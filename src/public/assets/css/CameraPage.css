@@ -1,0 +1,43 @@
+.camera-space {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .camera {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .camera-feed {
+    width: 100%;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .capture-button, .download-button, .dashboard-button {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .capture-button:hover, .download-button:hover, .dashboard-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .captured-image {
+    margin-top: 20px;
+  }
+  
+  .captured-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+  }
+  
