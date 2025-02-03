@@ -42,6 +42,7 @@ const RegisterPage = () => {
       console.log("Success response:", response.data);
       setSuccess("Registration successful!");
     } catch (error) {
+      window.alert(error)
       console.error("Error:", error.response?.data || error.message);
       setError(error.response.data?.message || "Failed to register. Please try again.");
     }

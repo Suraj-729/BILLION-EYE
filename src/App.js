@@ -43,6 +43,7 @@ import PoliceStationDashboard from "./pages/Reports/PoliceStation";
 import ServiceLogin from "./pages/serviceLogin";
 import CameraPage from "./pages/CameraPage";
 import Dashboard from "./pages/Dashboard";
+import "./public/assets/css/bootstrap"
 
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
@@ -100,3 +101,5 @@ function App() {
 }
 
 export default App;
+
+
