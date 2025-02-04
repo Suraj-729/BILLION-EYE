@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import "../../src/public/assets/css/BillionEye.css";
+
 const BillionEye = () => {
   return (
     
@@ -34,9 +35,9 @@ const BillionEye = () => {
           <div className="col-md-12">
             <div className="pag-1-wrapper-sec-2-wrapper text-center">
               <h4>
-                <a href="signup.html">
+                <p>
                   Your voice, Your Impact direct to the Government.
-                </a>
+                </p>
               </h4>
               <div className="footer-logo-1">
                 <ul>
@@ -64,9 +65,9 @@ const BillionEye = () => {
 
 </Link>
   </div>
-  <footer>
+  {/* <footer>
     <img src="./images/footer-bg.png" alt="" />
-  </footer>
+  </footer> */}
 </section>
 
   );

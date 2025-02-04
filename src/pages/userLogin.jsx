@@ -1,100 +1,7 @@
-// import React, { useState } from "react";
-// import "../public/assets/css/Login.css";
-// import api from "../api"; // Assuming your API client is imported as `api`
-// import { Link } from "react-router-dom";
 
-// const LoginPage = () => {
-//   const [formData, setFormData] = useState({
-//     email: "",
-//     password: "",
-//   });
-
-//   const [error, setError] = useState("");
-//   const [success, setSuccess] = useState("");
-
-//   const handleChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       [e.target.id]: e.target.value,
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     try {
-//       const payload = {
-//         email: formData.email,
-//         password: formData.password,
-//       };
-
-//       console.log("Sending login request with data:", payload);
-
-//       const response = await api.post("/user/login", payload);
-//       console.log("Login response:", response);
-
-//       if (response.status === 200) {
-//         setSuccess("Login successful!");
-//         // Store the token in local storage (or a more secure mechanism)
-//         localStorage.setItem("token", response.data.token);
-//       } else {
-//         setError("Invalid email or password.");
-//       }
-//     } catch (error) {
-//       console.error("Error:", error.response?.data || error.message);
-//       setError("Login failed. Please try again.");
-//     }
-//   };
-
-//   return (
-//     <div className="login-container">
-         
-//       <div className="login-card">
-//         <h2>Login</h2>
-//         {error && <p className="error">{error}</p>}
-//         {success && <p className="success">{success}</p>}
-//         <form className="login-form" onSubmit={handleSubmit}>
-//           <div className="form-group">
-//             <label htmlFor="email" className="form-label">
-//               Email
-//             </label>
-//             <input
-//               type="email"
-//               id="email"
-//               placeholder="Enter your email"
-//               className="form-input"
-//               value={formData.email}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div className="form-group">
-//             <label htmlFor="password" className="form-label">
-//               Password
-//             </label>
-//             <input
-//               type="password"
-//               id="password"
-//               placeholder="Enter your password"
-//               className="form-input"
-//               value={formData.password}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <Link to='/bmcreport' type="submit" className="login-button">
-//             Login
-//           </Link>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
 import React, { useState } from "react";
 import "../public/assets/css/Login.css";
+
 import api from "../api"; // Assuming your API client is imported as `api`
 import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
 
@@ -237,9 +144,9 @@ const LoginPage = () => {
           </div>
         </section>
       </div>
-      <footer>
+      {/* <footer>
         <img src="./images/footer-bg.png" alt="Footer" />
-      </footer>
+      </footer> */}
     </section>
   );
 };

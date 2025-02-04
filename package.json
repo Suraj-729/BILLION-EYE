@@ -38,5 +38,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-unicorn": "^56.0.1",
+    "sass": "^1.83.4"
   }
 }

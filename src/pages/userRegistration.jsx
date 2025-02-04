@@ -1,6 +1,10 @@
-import "../public/assets/css/Register.css"; 
+
+
 import React, { useState } from "react";
-import api from "../api"; 
+import "../public/assets/css/Register.css";
+import  {Link } from 'react-router-dom';
+
+import api from "../api";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -22,13 +26,13 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
 
     try {
       const payload = {
         fullname: {
           firstname: formData.firstName,
-          lastname: formData.lastName
+          lastname: formData.lastName,
         },
         email: formData.email,
         password: formData.password,
@@ -38,77 +42,132 @@ const RegisterPage = () => {
 
       const response = await api.post("/user/register", payload);
       console.log("Response:", response);
-      
+
       console.log("Success response:", response.data);
       setSuccess("Registration successful!");
     } catch (error) {
-      window.alert(error)
+      window.alert(error);
       console.error("Error:", error.response?.data || error.message);
       setError(error.response.data?.message || "Failed to register. Please try again.");
     }
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2 className="register-title">Register</h2>
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
-        <form className="register-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="firstName" className="form-label">First Name</label>
-            <input 
-              id="firstName" 
-              type="text" 
-              placeholder="Enter your first name" 
-              className="form-input" 
-              value={formData.firstName} 
-              onChange={handleChange} 
-              required 
-            />
+    <section className="main sign-up">
+    <div className="pag-1-wrapper">
+      {/* Background Section */}
+      <section className="pag-2-wrapper-sec-1">
+        <div className="pag-2-wrapper-sec-1-bgimg">
+          <figure>
+            <img src="./images/pag-2-logo-bg.png" alt="Background" />
+          </figure>
+          <figure>
+            <img src="./images/pag-2-logo-bg-right.png" alt="Background Right" />
+          </figure>
+        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <figure className="logo-con">
+                <Link to="/">
+                  <img src="./images/logo.png" alt="Logo" />
+                </Link>
+              </figure>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="lastName" className="form-label">Last Name</label>
-            <input 
-              id="lastName" 
-              type="text" 
-              placeholder="Enter your last name" 
-              className="form-input" 
-              value={formData.lastName} 
-              onChange={handleChange} 
-              required 
-            />
+        </div>
+      </section>
+
+      {/* Sign-Up Form */}
+      <section className="sign-up-form">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="heading-1">
+                <h4 className="text-uppercase">Sign up</h4>
+              </div>
+              {error && <p className="error">{error}</p>}
+              {success && <p className="success">{success}</p>}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <input
+                    id="firstName"
+                    type="text"
+                    className="form-control"
+                    placeholder="First Name"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    id="lastName"
+                    type="text"
+                    className="form-control"
+                    placeholder="Last Name"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    id="email"
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    id="password"
+                    type="password"
+                    className="form-control"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
-            <input 
-              id="email" 
-              type="email" 
-              placeholder="Enter your email" 
-              className="form-input" 
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
-            />
+        </div>
+      </section>
+
+      {/* Footer Section */}
+      <section className="pag-1-wrapper-sec-2">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="pag-1-wrapper-sec-2-wrapper text-center">
+                <div className="footer-logo-1">
+                  <ul>
+                    <li>
+                      <img src="./images/odisha-logo-white.png" alt="Odisha" title="Odisha" />
+                    </li>
+                    <li>
+                      <img src="./images/nic-logo.png" alt="NIC" title="NIC" />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
-            <input 
-              id="password" 
-              type="password" 
-              placeholder="Enter your password" 
-              className="form-input" 
-              value={formData.password} 
-              onChange={handleChange} 
-              required 
-            />
-          </div>
-          <button type="submit" className="register-button">
-            Register
-          </button>
-        </form>
-      </div>
+        </div>
+      </section>
     </div>
+    <footer>
+      <img src="./images/footer-bg.png" alt="Footer Background" />
+    </footer>
+  </section>
   );
 };
 
