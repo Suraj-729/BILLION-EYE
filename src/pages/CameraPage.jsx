@@ -164,6 +164,7 @@ const CameraPage = () => {
         </div>
         <div className="camera-btn">
           <button onClick={captureImage} className="capture-button">
+            <img src="./images/switch-camera.png" alt="" />
             Capture
           </button>
           <button onClick={switchCamera} className="switch-camera-button">
