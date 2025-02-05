@@ -28,30 +28,45 @@
   position: absolute;
   bottom: 20px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-10%);
   display: flex;
+  margin-left: 0px;
   gap: 20px;
   background: transparent; /* Ensure no black background */
   padding: 0;
   border: none;
+  gap: 50px;
 }
 
 /* Styling for buttons */
-.capture-button,
 .switch-camera-button {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
+  margin-left: 10px;
   border-radius: 50%;
-  background-color: red;
+  background-color: transparent; /* Fully transparent */
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition:  0.3s ease;
 }
 
-.capture-button:hover,
+/* Image inside the button */
+.switch-camera-button img {
+  width: 80%; /* Scales the icon properly */
+  height: 80%;
+  object-fit: contain;
+}
+
+/* Hover effect */
+.capture-button:hover 
 .switch-camera-button:hover {
-  background-color: darkred;
+  background-color: rgba(255, 255, 255, 0.2); /* Slight white overlay on hover */
+}
+
+/* Click effect */
+.switch-camera-button:active {
+  transform: scale(0.9); /* Subtle press effect */
 }

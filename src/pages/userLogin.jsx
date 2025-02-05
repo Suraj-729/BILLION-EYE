@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import "../public/assets/css/Login.css";
-
+import { Link } from "react-router-dom";
 import api from "../api"; // Assuming your API client is imported as `api`
 import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
 
@@ -62,7 +61,10 @@ const LoginPage = () => {
               <img src="./images/pag-2-logo-bg.png" alt="Background" />
             </figure>
             <figure>
-              <img src="./images/pag-2-logo-bg-right.png" alt="Background Right" />
+              <img
+                src="./images/pag-2-logo-bg-right.png"
+                alt="Background Right"
+              />
             </figure>
           </div>
           <div className="container">
@@ -82,12 +84,10 @@ const LoginPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <div className="heading-1">
-                  <h4 className="text-uppercase">Login</h4>
-                </div>
+                
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
-                <form onSubmit={handleSubmit}>
+                {/* <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <input
                       type="email"
@@ -111,9 +111,49 @@ const LoginPage = () => {
                     />
                   </div>
                   <button type="submit" className="btn btn-primary">
-                    Submit
+                    Login
                   </button>
-                </form>
+                  <Link to={"/register"}>
+                    <button type="submit" className="btn btn-primary">
+                      Register
+                    </button>
+                  </Link>
+                </form> */}
+
+<form onSubmit={handleSubmit}>
+  <div className="mb-3">
+    <input
+      type="email"
+      className="form-control"
+      placeholder="Email Id"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      required
+    />
+  </div>
+  <div className="mb-3">
+    <input
+      type="password"
+      className="form-control"
+      placeholder="Password"
+      name="password"
+      value={formData.password}
+      onChange={handleChange}
+      required
+    />
+  </div>
+
+  {/* Login Button (Form Submit) */}
+  <button type="submit" className="btn btn-primary">
+    Login
+  </button>
+  
+  {/* Register Button (Navigation Only) */}
+  <Link to="/register" className="btn btn-primary ms-2">
+    Register
+  </Link>
+</form>
               </div>
             </div>
           </div>
@@ -134,7 +174,11 @@ const LoginPage = () => {
                         />
                       </li>
                       <li>
-                        <img src="./images/nic-logo.png" alt="NIC" title="NIC" />
+                        <img
+                          src="./images/nic-logo.png"
+                          alt="NIC"
+                          title="NIC"
+                        />
                       </li>
                     </ul>
                   </div>

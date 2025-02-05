@@ -12,10 +12,12 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cookieparser());
+const port = process.env.PORT || 3000;
 
-// app.use('/user', userRoutes);
-// app.use('/images', imageRoutes);
+
+app.listen(port, () => {
+    console.log(`HTTPS Server is running on port ${port}`);
+});
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
