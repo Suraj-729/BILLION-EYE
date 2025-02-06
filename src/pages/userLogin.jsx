@@ -52,8 +52,34 @@ const LoginPage = () => {
     }
   };
 
+  const handleLogin = () => {
+    console.log("Login button clicked");
+  };
+
+  
+
   return (
     <section className="main sign-up">
+      <nav className="navbar navbar-expand-lg navbar-dark">
+        <div className="container-fluid">
+          <span className="navbar-brand fw-bold text-white">BILLIONEYE</span>
+          <div className="ms-auto">
+            <Link to={"/register"}>
+              <button
+                className="btn btn-outline-light me-2"
+                onClick={handleLogin}
+              >
+                Register
+              </button>
+            </Link>
+            {/* <Link to={"/register"}>
+                    <button className="btn btn-primary" onClick={handleSignUp}>
+                      Sign Up
+                    </button>
+                  </Link> */}
+          </div>
+        </div>
+      </nav>
       <div className="pag-1-wrapper">
         <section className="pag-2-wrapper-sec-1">
           <div className="pag-2-wrapper-sec-1-bgimg">
@@ -84,7 +110,6 @@ const LoginPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
                 {/* <form onSubmit={handleSubmit}>
@@ -120,40 +145,37 @@ const LoginPage = () => {
                   </Link>
                 </form> */}
 
-<form onSubmit={handleSubmit}>
-  <div className="mb-3">
-    <input
-      type="email"
-      className="form-control"
-      placeholder="Email Id"
-      name="email"
-      value={formData.email}
-      onChange={handleChange}
-      required
-    />
-  </div>
-  <div className="mb-3">
-    <input
-      type="password"
-      className="form-control"
-      placeholder="Password"
-      name="password"
-      value={formData.password}
-      onChange={handleChange}
-      required
-    />
-  </div>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Email Id"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
-  {/* Login Button (Form Submit) */}
-  <button type="submit" className="btn btn-primary">
-    Login
-  </button>
-  
-  {/* Register Button (Navigation Only) */}
-  <Link to="/register" className="btn btn-primary ms-2">
-    Register
-  </Link>
-</form>
+                  {/* Login Button (Form Submit) */}
+                  <button type="submit" className="btn btn-primary">
+                    Login
+                  </button>
+
+                 
+                </form>
               </div>
             </div>
           </div>

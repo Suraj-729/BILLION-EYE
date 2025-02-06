@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useRef } from "react";
 import "../public/assets/css/Dashboard.css";
 
 const Dashboard = () => {
@@ -8,6 +9,62 @@ const Dashboard = () => {
     // Example: navigate(route) if using react-router-dom
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+
+
+  const [activeTab, setActiveTab] = useState("RecentReports");
+  
+    const tabs = [
+      { id: "RecentReports", label: "Recent Reports", count: null },
+      { id: "ActiveEvents", label: "Active Events", count: 7 },
+      { id: "AssignedEvents", label: "Assigned Events", count: 5 },
+      { id: "ResolvedEvents", label: "Resolved Events", count: 27 },
+    ];
+  
+    const eventData = {
+      RecentReports: [
+        { id: 1, type: "Car Accident", time: "12:24:04", location: "Khandagiri", image: "./images/accident-1.png",status: "Hold By Admin" },
+        { id: 2, type: "Fire", time: "13:30:10", location: "Jaydev Vihar", image: "./images/accident-1.png",status: "RESOLVED" },
+      ],
+      ActiveEvents: [
+        { id: 3, type: "Flood", time: "14:45:00", location: "Sahid Nagar", image: "./images/accident-1.png" ,status: "APPROVED"},
+        { id: 4, type: "Car Breakdown", time: "15:00:20", location: "Patia", image: "./images/accident-1.png" ,status: "Rejected By Admin"},
+      ],
+      AssignedEvents: [
+        { id: 5, type: "Gas Leak", time: "16:10:35", location: "Bapuji Nagar", image: "./images/accident-1.png" , status: "appliedByRO"},
+      ],
+      ResolvedEvents: [
+        { id: 6, type: "Building Collapse", time: "10:15:50", location: "Unit-9", image: "./images/accident-1.png",status: "RESOLVED"},
+      ],
+    };
+   
+
+    const getStatusClass = (status) => {
+      switch (status) {
+        case "Hold By Admin":
+          return "blue-dot";
+        case "RESOLVED":
+          return "green-dot";
+        case "Rejected By Admin":
+        case "RejectedByRo":
+          return "red-dot";
+        case "APPROVED":
+        case "appliedByRO":
+          return "orange-dot";
+        default:
+          return "";
+      }
+    };
+
+    const StatusDot = ({ status }) => {
+      return <div className={`status-dot ${getStatusClass(status)}`}></div>;
+    };
   return (
     <section className="main dashboard-main">
       <section className="dashboard-main-page-wrapper">
@@ -17,38 +74,32 @@ const Dashboard = () => {
               <div className="col-md-12">
                 <div className="top-1">
                   <div className="logo">
-                    <button onClick={() => handleNavigation("/")}>
-                      <img src="./images/logo-small.png" alt="Logo" title="Logo" />
-                    </button>
+                    <img
+                      src="./images/logo-small.png"
+                      alt="Logo"
+                      title="Logo"
+                    />
                   </div>
-                  <div className="menu-con">
-                    <nav id="navigation1" className="navigation">
-                      <div className="nav-header">
-                        <button className="nav-toggle"></button>
-                      </div>
-                      <div className="nav-menus-wrapper">
-                        <ul className="navbar-nav">
-                          <li className="nav-item active">
-                            <button onClick={() => handleNavigation("/")}>HOME</button>
-                          </li>
-                          <li className="nav-item">
-                            <button onClick={() => handleNavigation("/about")}>About</button>
-                          </li>
-                          <li className="nav-item">
-                            <button onClick={() => handleNavigation("/author")}>Author</button>
-                          </li>
-                          <li className="nav-item">
-                            <button onClick={() => handleNavigation("/registration")}>Registration</button>
-                          </li>
-                          <li className="nav-item">
-                            <button onClick={() => handleNavigation("/committees")}>Committees</button>
-                          </li>
-                          <li className="nav-item">
-                            <button onClick={() => handleNavigation("/contact")}>Contact Us</button>
-                          </li>
-                        </ul>
-                      </div>
-                    </nav>
+                  {/*DropDown Nav menu */}
+                  <div className="nav-container  mt-4">
+                    <div className="dropdown" ref={dropdownRef}>
+                      <button
+                        className="btn btn-primary dropdown-toggle custom-dropdown-btn"
+                        type="button"
+                        onClick={toggleDropdown}
+                        aria-expanded={isOpen}
+                      >
+                        Services
+                      </button>
+                      <ul className={`dropdown-menu ${isOpen ? "show fade-in " : "fade-out"}`}>
+                        {/* <li className="dropdown-header"></li> */}
+                        <li>
+                          <a className="dropdown-item" href="#settings">
+                            Onboarding Staff
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -86,45 +137,47 @@ const Dashboard = () => {
                 <div className="table-card">
                   <div className="table-card-heading">
                     <div className="table-card-heading-icon">
-                      <img src="./images/dashboard-icon.png" alt="Dashboard Icon" title="Dashboard Icon" />
+                      <img
+                        src="./images/dashboard-icon.png"
+                        alt="Dashboard Icon"
+                        title="Dashboard Icon"
+                      />
                     </div>
                     <h4>Recent Reports</h4>
-                    <button onClick={() => handleNavigation("/reports")} className="table-card-btn">
+                    <button
+                      onClick={() => handleNavigation("/reports")}
+                      className="table-card-btn"
+                    >
                       View All <i className="fa-solid fa-play"></i>
                     </button>
                   </div>
 
                   <div className="table-con table-responsive">
-                    <div className="table-heading">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <td>
-                              <div>Sl.No</div>
-                            </td>
-                            <td>
-                              <div>Type</div>
-                            </td>
-                            <td>
-                              <div>Timestamp</div>
-                            </td>
-                            <td>
-                              <div>Location</div>
-                            </td>
-                            <td>
-                              <div>Image</div>
-                            </td>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-
+                   
                     <table className="table">
-                      <tbody>
+                      {/* <tbody>
                         {[
-                          { id: 1, type: "Car Accident", time: "12:24:04", location: "Khandagiri", image: "./images/accident-1.png" },
-                          { id: 2, type: "Car Accident", time: "12:24:04", location: "Khandagiri", image: "./images/accident-2.png" },
-                          { id: 3, type: "Car Accident", time: "12:24:04", location: "Khandagiri", image: "./images/accident-3.png" }
+                          {
+                            id: 1,
+                            type: "Car Accident",
+                            time: "12:24:04",
+                            location: "Khandagiri",
+                            image: "./images/accident-1.png",
+                          },
+                          {
+                            id: 2,
+                            type: "Car Accident",
+                            time: "12:24:04",
+                            location: "Khandagiri",
+                            image: "./images/accident-2.png",
+                          },
+                          {
+                            id: 3,
+                            type: "Car Accident",
+                            time: "12:24:04",
+                            location: "Khandagiri",
+                            image: "./images/accident-3.png",
+                          },
                         ].map((report) => (
                           <tr key={report.id}>
                             <td>
@@ -141,12 +194,75 @@ const Dashboard = () => {
                             </td>
                             <td>
                               <div>
-                                <img src={report.image} alt={`Accident ${report.id}`} title={`Accident ${report.id}`} />
+                                <img
+                                  src={report.image}
+                                  alt={`Accident ${report.id}`}
+                                  title={`Accident ${report.id}`}
+                                />
                               </div>
                             </td>
                           </tr>
                         ))}
-                      </tbody>
+                      </tbody> */}
+
+                      <div className="event-tabs">
+                        <ul className="nav nav-tabs">
+                          {tabs.map((tab) => (
+                            <li key={tab.id} className="nav-item">
+                              <button
+                                className={`nav-link ${
+                                  activeTab === tab.id ? "active" : ""
+                                }`}
+                                onClick={() => setActiveTab(tab.id)}
+                              >
+                                {tab.label}{" "}
+                                {tab.count !== null && (
+                                  <span>({tab.count})</span>
+                                )}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="table-container">
+                          <table className="event-table">
+                           
+                           <tr>
+                                <th>Sl.No</th>
+                                <th>Type</th>
+                                <th>Timestamp</th>
+                                <th>Location</th>
+                                <th>Image</th>
+                                <th>status</th>
+                              </tr>
+                                                         
+                            
+                            <tbody>
+                              {eventData[activeTab]?.map((event) => (
+                                <tr key={event.id}>
+                                  <td>{event.id}</td>
+                                  <td>{event.type}</td>
+                                  <td>{event.time}</td>
+                                  <td>{event.location}</td>
+                                  
+                                  <td>
+                                    <img
+                                      src={event.image}
+                                      alt={event.type}
+                                      title={event.type}
+                                    />
+                                  </td>
+                                  <td> <StatusDot status={event.status} /> </td>
+                                </tr>
+                              )) || (
+                                <tr>
+                                  <td colSpan="5">No events found</td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </table>
                   </div>
                 </div>

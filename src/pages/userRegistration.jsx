@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 
 import api from "../api";
 
+const handleLogin = () => {
+  console.log("Login button clicked");
+};
+
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -54,6 +58,26 @@ const RegisterPage = () => {
 
   return (
     <section className="main sign-up">
+      <nav className="navbar navbar-expand-lg navbar-dark">
+              <div className="container-fluid">
+                <span className="navbar-brand fw-bold text-white">BILLIONEYE</span>
+                <div className="ms-auto">
+                  <Link to={"/login"}>
+                    <button
+                      className="btn btn-outline-light me-2"
+                      onClick={handleLogin}
+                    >
+                      Login
+                    </button>
+                  </Link>
+                  {/* <Link to={"/register"}>
+                          <button className="btn btn-primary" onClick={handleSignUp}>
+                            Sign Up
+                          </button>
+                        </Link> */}
+                </div>
+              </div>
+            </nav>
       <div className="pag-1-wrapper">
         {/* Background Section */}
         <section className="pag-2-wrapper-sec-1">
@@ -86,9 +110,7 @@ const RegisterPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <div className="heading-1">
-                  <h4 className="text-uppercase">Sign up</h4>
-                </div>
+              
                 {error && <p className="error">{error}</p>}
                 {success && <p className="success">{success}</p>}
                 <form onSubmit={handleSubmit}>
@@ -142,11 +164,11 @@ const RegisterPage = () => {
                     </button>
                   
 
-                  <Link to={"/login"}>
+                  {/* <Link to={"/login"}>
                     <button type="submit" className="btn btn-primary">
                       Login
                     </button>
-                  </Link>
+                  </Link> */}
                 </form>
               </div>
             </div>

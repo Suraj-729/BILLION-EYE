@@ -44,7 +44,7 @@ import ServiceLogin from "./pages/serviceLogin";
 import CameraPage from "./pages/CameraPage";
 import Dashboard from "./pages/Dashboard";
 import "./public/assets/css/bootstrap/scss/bootstrap.scss";
-
+import Demo from "./pages/demo";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if the user is authenticated
@@ -95,6 +95,8 @@ function App() {
           path="/ServiceLogin"
           element={<ProtectedRoute element={ServiceLogin} />}
         />
+
+        <Route path="/demo" element={<ProtectedRoute element={Demo}/>} />
       </Routes>
     </Router>
   );

@@ -3,6 +3,37 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    overflow: auto;
+}
+
+/* Add this to your existing CSS */
+.main.dashboard-main {
+    overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
+    height: 100vh; /* Ensures the section takes the full viewport height */
+    padding: 20px; /* Optional: Add padding for better spacing */
+}
+
+/* Custom Scrollbar Styles (Optional) */
+.main.dashboard-main::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+
+.main.dashboard-main::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+    border-radius: 5px;
+}
+
+.main.dashboard-main::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar */
+    border-radius: 5px;
+}
+
+.main.dashboard-main::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar on hover */
+}
+
+.nav-container {
+    background-color: aqua;
 }
 
 .container {
@@ -30,16 +61,27 @@ header {
 }
 
 .logo {
-    float: left;
+    /* float: left; */
+    display: flex; /* Ensures proper alignment */
+    align-items: center; /* Centers vertically */
+    justify-content: center; /* Centers horizontally */
+    padding: 0px; /* Adds some spacing */
+   
 }
 
 .logo a {
     text-decoration: none;
 }
 
-.logo img {
+/* .logo img {
     width: 150px;
     height: auto;
+} */
+
+.logo img {
+    max-width: 100px; /* Adjust size as needed */
+    height: auto;
+    object-fit: contain; /* Ensures proper scaling */
 }
 
 .menu-con {
@@ -82,6 +124,7 @@ header {
 .page-heading {
     background-color: #00048c;
     padding: 20px 0;
+    
     text-align: center;
 }
 
@@ -152,8 +195,134 @@ header {
 
 .table thead th {
     text-align: left;
+    
+}
+.table-head th {
+    background-color: #007bff; /* Blue background color for headers */
+    color:black; /* White text color for headers */
+    padding: 12px; /* Optional: Add padding for better spacing */
+    text-align: center; /* Center-align text in headers */
+    border: 1px solid #ddd; /* Optional: Add border for consistency */
+}
+/* Suraj Css */
+.event-tabs {
+    width: 100%;
+    padding: 20px;
 }
 
+.nav-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.nav-link {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-link.active {
+    border-bottom: 3px solid #007bff;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.event-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.event-table th,
+.event-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.event-table img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.dropdown-menu {
+    max-height: 250px; /* Adjust height as needed */
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+    height: 10px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar on hover */
+}
+
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  /* Blinking effect */
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .blue-dot {
+    background-color: blue;
+    animation: blink 1s infinite;
+  }
+  
+  .green-dot {
+    background-color: green;
+    animation: blink 1s infinite;
+  }
+  
+  .red-dot {
+    background-color: red;
+    animation: blink 1s infinite;
+  }
+  
+  .orange-dot {
+    background-color: orange;
+    animation: blink 1s infinite;
+  }
+  
 /* Responsive media queries */
 @media (max-width: 768px) {
     .nav-header {
@@ -187,3 +356,87 @@ header {
         font-size: 14px;
     }
 }
+
+
+/* Style the dropdown button */
+.dropdown {
+    background-color: red;
+}
+.custom-dropdown-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-dropdown-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style the dropdown menu */
+  .dropdown-menu {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    overflow: hidden;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  /* Show dropdown with animation */
+  .dropdown-menu.show {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  
+  /* Smooth fade animations */
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  .fade-out {
+    animation: fadeOut 0.2s ease-in-out;
+  }
+  
+  /* Keyframe animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scaleY(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+    to {
+      opacity: 0;
+      transform: scaleY(0.8);
+    }
+  }
+  
+  /* Style individual dropdown items */
+  .dropdown-item {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .dropdown-item:hover {
+    background: #007bff;
+    color: white;
+    border-radius: 4px;
+  }
+  
