@@ -10,7 +10,7 @@ const CameraPage = () => {
   const [cameraError, setCameraError] = useState(null); // State to store camera errors
   const [cameraType, setCameraType] = useState("environment"); // State to manage camera type (front or back)
   const [devices, setDevices] = useState([]); // State to store available camera devices
-
+ const [switchCamera, setSwitchCamera]= useState([]);
   // Get available camera devices
   useEffect(() => {
     const getCameraDevices = async () => {
@@ -78,26 +78,23 @@ const CameraPage = () => {
 
   // Capture an image from the video stream
   const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
+  const canvas = canvasRef.current;
+  const video = videoRef.current;
+  if (!canvas || !video) {
+    console.error("Error: Canvas or video reference not available.");
+    return;
+  }
 
-      // Set canvas size to match the video frame
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
+  const context = canvas.getContext("2d");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+  const imageData = canvas.toDataURL("image/png"); // Base64-encoded string
+  setCapturedImage(imageData);
+  getLocation();
+};
 
-      // Draw the current video frame onto the canvas
-      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
-      // Convert canvas content to an image URL
-      const imageUrl = canvas.toDataURL("image/png");
-      setCapturedImage(imageUrl);
-      console.log(imageUrl);
-      
-      // Get the user's location after capturing the image
-      getLocation();
-    }
-  };
   
   
 
@@ -137,53 +134,46 @@ const CameraPage = () => {
     }
   };
 
-  const base64ToBlob = (base64) => {
-    const byteCharacters = atob(base64.split(",")[1]); // Remove the prefix (data:image/png;base64,)
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: "image/png" });
-};
-const sendImageToServer = async (imageUrl, latitude, longitude) => {
-  const userId = "12345"; // Replace with actual user ID (e.g., from authentication context)
-  const timestamp = new Date().toISOString();
 
-  try {
-      // Convert the base64 image to a Blob
-      const blob = base64ToBlob(imageUrl);
 
+  const sendImageToServer = async (imageUrl, latitude, longitude) => {
+    const userId = "12345"; 
+    const timestamp = new Date().toISOString();
+  
+    try {
+      // // Convert Base64 image to a Blob
+      // const byteString = atob(imageUrl.split(",")[1]); // Decode Base64
+      // const mimeString = imageUrl.split(",")[0].split(":")[1].split(";")[0]; // Get MIME type
+      // const arrayBuffer = new ArrayBuffer(byteString.length);
+      // const uint8Array = new Uint8Array(arrayBuffer);
+      // for (let i = 0; i < byteString.length; i++) {
+      //   uint8Array[i] = byteString.charCodeAt(i);
+      // }
+      // const file = new Blob([uint8Array], { type: mimeString });
+  
       // Create a FormData object to send the image and metadata
       const formData = new FormData();
-      formData.append("image", blob, "captured-image.png");
+      formData.append("image", imageUrl); // Append as a file
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
       formData.append("userId", userId);
       formData.append("timestamp", timestamp);
-
+  
       // Send the data to the backend API
-      const response = await api.post("/user/save-image", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+      const response = await api.post("user/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
+  
       if (response.status === 200) {
-          console.log("Image and location data uploaded successfully!");
+        console.log("Image and location data uploaded successfully!");
       } else {
-          console.error("Failed to upload image and location data.");
+        console.error("Failed to upload image and location data.");
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Error uploading image and location data:", error);
-  }
-};
-  // Switch between front and back cameras
-  const switchCamera = () => {
-    setCameraType((prevType) =>
-      prevType === "environment" ? "user" : "environment"
-    );
+    }
   };
-
-
+  
   
   
 
@@ -203,7 +193,7 @@ const sendImageToServer = async (imageUrl, latitude, longitude) => {
           <button onClick={captureImage} className="capture-button">
             Capture
           </button>
-          <button onClick={switchCamera} className="switch-camera-button">
+          <button onClick={setSwitchCamera} className="switch-camera-button">
             <img src="./images/switch-camera.png" alt="Switch Camera" />
           </button>
         </div>

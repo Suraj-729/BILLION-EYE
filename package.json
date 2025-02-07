@@ -8,6 +8,7 @@
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "cra-template": "1.2.0",
+    "minio": "^8.0.4",
     "owl.carousel": "^2.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

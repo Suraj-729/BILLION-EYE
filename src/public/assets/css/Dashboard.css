@@ -1,4 +1,4 @@
-/* General styles */
+General styles
 body {
     margin: 0;
     padding: 0;
@@ -123,8 +123,8 @@ header {
 /* Page heading styles */
 .page-heading {
     background-color: #00048c;
-    padding: 20px 0;
-    
+    padding: 10px ;
+    position: relative;
     text-align: center;
 }
 

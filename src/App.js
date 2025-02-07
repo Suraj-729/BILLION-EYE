@@ -1,38 +1,10 @@
-// import React from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import BillionEye from "./pages/BillionEye";
-// import RegisterPage from "./pages/userRegistration";
-// import LoginPage from "./pages/userLogin";
-// import BmcDashboard from "./pages/Report";
-// import BbsrDashboard from "./pages/Reports/BmcDashboard";
-// import HospitalDashboard from "./pages/Reports/HospitalDashboard";
-// import PoliceStationDashboard from "./pages/Reports/PoliceStation";
-// import CameraPage from "./pages/CameraPage";
-// import Dashboard from "./pages/Dashboard";
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<BillionEye />} />
-//         <Route path="/register" element={<RegisterPage />} />
-//         <Route path="/login" element={<LoginPage />} />
-//         <Route path="/bmcreport" element={<BmcDashboard/>}/>
-//         <Route path="/dashboard" element={<Dashboard/>}/>
-//         <Route path="/bbsrReport" element={<BbsrDashboard/>}/>
-//         <Route path="/HospitalDashboard" element={<HospitalDashboard/>}/>
-//         <Route path="/PoliceStation" element={<PoliceStationDashboard/>}/>
-//         <Route path="/Camera" element={<CameraPage/>}/>
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-// export default App;
-
-
-
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import BillionEye from "./pages/BillionEye";
 import RegisterPage from "./pages/userRegistration";
 import LoginPage from "./pages/userLogin";
@@ -43,6 +15,7 @@ import PoliceStationDashboard from "./pages/Reports/PoliceStation";
 import ServiceLogin from "./pages/serviceLogin";
 import CameraPage from "./pages/CameraPage";
 import Dashboard from "./pages/Dashboard";
+import BillionEyePublic from "./pages/BillionEyePublic";
 import "./public/assets/css/bootstrap/scss/bootstrap.scss";
 import Demo from "./pages/demo";
 // Protected Route Component
@@ -64,6 +37,10 @@ function App() {
         <Route path="/" element={<BillionEye />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/Public" element={<BillionEyePublic />} />
+        <Route path="/Camera" element={<CameraPage />} />
+        {/* <Route
+          path="/Camera" element={<CameraPage />} /> */}
 
         {/* Protected Routes */}
         <Route
@@ -86,22 +63,18 @@ function App() {
           path="/PoliceStation"
           element={<ProtectedRoute element={PoliceStationDashboard} />}
         />
-        <Route
-          path="/Camera"
-          element={<ProtectedRoute element={CameraPage} />}
-        />
 
-<Route
+        
+
+        <Route
           path="/ServiceLogin"
           element={<ProtectedRoute element={ServiceLogin} />}
         />
 
-        <Route path="/demo" element={<ProtectedRoute element={Demo}/>} />
+        <Route path="/demo" element={<ProtectedRoute element={Demo} />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
