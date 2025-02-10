@@ -2,17 +2,19 @@
 // import axios from "axios";
 
 // const api = axios.create({
-//   baseURL: "/backend", // Update this if the backend is hosted elsewhere
+//    baseURL: "https://192.168.76.31:5000", // Update this if the backend is hosted elsewhere
+//   // baseURL: ":5000", // Update this if the backend is hosted elsewhere
 //   timeout: 5000,
 // });
+// export default api;
 
 //  export default api;
-// src/api.js
+// // src/api.js
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "/backend", // Update this if the backend is hosted elsewhere
-  baseURL: "http://localhost:5000", // Update this if the backend is hosted elsewhere
+    baseURL: "/backend", // Update this if the backend is hosted elsewhere
+  //  baseURL: "https://192.168.76.31:5000", // Update this if the backend is hosted elsewhere
   timeout: 5000,
 });
 api.interceptors.response.use(
@@ -21,7 +23,7 @@ api.interceptors.response.use(
     // If the request fails (e.g., due to server being unreachable)
     if (error.response === undefined) {
       // Modify the base URL to fallback to localhost
-      error.config.baseURL = "http://localhost:5000";
+      error.config.baseURL = "https://localhost:5000";
       // Retry the request with the new base URL
       return axios(error.config);
     }

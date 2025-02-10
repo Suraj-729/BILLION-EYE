@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "../public/assets/css/CameraPage.css"; // Ensure you have a CSS file for styling
 import api from "../api";
+
 const CameraPage = () => {
   const videoRef = useRef(null); // Reference for the video element
   const canvasRef = useRef(null); // Reference for the canvas element
@@ -8,9 +9,9 @@ const CameraPage = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null }); // State to store user's location
   const [locationError, setLocationError] = useState(null); // State to store location errors
   const [cameraError, setCameraError] = useState(null); // State to store camera errors
-  const [cameraType, setCameraType] = useState("environment"); // State to manage camera type (front or back)
   const [devices, setDevices] = useState([]); // State to store available camera devices
- const [switchCamera, setSwitchCamera]= useState([]);
+  const [cameraType, setCameraType] = useState('user');
+
   // Get available camera devices
   useEffect(() => {
     const getCameraDevices = async () => {
@@ -34,14 +35,14 @@ const CameraPage = () => {
       try {
         const constraints = {
           video: {
-            facingMode: cameraType, // Use the selected camera type
+            facingMode: cameraType, // Use front camera by default
             width: { ideal: 1280 }, // Set the video resolution
             height: { ideal: 720 },
           },
-
         };
 
         console.log("Requesting camera access...");
+       
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -55,17 +56,14 @@ const CameraPage = () => {
       }
     };
 
-    // Check if the browser supports the camera API
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setCameraError("Camera API is not supported by this browser.");
     } else {
       startCamera();
     }
 
-    // Store the current videoRef value in a variable
-    const videoElement = videoRef.current;
-
     // Cleanup function to stop the camera when the component unmounts
+    const videoElement = videoRef.current;
     return () => {
       if (videoElement && videoElement.srcObject) {
         const tracks = videoElement.srcObject.getTracks();
@@ -73,33 +71,37 @@ const CameraPage = () => {
         console.log("Camera stream stopped.");
       }
     };
-  }, [cameraType]); // Restart camera when cameraType changes
+  }, [cameraType]);
 
-
-  // Capture an image from the video stream
+  // Function to capture the image from the camera
   const captureImage = () => {
-  const canvas = canvasRef.current;
-  const video = videoRef.current;
-  if (!canvas || !video) {
-    console.error("Error: Canvas or video reference not available.");
-    return;
-  }
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
 
-  const context = canvas.getContext("2d");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  
-  const imageData = canvas.toDataURL("image/png"); // Base64-encoded string
-  setCapturedImage(imageData);
-  getLocation();
-};
+    if (!canvas || !video) {
+      console.error("Error: Canvas or video reference not available.");
+      return;
+    }
 
-  
-  
+    const context = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Get the user's location using the Geolocation API
-  const getLocation = () => {
+    const imageData = canvas.toDataURL("image/png"); // Convert image to Base64
+    console.log("Captured image:", imageData);
+
+    setCapturedImage(imageData);
+  };
+
+  // Memoize the getLocation function with useCallback
+  const getLocation = useCallback(() => {
+    if (!capturedImage) {
+      console.error("Error: No image captured before sending to server.");
+      setLocationError("Please capture an image before sending.");
+      return;
+    }
+
     if (navigator.geolocation) {
       console.log("Requesting location access...");
       navigator.geolocation.getCurrentPosition(
@@ -109,6 +111,7 @@ const CameraPage = () => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
+
           console.log(
             "Location:",
             position.coords.latitude,
@@ -117,7 +120,7 @@ const CameraPage = () => {
 
           setLocationError(null);
 
-          // Send the captured image and location data to the server
+          // Now send the image and location data
           sendImageToServer(
             capturedImage,
             position.coords.latitude,
@@ -126,56 +129,80 @@ const CameraPage = () => {
         },
         (error) => {
           console.error("Error getting location:", error);
+          window.alert(error);
           setLocationError("Please enable location services to proceed.");
         }
       );
     } else {
       setLocationError("Geolocation is not supported by this browser.");
     }
-  };
+  }, [capturedImage]);
 
+  // Run getLocation() only when capturedImage is set
+  useEffect(() => {
+    if (capturedImage) {
+      console.log("Image successfully captured. Now requesting location...");
+      getLocation();
+    }
+  }, [capturedImage, getLocation]);
 
-
+  // Send the captured image and location to the server
   const sendImageToServer = async (imageUrl, latitude, longitude) => {
-    const userId = "12345"; 
+    const userId = "12345";
     const timestamp = new Date().toISOString();
-  
+
     try {
-      // // Convert Base64 image to a Blob
-      // const byteString = atob(imageUrl.split(",")[1]); // Decode Base64
-      // const mimeString = imageUrl.split(",")[0].split(":")[1].split(";")[0]; // Get MIME type
-      // const arrayBuffer = new ArrayBuffer(byteString.length);
-      // const uint8Array = new Uint8Array(arrayBuffer);
-      // for (let i = 0; i < byteString.length; i++) {
-      //   uint8Array[i] = byteString.charCodeAt(i);
-      // }
-      // const file = new Blob([uint8Array], { type: mimeString });
-  
-      // Create a FormData object to send the image and metadata
+      if (!imageUrl) {
+        throw new Error("Invalid image: imageUrl is null or undefined.");
+      }
+
+      if (!imageUrl.includes(",")) {
+        throw new Error("Invalid Base64 format: Missing ',' separator.");
+      }
+
+      // Extract Base64 data and MIME type
+      const base64Data = imageUrl.split(",")[1];
+      const mimeType = imageUrl.split(",")[0].split(":")[1].split(";")[0];
+
+      // Convert Base64 to Blob
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const file = new Blob([byteArray], { type: mimeType });
+
+      // Convert Blob to File object
+      const fileObject = new File([file], "image.jpg", { type: mimeType });
+
+      // Prepare FormData
       const formData = new FormData();
-      formData.append("image", imageUrl); // Append as a file
+      formData.append("image", fileObject); // Attach the file
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
       formData.append("userId", userId);
       formData.append("timestamp", timestamp);
-  
-      // Send the data to the backend API
+
+      // Send data to backend
       const response = await api.post("user/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       if (response.status === 200) {
-        console.log("Image and location data uploaded successfully!");
+        console.log("✅ Image and location data uploaded successfully!");
+        return response.data;
       } else {
-        console.error("Failed to upload image and location data.");
+        console.error("❌ Failed to upload image and location data.");
       }
     } catch (error) {
-      console.error("Error uploading image and location data:", error);
+      console.error("❌ Error uploading image:", error.message);
     }
   };
-  
-  
-  
+
+  const toggleCamera = () => {
+    setCameraType((prevType) => (prevType === "user" ? "environment" : "user"));
+  };
 
   return (
     <section className="main camera-page">
@@ -193,9 +220,11 @@ const CameraPage = () => {
           <button onClick={captureImage} className="capture-button">
             Capture
           </button>
-          <button onClick={setSwitchCamera} className="switch-camera-button">
-            <img src="./images/switch-camera.png" alt="Switch Camera" />
-          </button>
+
+          {/* Switch Camera Button */}
+        <button onClick={toggleCamera} className="switch-camera-button">
+          <img src="./images/switch-camera.png" alt="Switch Camera" />
+        </button>
         </div>
 
         {/* Canvas (Hidden, used for capturing image) */}
@@ -225,12 +254,11 @@ const CameraPage = () => {
             <li key={device.deviceId}>{device.label || "Unnamed Camera"}</li>
           ))}
         </ul>
+
         {/* Error Messages */}
         {cameraError && <p className="error-message">{cameraError}</p>}
         {locationError && <p className="error-message">{locationError}</p>}
       </div>
-
-      
     </section>
   );
 };
