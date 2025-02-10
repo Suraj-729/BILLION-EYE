@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useNavigate  } from "react-router-dom";
 import "../public/assets/css/CameraPage.css"; // Ensure you have a CSS file for styling
 import api from "../api";
 
@@ -10,8 +11,9 @@ const CameraPage = () => {
   const [locationError, setLocationError] = useState(null); // State to store location errors
   const [cameraError, setCameraError] = useState(null); // State to store camera errors
   const [devices, setDevices] = useState([]); // State to store available camera devices
-  const [cameraType, setCameraType] = useState('user');
-
+  const [cameraType, setCameraType] = useState("user");
+  const [imageId,setImageId] = useState(null) ; //store uplaoded imageid
+  const navigate = useNavigate();
   // Get available camera devices
   useEffect(() => {
     const getCameraDevices = async () => {
@@ -42,7 +44,7 @@ const CameraPage = () => {
         };
 
         console.log("Requesting camera access...");
-       
+
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -90,8 +92,9 @@ const CameraPage = () => {
 
     const imageData = canvas.toDataURL("image/png"); // Convert image to Base64
     console.log("Captured image:", imageData);
-
+    
     setCapturedImage(imageData);
+    navigate('/login')
   };
 
   // Memoize the getLocation function with useCallback
@@ -143,6 +146,7 @@ const CameraPage = () => {
     if (capturedImage) {
       console.log("Image successfully captured. Now requesting location...");
       getLocation();
+      
     }
   }, [capturedImage, getLocation]);
 
@@ -191,6 +195,9 @@ const CameraPage = () => {
 
       if (response.status === 200) {
         console.log("✅ Image and location data uploaded successfully!");
+
+        // **Store the imageId returned from the API**
+        setImageId(response.data.imageId);
         return response.data;
       } else {
         console.error("❌ Failed to upload image and location data.");
@@ -222,13 +229,22 @@ const CameraPage = () => {
           </button>
 
           {/* Switch Camera Button */}
-        <button onClick={toggleCamera} className="switch-camera-button">
-          <img src="./images/switch-camera.png" alt="Switch Camera" />
-        </button>
+          <button onClick={toggleCamera} className="switch-camera-button">
+            <img src="./images/switch-camera.png" alt="Switch Camera" />
+          </button>
         </div>
 
         {/* Canvas (Hidden, used for capturing image) */}
         <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+
+
+
+
+
+        {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
+
+
+
 
         {/* Show Captured Image */}
         {capturedImage && (
