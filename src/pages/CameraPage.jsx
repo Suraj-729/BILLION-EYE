@@ -94,7 +94,7 @@ const CameraPage = () => {
     console.log("Captured image:", imageData);
     
     setCapturedImage(imageData);
-    navigate('/login')
+    navigate('/incidentReport')
   };
 
   // Memoize the getLocation function with useCallback
