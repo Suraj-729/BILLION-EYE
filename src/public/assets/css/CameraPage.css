@@ -1,4 +1,11 @@
-/* Full-screen camera layout for mobile */
+/* Ensure the entire page is transparent */
+body, html {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Full-screen camera layout */
 .camera-page {
   display: flex;
   flex-direction: column;
@@ -6,14 +13,14 @@
   justify-content: space-between;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
   position: relative;
   overflow: hidden;
   padding: 0;
   margin: 0;
+  background: none !important;
 }
 
-/* Camera feed should cover the full screen */
+/* Camera feed to cover full screen */
 .camera-feed {
   width: 100%;
   height: 100%;
@@ -23,50 +30,82 @@
   left: 0;
 }
 
-/* Container for the button */
+/* Container for camera buttons */
 .camera-btn {
   position: absolute;
   bottom: 20px;
   left: 50%;
-  transform: translateX(-10%);
+  transform: translateX(-50%);
   display: flex;
-  margin-left: 0px;
-  gap: 20px;
-  background: transparent; /* Ensure no black background */
-  padding: 0;
-  border: none;
-  gap: 50px;
+  align-items: center;
+  gap: 30px;
+  background: none !important; /* Ensures no background */
 }
 
-/* Styling for buttons */
-.switch-camera-button {
-  width: 45px;
-  height: 45px;
-  margin-left: 10px;
+/* Capture button styling */
+.capture-button {
+  width: 60px;
+  height: 60px;
+  left: 150px;
   border-radius: 50%;
-  background-color: transparent; /* Fully transparent */
-  border: none;
+  background-color: transparent;
+  border: 2px solid red;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* Switch Camera Button */
+.switch-camera-button {
+  width: 50px;
+  height: 50px;
+  left: 170px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:  0.3s ease;
-}
-
-/* Image inside the button */
-.switch-camera-button img {
-  width: 80%; /* Scales the icon properly */
-  height: 80%;
-  object-fit: contain;
+  transition: 0.3s ease;
 }
 
 /* Hover effect */
-.capture-button:hover 
+.capture-button:hover,
 .switch-camera-button:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Slight white overlay on hover */
+  background-color: transparent;
+  opacity: 0.8;
 }
 
 /* Click effect */
 .switch-camera-button:active {
-  transform: scale(0.9); /* Subtle press effect */
+  transform: scale(0.9);
+}
+
+/* Captured Image */
+.captured-image img {
+  max-width: 80%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+/* Download button */
+.download-button {
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid white;
+}
+
+/* Error Messages */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }

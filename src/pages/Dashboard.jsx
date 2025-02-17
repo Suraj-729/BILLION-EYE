@@ -1,7 +1,8 @@
 import React from "react";
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import "../public/assets/css/Dashboard.css";
-
+//import api from "../api";
 const Dashboard = () => {
   const handleNavigation = (route) => {
     console.log(`Navigating to ${route}`);
@@ -12,59 +13,102 @@ const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState(null);
+
+  const handleZoom = () => {
+    setIsZoomed((prev) => !prev);
+    console.log("Zoom state:", !isZoomed);
+  };
+
+  const closePopup = () => {
+    setZoomedImage(null);
+  };
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  const approveTicket = (ticketNo) => {
+    console.log("Approved ticket:", ticketNo);
+  };
 
+  const reject = (ticketNo) => {
+    console.log("Rejected ticket:", ticketNo);
+  };
+
+  const hold = (ticketNo) => {
+    console.log("Held ticket:", ticketNo);
+  };
 
   const [activeTab, setActiveTab] = useState("RecentReports");
-  
-    const tabs = [
-      { id: "RecentReports", label: "Recent Reports", count: null },
-      { id: "ActiveEvents", label: "Active Events", count: 7 },
-      { id: "AssignedEvents", label: "Assigned Events", count: 5 },
-      { id: "ResolvedEvents", label: "Resolved Events", count: 27 },
-    ];
-  
-    const eventData = {
-      RecentReports: [
-        { id: 1, type: "Car Accident", time: "12:24:04", location: "Khandagiri", image: "./images/accident-1.png",status: "Hold By Admin" },
-        { id: 2, type: "Fire", time: "13:30:10", location: "Jaydev Vihar", image: "./images/accident-1.png",status: "RESOLVED" },
-      ],
-      ActiveEvents: [
-        { id: 3, type: "Flood", time: "14:45:00", location: "Sahid Nagar", image: "./images/accident-1.png" ,status: "APPROVED"},
-        { id: 4, type: "Car Breakdown", time: "15:00:20", location: "Patia", image: "./images/accident-1.png" ,status: "Rejected By Admin"},
-      ],
-      AssignedEvents: [
-        { id: 5, type: "Gas Leak", time: "16:10:35", location: "Bapuji Nagar", image: "./images/accident-1.png" , status: "appliedByRO"},
-      ],
-      ResolvedEvents: [
-        { id: 6, type: "Building Collapse", time: "10:15:50", location: "Unit-9", image: "./images/accident-1.png",status: "RESOLVED"},
-      ],
-    };
-   
 
-    const getStatusClass = (status) => {
-      switch (status) {
-        case "Hold By Admin":
-          return "blue-dot";
-        case "RESOLVED":
-          return "green-dot";
-        case "Rejected By Admin":
-        case "RejectedByRo":
-          return "red-dot";
-        case "APPROVED":
-        case "appliedByRO":
-          return "orange-dot";
-        default:
-          return "";
-      }
-    };
+  const tabs = [
+    { id: "RecentReports", label: "Recent Reports", count: null },
+    { id: "ActiveEvents", label: "Active Events", count: 7 },
+    { id: "AssignedEvents", label: "Assigned Events", count: 5 },
+    { id: "ResolvedEvents", label: "Resolved Events", count: 27 },
+  ];
 
-    const StatusDot = ({ status }) => {
-      return <div className={`status-dot ${getStatusClass(status)}`}></div>;
-    };
+  const eventData = {
+    RecentReports: [
+      {
+        id: 1,
+        type: "Car Accident",
+        time: "12:24:04",
+        location: "Khandagiri",
+        image: "./images/hack.jpg",
+        status: "Hold By Admin",
+      },
+      {
+        id: 2,
+        type: "Fire",
+        time: "13:30:10",
+        location: "Jaydev Vihar",
+        image: "./images/hack.jpg",
+        status: "RESOLVED",
+      },
+    ],
+    ActiveEvents: [
+      {
+        id: 3,
+        type: "Flood",
+        time: "14:45:00",
+        location: "Sahid Nagar",
+        image: "./images/hack.jpg",
+        status: "APPROVED",
+      },
+      {
+        id: 4,
+        type: "Car Breakdown",
+        time: "15:00:20",
+        location: "Patia",
+        image: "./images/hack.jpg",
+        status: "Rejected By Admin",
+      },
+    ],
+    AssignedEvents: [
+      {
+        id: 5,
+        type: "Gas Leak",
+        time: "16:10:35",
+        location: "Bapuji Nagar",
+        image: "./images/hack.jpg",
+        status: "appliedByRO",
+      },
+    ],
+    ResolvedEvents: [
+      {
+        id: 6,
+        type: "Building Collapse",
+        time: "10:15:50",
+        location: "Unit-9",
+        image: "./images/hack.jpg",
+        status: "RESOLVED",
+      },
+    ],
+  };
+
   return (
     <section className="main dashboard-main">
       <section className="dashboard-main-page-wrapper">
@@ -91,13 +135,20 @@ const Dashboard = () => {
                       >
                         Services
                       </button>
-                      <ul className={`dropdown-menu ${isOpen ? "show fade-in " : "fade-out"}`}>
-                        {/* <li className="dropdown-header"></li> */}
-                        <li>
-                          <a className="dropdown-item" href="#settings">
-                            Onboarding Staff
-                          </a>
-                        </li>
+
+                      <ul
+                        className={`dropdown-menu ${
+                          isOpen ? "show fade-in " : "fade-out"
+                        }`}
+                      >
+                        <li className="dropdown-header"></li>
+                        <Link to="/onBoardingStaff">
+                          <li>
+                            <a className="dropdown-item" href="#settings">
+                              Onboarding Staff
+                            </a>
+                          </li>
+                        </Link>
                       </ul>
                     </div>
                   </div>
@@ -111,7 +162,7 @@ const Dashboard = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <h3>HOSPITALS</h3>
+                <h3>Govt. Of Odisha</h3>
               </div>
             </div>
           </div>
@@ -138,7 +189,7 @@ const Dashboard = () => {
                   <div className="table-card-heading">
                     <div className="table-card-heading-icon">
                       <img
-                        src="./images/dashboard-icon.png"
+                        src="/images/dashboard-icon.png"
                         alt="Dashboard Icon"
                         title="Dashboard Icon"
                       />
@@ -151,62 +202,9 @@ const Dashboard = () => {
                       View All <i className="fa-solid fa-play"></i>
                     </button>
                   </div>
-
+                  
                   <div className="table-con table-responsive">
-                   
-                    <table className="table">
-                      {/* <tbody>
-                        {[
-                          {
-                            id: 1,
-                            type: "Car Accident",
-                            time: "12:24:04",
-                            location: "Khandagiri",
-                            image: "./images/accident-1.png",
-                          },
-                          {
-                            id: 2,
-                            type: "Car Accident",
-                            time: "12:24:04",
-                            location: "Khandagiri",
-                            image: "./images/accident-2.png",
-                          },
-                          {
-                            id: 3,
-                            type: "Car Accident",
-                            time: "12:24:04",
-                            location: "Khandagiri",
-                            image: "./images/accident-3.png",
-                          },
-                        ].map((report) => (
-                          <tr key={report.id}>
-                            <td>
-                              <div>{report.id}</div>
-                            </td>
-                            <td>
-                              <div>{report.type}</div>
-                            </td>
-                            <td>
-                              <div>{report.time}</div>
-                            </td>
-                            <td>
-                              <div>{report.location}</div>
-                            </td>
-                            <td>
-                              <div>
-                                <img
-                                  src={report.image}
-                                  alt={`Accident ${report.id}`}
-                                  title={`Accident ${report.id}`}
-                                />
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody> */}
-
-                      <div className="event-tabs">
-                        <ul className="nav nav-tabs">
+                  <ul className="nav nav-tabs">
                           {tabs.map((tab) => (
                             <li key={tab.id} className="nav-item">
                               <button
@@ -223,46 +221,70 @@ const Dashboard = () => {
                             </li>
                           ))}
                         </ul>
+                    <table className="event-table">
+                      
+                        <tr>
+                          <th>Sl.No</th>
+                          <th>Type</th>
+                          <th>Time</th>
+                          <th>Location</th>
+                          <th>Images</th>
+                          <th>Status View</th>
+                        </tr>
+                      
 
-                        <div className="table-container">
-                          <table className="event-table">
-                           
-                           <tr>
-                                <th>Sl.No</th>
-                                <th>Type</th>
-                                <th>Timestamp</th>
-                                <th>Location</th>
-                                <th>Image</th>
-                                <th>status</th>
-                              </tr>
-                                                         
-                            
-                            <tbody>
-                              {eventData[activeTab]?.map((event) => (
-                                <tr key={event.id}>
-                                  <td>{event.id}</td>
-                                  <td>{event.type}</td>
-                                  <td>{event.time}</td>
-                                  <td>{event.location}</td>
-                                  
-                                  <td>
-                                    <img
-                                      src={event.image}
-                                      alt={event.type}
-                                      title={event.type}
-                                    />
-                                  </td>
-                                  <td> <StatusDot status={event.status} /> </td>
-                                </tr>
-                              )) || (
-                                <tr>
-                                  <td colSpan="5">No events found</td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                      <tbody>
+                        {eventData[activeTab]?.length > 0 ? (
+                          eventData[activeTab].map((event) => (
+                            <tr key={event.id}>
+                              <td>{event.id}</td>
+                              <td>{event.type}</td>
+                              <td>{event.time}</td>
+                              <td>{event.location}</td>
+                              <td>
+                                <img
+                                  className={`default-class ${
+                                    isZoomed ? "zoomed" : ""
+                                  }`}
+                                  onClick={handleZoom}
+                                  src={event.image}
+                                  alt={event.type}
+                                  title={event.type}
+                                />
+                              </td>
+                              <td>
+                                {event.status !== "RESOLVED" &&
+                                  event.status !== "Rejected By Admin" && (
+                                    <>
+                                      <button
+                                        className="btn btn-success"
+                                        onClick={() => approveTicket(event.id)}
+                                      >
+                                        Approve
+                                      </button>
+                                      <button
+                                        className="btn btn-danger"
+                                        onClick={() => reject(event.id)}
+                                      >
+                                        Reject
+                                      </button>
+                                      <button
+                                        className="btn btn-primary"
+                                        onClick={() => hold(event.id)}
+                                      >
+                                        Hold
+                                      </button>
+                                    </>
+                                  )}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="6">No events found</td>
+                          </tr>
+                        )}
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -270,6 +292,21 @@ const Dashboard = () => {
             </div>
           </div>
         </section>
+
+        {/* Pop-up for Zoomed Image */}
+
+        {isZoomed && (
+          <>
+            <div className="overlay" onClick={closePopup}></div>
+
+            <div className="popup">
+              <button className="close-btn" onClick={closePopup}>
+                X
+              </button>
+              <img className="popup-image" src={zoomedImage} alt="Zoomed" />
+            </div>
+          </>
+        )}
       </section>
     </section>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../public/assets/css/CameraPage.css"; // Ensure you have a CSS file for styling
 import api from "../api";
 
@@ -12,7 +12,7 @@ const CameraPage = () => {
   const [cameraError, setCameraError] = useState(null); // State to store camera errors
   const [devices, setDevices] = useState([]); // State to store available camera devices
   const [cameraType, setCameraType] = useState("user");
-  const [imageId,setImageId] = useState(null) ; //store uplaoded imageid
+  const [imageId, setImageId] = useState(null); //store uplaoded imageid
   const navigate = useNavigate();
   // Get available camera devices
   useEffect(() => {
@@ -92,9 +92,9 @@ const CameraPage = () => {
 
     const imageData = canvas.toDataURL("image/png"); // Convert image to Base64
     console.log("Captured image:", imageData);
-    
+
     setCapturedImage(imageData);
-    navigate('/incidentReport')
+    navigate("/");
   };
 
   // Memoize the getLocation function with useCallback
@@ -146,7 +146,6 @@ const CameraPage = () => {
     if (capturedImage) {
       console.log("Image successfully captured. Now requesting location...");
       getLocation();
-      
     }
   }, [capturedImage, getLocation]);
 
@@ -212,70 +211,60 @@ const CameraPage = () => {
   };
 
   return (
+    
+
     <section className="main camera-page">
-      <div className="camera-space">
-        <div className="camera">
-          {/* Live Camera Feed */}
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="camera-feed"
-          ></video>
-        </div>
-        <div className="camera-btn">
-          <button onClick={captureImage} className="capture-button">
-            Capture
-          </button>
+    <div className="camera-space">
+      {/* Live Camera Feed */}
+      <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
 
-          {/* Switch Camera Button */}
-          <button onClick={toggleCamera} className="switch-camera-button">
-            <img src="./images/switch-camera.png" alt="Switch Camera" />
-          </button>
-        </div>
-
-        {/* Canvas (Hidden, used for capturing image) */}
-        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-
-
-
-
-
-        {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
-
-
-
-
-        {/* Show Captured Image */}
-        {capturedImage && (
-          <div className="captured-image">
-            <img src={capturedImage} alt="Captured" />
-            <a
-              href={capturedImage}
-              download="captured-image.png"
-              className="download-button"
-            >
-              Download Image
-            </a>
-          </div>
-        )}
-        {location.latitude && location.longitude && (
-          <p>
-            Location: {location.latitude}, {location.longitude}
-          </p>
-        )}
-
-        <ul>
-          {devices.map((device) => (
-            <li key={device.deviceId}>{device.label || "Unnamed Camera"}</li>
-          ))}
-        </ul>
-
-        {/* Error Messages */}
-        {cameraError && <p className="error-message">{cameraError}</p>}
-        {locationError && <p className="error-message">{locationError}</p>}
+      {/* Camera Buttons */}
+      <div className="camera-btn">
+        <button onClick={captureImage} className="capture-button">
+          Capture
+        </button>
+        <button onClick={toggleCamera} className="switch-camera-button">
+          <img src="./images/switch-camera.png" alt="Switch Camera" />
+        </button>
+       
       </div>
-    </section>
+      
+      
+
+      {/* Hidden Canvas for Capturing Image */}
+      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+
+      {/* Image Upload Status */}
+      {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
+
+      {/* Display Captured Image */}
+      {capturedImage && (
+        <div className="captured-image">
+          <img src={capturedImage} alt="Captured" />
+          <a href={capturedImage} download="captured-image.png" className="download-button">
+            Download Image
+          </a>
+        </div>
+      )}
+
+      {/* Display User Location */}
+      {location.latitude && location.longitude && (
+        <p>Location: {location.latitude}, {location.longitude}</p>
+      )}
+
+      {/* Display Available Camera Devices */}
+      <ul>
+        {devices.map((device) => (
+          <li key={device.deviceId}>{device.label || "Unnamed Camera"}</li>
+        ))}
+      </ul>
+
+      {/* Error Messages */}
+      {cameraError && <p className="error-message">{cameraError}</p>}
+      {locationError && <p className="error-message">{locationError}</p>}
+    </div>
+  </section>
+
   );
 };
 

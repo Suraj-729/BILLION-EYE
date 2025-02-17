@@ -1,4 +1,3 @@
-General styles
 body {
     margin: 0;
     padding: 0;
@@ -6,34 +5,76 @@ body {
     overflow: auto;
 }
 
-/* Add this to your existing CSS */
-.main.dashboard-main {
-    overflow-y: auto; /* Adds a vertical scrollbar when content overflows */
-    height: 100vh; /* Ensures the section takes the full viewport height */
-    padding: 20px; /* Optional: Add padding for better spacing */
+.default-class {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
 }
 
-/* Custom Scrollbar Styles (Optional) */
-.main.dashboard-main::-webkit-scrollbar {
-    width: 10px; /* Width of the scrollbar */
+/* Large, centered popup */
+.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;  /* Increased size */
+    height: 400px;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
 }
 
-.main.dashboard-main::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color of the track */
+/* Background overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: none;
+}
+
+/* Show overlay when image is zoomed */
+.overlay.show {
+    display: block;
+}
+
+/* Optional: Close button for better UX */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
     border-radius: 5px;
 }
 
+
+.main.dashboard-main {
+    overflow-y: auto;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Custom Scrollbar Styles */
+.main.dashboard-main::-webkit-scrollbar {
+    width: 10px;
+}
+
 .main.dashboard-main::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar */
+    background: #888;
     border-radius: 5px;
 }
 
 .main.dashboard-main::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar on hover */
-}
-
-.nav-container {
-    background-color: aqua;
+    background: #555;
 }
 
 .container {
@@ -45,8 +86,7 @@ body {
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+    margin: 0 -15px;
 }
 
 .col-md-12 {
@@ -61,42 +101,22 @@ header {
 }
 
 .logo {
-    /* float: left; */
-    display: flex; /* Ensures proper alignment */
-    align-items: center; /* Centers vertically */
-    justify-content: center; /* Centers horizontally */
-    padding: 0px; /* Adds some spacing */
-   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
 }
-
-.logo a {
-    text-decoration: none;
-}
-
-/* .logo img {
-    width: 150px;
-    height: auto;
-} */
 
 .logo img {
-    max-width: 100px; /* Adjust size as needed */
+    max-width: 100px;
     height: auto;
-    object-fit: contain; /* Ensures proper scaling */
-}
-
-.menu-con {
-    float: right;
+    object-fit: contain;
 }
 
 .nav-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.nav-toggle {
-    display: none;
-    cursor: pointer;
 }
 
 .nav-menus-wrapper {
@@ -123,8 +143,7 @@ header {
 /* Page heading styles */
 .page-heading {
     background-color: #00048c;
-    padding: 10px ;
-    position: relative;
+    padding: 10px;
     text-align: center;
 }
 
@@ -134,51 +153,9 @@ header {
     color: #fff;
 }
 
-/* Dashboard map styles */
-.dashboard-map {
-    margin: 20px 0;
-    width: 100%;
-    height: 450px;
-    border: 1px solid #ddd;
-}
-
-/* Dashboard table styles */
-.dashboard-table-con {
-    background-color: #fff;
-    padding: 20px;
-}
-
-.table-card {
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.table-card-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.table-card-heading img {
-    width: 30px;
-    height: auto;
-    margin-right: 10px;
-}
-
-.table-card-heading h4 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.table-card-btn {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.table-con {
+/* Table styles */
+.table-container {
+    margin-top: 20px;
     overflow-x: auto;
 }
 
@@ -191,252 +168,102 @@ header {
 .table tbody td {
     padding: 10px;
     border: 1px solid #ddd;
-}
-
-.table thead th {
-    text-align: left;
-    
-}
-.table-head th {
-    background-color: #007bff; /* Blue background color for headers */
-    color:black; /* White text color for headers */
-    padding: 12px; /* Optional: Add padding for better spacing */
-    text-align: center; /* Center-align text in headers */
-    border: 1px solid #ddd; /* Optional: Add border for consistency */
-}
-/* Suraj Css */
-.event-tabs {
-    width: 100%;
-    padding: 20px;
-}
-
-.nav-tabs {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    border-bottom: 2px solid #ddd;
-}
-
-.nav-item {
-    margin-right: 10px;
-}
-
-.nav-link {
-    background: none;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    color: #333;
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s ease-in-out;
-}
-
-.nav-link.active {
-    border-bottom: 3px solid #007bff;
-    font-weight: bold;
-    color: #007bff;
-}
-
-.table-container {
-    margin-top: 20px;
-    overflow-x: auto;
-}
-
-.event-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-}
-
-.event-table th,
-.event-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
     text-align: center;
 }
 
-.event-table img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
+.table-head th {
+    background-color: #007bff;
+    color: black;
+    padding: 12px;
+    border: 1px solid #ddd;
 }
 
-.dropdown-menu {
-    max-height: 250px; /* Adjust height as needed */
-    overflow-y: auto;
-}
-
-/* Custom Scrollbar Styles */
-::-webkit-scrollbar {
-    width: 10px; /* Width of the scrollbar */
-    height: 10px; /* Height of the horizontal scrollbar */
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color of the track */
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar */
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar on hover */
-}
-
-
+/* Status dots */
 .status-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     display: inline-block;
+    animation: blink 1s infinite;
+}
+
+
+.event-table {
+    width: 100%;
+    border-collapse: collapse;
   }
   
-  /* Blinking effect */
-  @keyframes blink {
+  .event-table th,
+  .event-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .event-table th {
+    background-color: #f2f2f2;
+  }
+  
+
+@keyframes blink {
     50% {
-      opacity: 0;
+        opacity: 0;
     }
-  }
-  
-  .blue-dot {
-    background-color: blue;
-    animation: blink 1s infinite;
-  }
-  
-  .green-dot {
-    background-color: green;
-    animation: blink 1s infinite;
-  }
-  
-  .red-dot {
-    background-color: red;
-    animation: blink 1s infinite;
-  }
-  
-  .orange-dot {
-    background-color: orange;
-    animation: blink 1s infinite;
-  }
-  
-/* Responsive media queries */
+}
+
+.blue-dot { background-color: blue; }
+.green-dot { background-color: green; }
+.red-dot { background-color: red; }
+.orange-dot { background-color: orange; }
+
+/* Responsive styles */
 @media (max-width: 768px) {
     .nav-header {
         display: block;
     }
-
-    .nav-toggle {
-        display: block;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .nav-menus-wrapper {
-        display: none;
-    }
-
-    .menu-con {
-        text-align: center;
-    }
-
     .nav-item {
         display: block;
-        margin: 0 auto 10px;
+        margin-bottom: 10px;
     }
-
-    .table-con {
+    .table-container {
         overflow-x: scroll;
     }
-
-    .nav-link {
-        font-size: 14px;
-    }
 }
 
-
-/* Style the dropdown button */
-.dropdown {
-    background-color: red;
+/* Dropdown Styles */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 200px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    padding: 10px 0;
+    z-index: 100;
 }
-.custom-dropdown-btn {
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
     background-color: #007bff;
     color: white;
-    font-weight: bold;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-  }
-  
-  .custom-dropdown-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Style the dropdown menu */
-  .dropdown-menu {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    overflow: hidden;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-  }
-  
-  /* Show dropdown with animation */
-  .dropdown-menu.show {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-  
-  /* Smooth fade animations */
-  .fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  .fade-out {
-    animation: fadeOut 0.2s ease-in-out;
-  }
-  
-  /* Keyframe animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scaleY(0.8);
-    }
-    to {
-      opacity: 1;
-      transform: scaleY(1);
-    }
-  }
-  
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-      transform: scaleY(1);
-    }
-    to {
-      opacity: 0;
-      transform: scaleY(0.8);
-    }
-  }
-  
-  /* Style individual dropdown items */
-  .dropdown-item {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #333;
-    transition: background 0.3s ease, color 0.3s ease;
-  }
-  
-  .dropdown-item:hover {
-    background: #007bff;
-    color: white;
     border-radius: 4px;
-  }
-  
+}
