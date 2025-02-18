@@ -110,13 +110,13 @@ const Dashboard = () => {
   };
 
   return (
-    <section className="main dashboard-main">
+    
       <section className="dashboard-main-page-wrapper">
         <header>
           <div className="container">
             <div className="row">
-              <div className="col-md-12">
-                <div className="top-1">
+              <div className="col-md-1">
+                <div className="">
                   <div className="logo">
                     <img
                       src="./images/logo-small.png"
@@ -125,33 +125,7 @@ const Dashboard = () => {
                     />
                   </div>
                   {/*DropDown Nav menu */}
-                  <div className="nav-container  mt-4">
-                    <div className="dropdown" ref={dropdownRef}>
-                      <button
-                        className="btn btn-primary dropdown-toggle custom-dropdown-btn"
-                        type="button"
-                        onClick={toggleDropdown}
-                        aria-expanded={isOpen}
-                      >
-                        Services
-                      </button>
-
-                      <ul
-                        className={`dropdown-menu ${
-                          isOpen ? "show fade-in " : "fade-out"
-                        }`}
-                      >
-                        <li className="dropdown-header"></li>
-                        <Link to="/onBoardingStaff">
-                          <li>
-                            <a className="dropdown-item" href="#settings">
-                              Onboarding Staff
-                            </a>
-                          </li>
-                        </Link>
-                      </ul>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -308,7 +282,7 @@ const Dashboard = () => {
           </>
         )}
       </section>
-    </section>
+    
   );
 };
 

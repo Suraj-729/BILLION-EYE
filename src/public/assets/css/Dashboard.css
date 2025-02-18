@@ -76,43 +76,58 @@ body {
 .main.dashboard-main::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
+/*header part*/
+/* Container Styles */
 .container {
     max-width: 1024px;
     margin: 0 auto;
     padding: 0 15px;
 }
 
+/* Row Styles */
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 -15px;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.col-md-12 {
-    flex: 0 0 100%;
-    padding: 15px;
-}
-
-/* Header styles */
+/* Header Styling */
 header {
     background-color: #fff;
-    padding: 20px 0;
+    padding: 5px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Logo Styling */
 .logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0px;
 }
 
 .logo img {
-    max-width: 100px;
+    max-width: 80px;
     height: auto;
-    object-fit: contain;
+    transition: transform 0.3s ease-in-out;
 }
 
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo img {
+        max-width: 100px;
+    }
+}
+
+/*header part*/
 .nav-header {
     display: flex;
     justify-content: space-between;

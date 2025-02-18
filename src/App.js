@@ -19,6 +19,7 @@ import BillionEyePublic from "./pages/BillionEyePublic";
 import "./public/assets/css/bootstrap/scss/bootstrap.scss";
 import IncidentReport from "./pages/IncidentReport";
 import OnBoardingStaff from "./pages/OnBoardingStaff";
+import EventReport from "./Agency/EventReport";
 import Demo from "./pages/demo";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
@@ -43,6 +44,7 @@ function App() {
         <Route path="/Camera" element={<CameraPage />} />
         <Route path="/incidentReport" element={<IncidentReport />} />
         <Route path="/onBoardingStaff" element={<OnBoardingStaff />} />
+        <Route path="/eventReport" element={< EventReport />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 
