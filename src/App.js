@@ -21,6 +21,8 @@ import IncidentReport from "./pages/IncidentReport";
 import OnBoardingStaff from "./pages/OnBoardingStaff";
 import EventReport from "./Agency/EventReport";
 import Demo from "./pages/demo";
+import GoMapsTest from "./pages/gomaps";
+import AgencyLogin from "./Agency/AgencyLogin";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if the user is authenticated
@@ -45,6 +47,8 @@ function App() {
         <Route path="/incidentReport" element={<IncidentReport />} />
         <Route path="/onBoardingStaff" element={<OnBoardingStaff />} />
         <Route path="/eventReport" element={< EventReport />} />
+        <Route path="/gomaps" element={< GoMapsTest />} />
+        <Route path="/agencyLogin" element={< AgencyLogin />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 

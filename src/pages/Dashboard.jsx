@@ -1,6 +1,6 @@
 import React from "react";
-import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+
 import "../public/assets/css/Dashboard.css";
 //import api from "../api";
 const Dashboard = () => {
@@ -10,8 +10,8 @@ const Dashboard = () => {
     // Example: navigate(route) if using react-router-dom
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const dropdownRef = useRef(null);
 
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -25,9 +25,9 @@ const Dashboard = () => {
     setZoomedImage(null);
   };
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleDropdown = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   const approveTicket = (ticketNo) => {
     console.log("Approved ticket:", ticketNo);
