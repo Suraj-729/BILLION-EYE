@@ -1,9 +1,28 @@
 import React from "react";
 import "../public/assets/css/AgencyLogin.css";
-
+import { Link } from  'react-router-dom';
 const AgencyLogin = () => {
+  const handleLogin = () => {};
+
   return (
     <section className="main dashboard-hospital">
+      <nav className="navbar navbar-expand-lg navbar-dark">
+        <div className="container-fluid">
+          <span className="navbar-brand fw-bold " style={{ color : "#0d6efd"}}>BILLIONEYE- AGENCY</span>
+          <div className="ms-auto">
+            <Link to={"/agencyRegisiter"}>
+              <button
+                className="btn btn-outline-light me-2"
+                onClick={handleLogin}
+                style={{ backgroundColor : "#0d6efd"}}
+              >
+                Register
+              </button>
+            </Link>
+            
+          </div>
+        </div>
+      </nav>
       <div className="pag-1-wrapper">
         {/* Background Images Section */}
         <section className="pag-2-wrapper-sec-1">
@@ -62,14 +81,14 @@ const AgencyLogin = () => {
                       Login
                     </a>
                   </button>
-                  <button type="submit" className="btn btn-primary">
+                  {/* <button type="submit" className="btn btn-primary">
                     <a
                       href="ground-staff-assigned-task.html"
                       style={{ textDecoration: "none", color: "#fff" }}
                     >
                       Register
                     </a>
-                  </button>
+                  </button> */}
                 </form>
               </div>
             </div>

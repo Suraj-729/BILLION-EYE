@@ -17,7 +17,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
 const EventReport = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState();
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -28,19 +28,65 @@ const EventReport = () => {
     setAnchorEl(null);
   };
 
-  const [reportId, setReportId] = useState(["123456"]);
+  const [reportData, setReportData] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try{
+  //          const response = await api.get("/user/images/latest");
+  //          if (Array.isArray(response.data) && response.data.length > 0) {
+  //           setReportData(response.data[0]);
+  //       } else {
+  //           console.warn("No data found in response:", response.data);
+  //       }
+
+  //     }catch (error) {
+  //       console.error("Error fetching report data:", error);
+  //     }
+  //   };
+  //   fetchData();
+
+  // }, []);
 
   useEffect(() => {
-    const reports = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.get("/user/images");
-        setReportId(response.data);
+        const response = await api.get("/user/images/latest");
+
+        if (Array.isArray(response.data)) {
+          if (response.data.length > 0) {
+            setReportData(response.data[0]); // Use first object if it's an array
+          } else {
+            console.warn("Response is an empty array.");
+          }
+        } else if (
+          typeof response.data === "object" &&
+          response.data !== null
+        ) {
+          setReportData(response.data); // Set directly if it's an object
+        } else {
+          console.warn("Unexpected response format:", response.data);
+        }
       } catch (error) {
-        console.error("❌ Error fetching reportId:", error);
+        console.error("Error fetching report data:", error);
       }
     };
-    reports();
+
+    fetchData();
   }, []);
+
+  // Only format date & time if reportData is available
+  const formattedDate = reportData?.timestamp
+    ? new Date(reportData.timestamp).toLocaleDateString()
+    : "N/A";
+
+  const formattedTime = reportData?.timestamp
+    ? new Date(reportData.timestamp).toLocaleTimeString()
+    : "N/A";
+
+  if (!reportData) {
+    return <p>Loading report data...</p>;
+  }
 
   return (
     <section className="dashboard-main-page-wrapper">
@@ -151,7 +197,7 @@ const EventReport = () => {
             <div
               className="col-md-6 "
               id="report-coloumn"
-              style={{ marginTop: "-115px" }}
+              style={{ marginTop: "-15px" }}
             >
               <div className="table-card-2">
                 <div className="table-card-heading">
@@ -168,25 +214,25 @@ const EventReport = () => {
                         <td>
                           <b>Report Id :</b>
                         </td>
-                        <td>{reportId}</td>
+                        <td>{reportData.incidentID}</td>
                       </tr>
                       <tr>
                         <td>
                           <b>Object Detected :</b>
                         </td>
-                        <td>Car Accident</td>
+                        <td>{reportData.ObjDesc}</td>
                       </tr>
                       <tr>
                         <td>
                           <b>Date of Reporting :</b>
                         </td>
-                        <td>12-02-2024</td>
+                        <td>{formattedDate}</td>
                       </tr>
                       <tr>
                         <td>
                           <b>Time of Reporting :</b>
                         </td>
-                        <td>12:24:10</td>
+                        <td>{formattedTime}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -229,7 +275,7 @@ const EventReport = () => {
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
                 <figure>
-                  <img src="./images/accident-img.png" alt="Accident" />
+                  <img src={reportData.imageUrl} alt="Accident" />
                 </figure>
               </div>
             </div>

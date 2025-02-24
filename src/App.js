@@ -23,6 +23,9 @@ import EventReport from "./Agency/EventReport";
 import Demo from "./pages/demo";
 import GoMapsTest from "./pages/gomaps";
 import AgencyLogin from "./Agency/AgencyLogin";
+import AgencyRegister from "./Agency/AgencyRegister";
+import GroundStaffTax from "./Agency/GroundStaff";
+import OngoingTax from "./Agency/OngoingTax";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if the user is authenticated
@@ -49,6 +52,9 @@ function App() {
         <Route path="/eventReport" element={< EventReport />} />
         <Route path="/gomaps" element={< GoMapsTest />} />
         <Route path="/agencyLogin" element={< AgencyLogin />} />
+        <Route path="/agencyRegisiter" element={< AgencyRegister />} />
+        <Route path="/groundstaffTax" element={<GroundStaffTax />} />
+        <Route path="/ongoingTax" element={<OngoingTax />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 

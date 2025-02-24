@@ -14,6 +14,21 @@ const CameraPage = () => {
   const [cameraType, setCameraType] = useState("user");
   const [imageId, setImageId] = useState(null); //store uplaoded imageid
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
+
+  // const popupStyle = {
+  //   position: "fixed",
+  //   top: "50%",
+  //   left: "50%",
+  //   transform: "translate(-50%, -50%)",
+  //   background: "rgba(0, 0, 0, 0.8)",
+  //   color: "white",
+  //   padding: "10px 20px",
+  //   borderRadius: "5px",
+  //   zIndex: 1000,
+  // };
+
   // Get available camera devices
   useEffect(() => {
     const getCameraDevices = async () => {
@@ -33,18 +48,45 @@ const CameraPage = () => {
 
   // Start the camera based on the selected camera type
   useEffect(() => {
+    // const startCamera = async () => {
+    //   try {
+    //     const constraints = {
+    //       video: {
+    //         facingMode: cameraType, // Use front camera by default
+    //         width: { ideal: 1280 }, // Set the video resolution
+    //         height: { ideal: 720 },
+    //       },
+    //     };
+
+    //     console.log("Requesting camera access...");
+
+    //     const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    //     if (videoRef.current) {
+    //       videoRef.current.srcObject = stream;
+    //       console.log("Camera access granted.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error accessing camera:", error);
+    //     setCameraError(
+    //       "Unable to access the camera. Please ensure permissions are granted."
+    //     );
+    //   }
+    // };
+
     const startCamera = async () => {
       try {
+        const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    
         const constraints = {
           video: {
-            facingMode: cameraType, // Use front camera by default
-            width: { ideal: 1280 }, // Set the video resolution
+            facingMode: isMobile ? { exact: "environment" } : "user", 
+            width: { ideal: 1280 },
             height: { ideal: 720 },
           },
         };
-
+    
         console.log("Requesting camera access...");
-
+    
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -94,8 +136,23 @@ const CameraPage = () => {
     console.log("Captured image:", imageData);
 
     setCapturedImage(imageData);
-    navigate("/");
-  };
+    setShowPopup(true);
+
+    setTimeout(() => {
+      setShowPopup(false);
+      setShowThankYou(true);
+
+      // Step 2: Show "Thank You" message for another 3 seconds, then navigate
+      setTimeout(() => {
+        setShowThankYou(false);
+        navigate("/");
+      }, 3000);
+    }, 3000);
+};
+
+
+    // navigate("/");
+  
 
   // Memoize the getLocation function with useCallback
   const getLocation = useCallback(() => {
@@ -211,60 +268,91 @@ const CameraPage = () => {
   };
 
   return (
-    
-
     <section className="main camera-page">
-    <div className="camera-space">
-      {/* Live Camera Feed */}
-      <video ref={videoRef} autoPlay playsInline className="camera-feed"></video>
+      <div className="camera-space">
+        {/* Live Camera Feed */}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          className="camera-feed"
+        ></video>
 
-      {/* Camera Buttons */}
-      <div className="camera-btn">
-        <button onClick={captureImage} className="capture-button">
-          Capture
-        </button>
-        <button onClick={toggleCamera} className="switch-camera-button">
-          <img src="./images/switch-camera.png" alt="Switch Camera" />
-        </button>
-       
-      </div>
-      
-      
-
-      {/* Hidden Canvas for Capturing Image */}
-      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-
-      {/* Image Upload Status */}
-      {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
-
-      {/* Display Captured Image */}
-      {capturedImage && (
-        <div className="captured-image">
-          <img src={capturedImage} alt="Captured" />
-          <a href={capturedImage} download="captured-image.png" className="download-button">
-            Download Image
-          </a>
+        {/* Camera Buttons */}
+        <div className="camera-btn">
+          <button onClick={captureImage} className="capture-button">
+            Capture
+          </button>
+          <button onClick={toggleCamera} className="switch-camera-button">
+            <img src="./images/switch-camera.png" alt="Switch Camera" />
+          </button>
         </div>
-      )}
 
-      {/* Display User Location */}
-      {location.latitude && location.longitude && (
-        <p>Location: {location.latitude}, {location.longitude}</p>
-      )}
+        {/* Hidden Canvas for Capturing Image */}
+        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
 
-      {/* Display Available Camera Devices */}
-      <ul>
-        {devices.map((device) => (
-          <li key={device.deviceId}>{device.label || "Unnamed Camera"}</li>
-        ))}
-      </ul>
+        {/* Image Upload Status */}
+        {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
 
-      {/* Error Messages */}
-      {cameraError && <p className="error-message">{cameraError}</p>}
-      {locationError && <p className="error-message">{locationError}</p>}
-    </div>
-  </section>
+        {/* Display Captured Image */}
+        {capturedImage && (
+          <div className="captured-image">
+            <img src={capturedImage} alt="Captured" />
+            <a
+              href={capturedImage}
+              download="captured-image.png"
+              className="download-button"
+            >
+              Download Image
+            </a>
+          </div>
+        )}
 
+        {showPopup && (
+          <div className="popup">
+            <div className="popup-content">
+              <div className="checkmark">✔</div>
+              <h2>Report Submitted</h2>
+              <p>Your report has been successfully sent to the government.</p>
+              <button
+                onClick={() => setShowPopup(false)}
+                className="popup-button"
+              >
+                Submit Another Report
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Thank You Message */}
+        {showThankYou && (
+          <div className="popup">
+            <div className="popup-content">
+              <h2>Thank You for Reporting!</h2>
+              <p>Your contribution helps make a better and safer society.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Display User Location */}
+        {location.latitude && location.longitude && (
+          <p>
+            Location: {location.latitude}, {location.longitude}
+          </p>
+        )}
+
+        {/* Display Available Camera Devices */}
+        <ul>
+          {devices.map((device) => (
+            <li key={device.deviceId}>{device.label || "Unnamed Camera"}</li>
+          ))}
+        </ul>
+
+        {/* Error Messages */}
+        {cameraError && <p className="error-message">{cameraError}</p>}
+        {locationError && <p className="error-message">{locationError}</p>}
+      </div>
+    </section>
   );
 };
 
