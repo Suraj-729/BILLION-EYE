@@ -55,6 +55,7 @@ function App() {
         <Route path="/agencyRegisiter" element={< AgencyRegister />} />
         <Route path="/groundstaffTax" element={<GroundStaffTax />} />
         <Route path="/ongoingTax" element={<OngoingTax />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 
@@ -63,10 +64,10 @@ function App() {
           path="/bmcreport"
           element={<ProtectedRoute element={BmcDashboard} />}
         />
-        <Route
+        {/* <Route
           path="/dashboard"
           element={<ProtectedRoute element={Dashboard} />}
-        />
+        /> */}
         <Route
           path="/bbsrReport"
           element={<ProtectedRoute element={BbsrDashboard} />}

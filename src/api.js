@@ -13,8 +13,8 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "/backend", // Update this if the backend is hosted elsewhere
-  //baseURL: "https:localhost:5000", // Update this if the backend is hosted elsewhere
+    // baseURL: "/backend", // Update this if the backend is hosted elsewhere
+  baseURL: "http:localhost:5000", // Update this if the backend is hosted elsewhere
   timeout: 5000,
 });
 api.interceptors.response.use(

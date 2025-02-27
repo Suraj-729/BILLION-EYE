@@ -722,3 +722,67 @@ section.main {
   }
 
 /**/
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    background: #000;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.menu-icon {
+    cursor: pointer;
+}
+
+/* Apps Menu */
+.apps-menu {
+    position: absolute;
+    right: 20px;
+    top: 50px;
+    background: #222;
+    border-radius: 10px;
+    padding: 15px;
+    width: 250px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.menu-item {
+    text-align: center;
+    cursor: pointer;
+}
+
+.menu-item img {
+    width: 40px;
+    height: 40px;
+}
+
+.menu-item p {
+    margin: 5px 0 0;
+    font-size: 14px;
+}

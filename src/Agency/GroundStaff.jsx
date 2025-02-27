@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useState , useEffect , useRef}from "react";
 import "../public/assets/css/GroundStaff.css";
 // Assuming you have a separate CSS file
 
@@ -27,12 +27,73 @@ const tasks = [
 ];
 
 const GroundStaffTax = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    // Toggle menu visibility
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
   return (
     <section className="main dashboard-main">
       <section className="dashboard-main-page-wrapper">
         <header>
           <div className="container">
             <div className="row">
+            <div className="navbar">
+            <a href="#">Gmail</a>
+            <a href="#">Images</a>
+            <div className="menu-icon" onClick={toggleMenu}>
+                <img src="menu-icon.png" alt="Menu" width="30" />
+            </div>
+
+            {/* Apps Menu */}
+            {isOpen && (
+                <div className="apps-menu" ref={menuRef}>
+                    <div className="menu-grid">
+                        <div className="menu-item">
+                            <img src="profile.png" alt="Account" />
+                            <p>Account</p>
+                        </div>
+                        <div className="menu-item">
+                            <img src="google.png" alt="Search" />
+                            <p>Search</p>
+                        </div>
+                        <div className="menu-item">
+                            <img src="youtube.png" alt="YouTube" />
+                            <p>YouTube</p>
+                        </div>
+                        <div className="menu-item">
+                            <img src="maps.png" alt="Maps" />
+                            <p>Maps</p>
+                        </div>
+                        <div className="menu-item">
+                            <img src="gmail.png" alt="Gmail" />
+                            <p>Gmail</p>
+                        </div>
+                        <div className="menu-item">
+                            <img src="drive.png" alt="Drive" />
+                            <p>Drive</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
               <div className="col-md-12">
                 <div className="top-1">
                   <div className="logo">

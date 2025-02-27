@@ -159,7 +159,7 @@ const EventReport = () => {
                       <ListItemIcon>
                         <PersonAdd fontSize="small" />
                       </ListItemIcon>
-                      Add another account
+                      Add Ground Satff
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
