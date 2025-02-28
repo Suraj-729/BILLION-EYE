@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import api from "../api";
 import "../public/assets/css/Dashboard.css";
 //import api from "../api";
@@ -11,15 +11,12 @@ const Dashboard = () => {
     // Example: navigate(route) if using react-router-dom
   };
 
-  // const [isOpen, setIsOpen] = useState(false);
-  // const dropdownRef = useRef(null);
-  // const reportArray = Array.isArray(reportData) ? reportData : [reportData];
-
   const [reportData, setReportData] = useState(null);
   const reportArray = Array.isArray(reportData) ? reportData : [reportData];
+  const [isOpen, setIsOpen] = useState(false);
 
   const [isZoomed, setIsZoomed] = useState(false);
-  const [zoomedImage, setZoomedImage] = useState(null);
+  // const [zoomedImage, setZoomedImage] = useState(null);
 
   const handleZoom = () => {
     setIsZoomed((prev) => !prev);
@@ -27,12 +24,8 @@ const Dashboard = () => {
   };
 
   const closePopup = () => {
-    setZoomedImage(null);
+    setIsZoomed(null);
   };
-
-  // const toggleDropdown = () => {
-  //   setIsOpen(!isOpen);
-  // };
 
   const approveTicket = (ticketNo) => {
     console.log("Approved ticket:", ticketNo);
@@ -47,8 +40,6 @@ const Dashboard = () => {
   };
 
   const [activeTab, setActiveTab] = useState("RecentReports");
-
-  // const [reportData, setReportData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,8 +63,6 @@ const Dashboard = () => {
       } catch (error) {
         console.error("Error fetching report data:", error);
       }
-      
-      
     };
 
     fetchData();
@@ -83,7 +72,7 @@ const Dashboard = () => {
     const fetchReportsByTab = async () => {
       try {
         let endpoint = "/images/recent"; // Default for Recent Reports
-  
+
         if (activeTab === "ActiveEvents") {
           endpoint = "/images/ACTIVE";
         } else if (activeTab === "AssignedEvents") {
@@ -91,18 +80,16 @@ const Dashboard = () => {
         } else if (activeTab === "ResolvedEvents") {
           endpoint = "/images/RESOLVED";
         }
-  
+
         const response = await api.get(endpoint);
         setReportData(response.data);
       } catch (error) {
         console.error("Error fetching report data for tab:", error);
       }
     };
-  
+
     fetchReportsByTab();
   }, [activeTab]); // Runs when activeTab changes
-  
-  
 
   // const formattedDate = reportData?.timestamp
   //   ? new Date(
@@ -117,8 +104,8 @@ const Dashboard = () => {
   //   : "N/A";
 
   const tabs = [
-    { id: "RecentReports", label: "Recent Reports"},
-    { id: "ActiveEvents", label: "Active Events"},
+    { id: "RecentReports", label: "Recent Reports" },
+    { id: "ActiveEvents", label: "Active Events" },
     { id: "AssignedEvents", label: "Assigned Events" },
     { id: "ResolvedEvents", label: "Resolved Events" },
   ];
@@ -128,15 +115,82 @@ const Dashboard = () => {
       <header>
         <div className="container">
           <div className="row">
-            <div className="col-md-1">
-              <div className="">
+            <div className="col-md-12">
+              <div className="d-flex align-items-center justify-content-between">
+                {/* Logo */}
                 <div className="logo">
                   <img src="./images/logo-small.png" alt="Logo" title="Logo" />
                 </div>
-                {/*DropDown Nav menu */}
+
+                {/* Hamburger Menu Button */}
+                <div
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "24px",
+                    padding: "10px",
+                    zIndex: "1100", // Ensures it's clickable
+                  }}
+                  onClick={() => setIsOpen(true)}
+                >
+                  <img src="./images/menu-bar.svg" alt="" />
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Backdrop to close the menu when clicking outside */}
+        {isOpen && (
+          <div
+            style={{
+              position: "fixed",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "100vh",
+              background: "rgba(0, 0, 0, 0.3)",
+              zIndex: "999", // Below the menu, above other content
+            }}
+            onClick={() => setIsOpen(false)}
+          ></div>
+        )}
+
+        {/* DropDown Nav Menu */}
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: isOpen ? "0" : "-250px",
+            width: "250px",
+            height: "100vh",
+            background: "#fff",
+            boxShadow: "2px 0px 10px rgba(0, 0, 0, 0.1)",
+            transition: "left 0.3s ease-in-out",
+            padding: "20px",
+            zIndex: "1000", // Ensures it appears above everything
+          }}
+        >
+          <span
+            style={{
+              fontSize: "20px",
+              cursor: "pointer",
+              display: "block",
+              marginBottom: "20px",
+              marginRight: "-190px",
+            }}
+            onClick={() => setIsOpen(false)}
+          >
+            ✕
+          </span>
+
+          <ul>
+            <Link to={"/dashboard"}>
+              <li>HOME</li>
+            </Link>
+            <Link to={"/assignGroundstaff"}>
+              <li>Onboarding ground staff</li>
+            </Link>
+          </ul>
         </div>
       </header>
 
@@ -221,12 +275,16 @@ const Dashboard = () => {
                               <td>
                                 {/* {formattedTime},{formattedDate} */}
                                 {report.timestamp
-    ? new Date(report.timestamp.$date || report.timestamp).toLocaleTimeString()
-    : "N/A"}
-  ,{" "}
-  {report.timestamp
-    ? new Date(report.timestamp.$date || report.timestamp).toLocaleDateString()
-    : "N/A"}
+                                  ? new Date(
+                                      report.timestamp.$date || report.timestamp
+                                    ).toLocaleTimeString()
+                                  : "N/A"}
+                                ,{" "}
+                                {report.timestamp
+                                  ? new Date(
+                                      report.timestamp.$date || report.timestamp
+                                    ).toLocaleDateString()
+                                  : "N/A"}
                               </td>
                               <td>
                                 {report.latitude}, {report.longitude}
@@ -238,7 +296,7 @@ const Dashboard = () => {
                                   }`}
                                   onClick={() => {
                                     handleZoom();
-                                    setZoomedImage(report.imageUrl);
+                                    setIsZoomed(report.imageUrl);
                                   }}
                                   src={report.imageUrl}
                                   alt={report.ObjDes}
@@ -298,13 +356,6 @@ const Dashboard = () => {
       {isZoomed && (
         <>
           <div className="overlay" onClick={closePopup}></div>
-
-          <div className="popup">
-            <button className="close-btn" onClick={closePopup}>
-              X
-            </button>
-            <img className="popup-image" src={zoomedImage} alt="Zoomed" />
-          </div>
         </>
       )}
     </section>

@@ -17,7 +17,7 @@ import CameraPage from "./pages/CameraPage";
 import Dashboard from "./pages/Dashboard";
 import BillionEyePublic from "./pages/BillionEyePublic";
 import "./public/assets/css/bootstrap/scss/bootstrap.scss";
-import IncidentReport from "./pages/IncidentReport";
+// import IncidentReport from "./pages/IncidentReport";
 import OnBoardingStaff from "./pages/OnBoardingStaff";
 import EventReport from "./Agency/EventReport";
 import Demo from "./pages/demo";
@@ -26,6 +26,7 @@ import AgencyLogin from "./Agency/AgencyLogin";
 import AgencyRegister from "./Agency/AgencyRegister";
 import GroundStaffTax from "./Agency/GroundStaff";
 import OngoingTax from "./Agency/OngoingTax";
+import AssignGroundStaff from "./Agency/assignGroundstaff";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if the user is authenticated
@@ -47,7 +48,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<BillionEyePublic />} />
         <Route path="/Camera" element={<CameraPage />} />
-        <Route path="/incidentReport" element={<IncidentReport />} />
+        {/* <Route path="/incidentReport" element={<IncidentReport />} /> */}
         <Route path="/onBoardingStaff" element={<OnBoardingStaff />} />
         <Route path="/eventReport" element={< EventReport />} />
         <Route path="/gomaps" element={< GoMapsTest />} />
@@ -56,6 +57,7 @@ function App() {
         <Route path="/groundstaffTax" element={<GroundStaffTax />} />
         <Route path="/ongoingTax" element={<OngoingTax />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/assignGroundstaff" element={<AssignGroundStaff />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 

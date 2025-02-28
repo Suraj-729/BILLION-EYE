@@ -85,7 +85,7 @@ const AgencyRegister = () => {
 
   return (
     <section className="main dashboard-hospital">
-      <nav className="navbar navbar-expand-lg navbar-dark">
+      <nav className="navbar navbar-expand-lg navbar-white">
         <div className="container-fluid">
           <span className="navbar-brand fw-bold " style={{ color: "#0d6efd" }}>
             BILLIONEYE- AGENCY
@@ -121,9 +121,9 @@ const AgencyRegister = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <figure className="logo-con">
+                <figure className="logo-con" style={{marginTop: "18px"}}>
                   <a href="index.html">
-                    <img src="./images/logo-blue.png" alt="Logo" />
+                    <img src="./images/logo-blue.png" alt="Logo"  />
                   </a>
                 </figure>
               </div>
@@ -132,7 +132,7 @@ const AgencyRegister = () => {
         </section>
 
         {/* Sign-Up Form Section */}
-        <section className="sign-up-form dashboard-hospital-sign-up">
+        <section className="sign-up-form dashboard-hospital-sign-up" style={{marginTop:"-2px"}}>
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -222,9 +222,11 @@ const AgencyRegister = () => {
                       required
                     />
                   </div>
+                  <Link to={'/dashboard'}>
                   <button type="submit" className="btn btn-primary">
                     Register
-                  </button>
+                  </button></Link>
+                  
                 </form>
               </div>
             </div>

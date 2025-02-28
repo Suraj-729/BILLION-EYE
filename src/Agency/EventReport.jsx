@@ -15,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom";
 
 const EventReport = () => {
   const [anchorEl, setAnchorEl] = React.useState();
@@ -89,16 +90,16 @@ const EventReport = () => {
   }
 
   return (
-    <section className="dashboard-main-page-wrapper">
+    <section className="dashboard-main-page-wrapper" style={{backgroundColor:"#eaf8ff"}}>
       <header>
         <div className="container">
           <div className="row">
             <div className="col-md-12">
               <div className="top-1">
                 <div className="logo">
-                  <a href="index.html">
+                  <Link to={'/dashboard'}>
                     <img src="./images/logo-small.png" alt="Logo" />
-                  </a>
+                    </Link>
                 </div>
 
                 <React.Fragment>
@@ -181,7 +182,10 @@ const EventReport = () => {
         </div>
       </header>
 
-      <section className="page-heading" style={{ marginTop: "-25px" }}>
+      <section
+        className="page-heading"
+        style={{ marginTop: "-25px", padding: "2px" }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-md-12">
@@ -220,7 +224,7 @@ const EventReport = () => {
                         <td>
                           <b>Object Detected :</b>
                         </td>
-                        <td>{reportData.ObjDesc}</td>
+                        <td>{reportData.ObjDes}</td>
                       </tr>
                       <tr>
                         <td>
@@ -275,7 +279,11 @@ const EventReport = () => {
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
                 <figure>
-                  <img src={reportData.imageUrl} alt="Accident" />
+                  <img
+                    src={reportData.imageUrl}
+                    style={{ width: "200px" }}
+                    alt="Accident"
+                  />
                 </figure>
               </div>
             </div>
@@ -288,8 +296,10 @@ const EventReport = () => {
               >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <h4 className="text-uppercase">ASSIGN TO</h4>
-                  </div>
+                    <img src="./images/user.png" alt="" title="" />
+                    </div>
+                    <h4 className="text-uppercase"  style={{marginLeft: "10px" }}>ASSIGN TO</h4>
+                  
                 </div>
                 <form>
                   <select
@@ -311,6 +321,9 @@ const EventReport = () => {
           </div>
         </div>
       </section>
+      <footer>
+            <img src="./images/footer-bg.png" alt=""/>
+        </footer>
     </section>
   );
 };
