@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
-import "../public/assets/css/Dashboard.css";
+//  import { Link } from "react-router-dom";
+import "../public/assets/css/EventReport.css";
 import api from "../api";
 
 import Box from "@mui/material/Box";
@@ -31,23 +31,25 @@ const EventReport = () => {
 
   const [reportData, setReportData] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try{
-  //          const response = await api.get("/user/images/latest");
-  //          if (Array.isArray(response.data) && response.data.length > 0) {
-  //           setReportData(response.data[0]);
-  //       } else {
-  //           console.warn("No data found in response:", response.data);
-  //       }
+  
+  const [selectedUser, setSelectedUser] = useState(""); // State for selected user
+  const [userDetails, setUserDetails] = useState(null); // State for user details
 
-  //     }catch (error) {
-  //       console.error("Error fetching report data:", error);
-  //     }
-  //   };
-  //   fetchData();
+  const [users, setUsers] = useState([
+    { id: "1", name: "John Doe", phone: "123-456-7890", responsibility: "Traffic Officer" },
+    { id: "2", name: "Jane Smith", phone: "987-654-3210", responsibility: "Road Safety Analyst" },
+    { id: "3", name: "Alice Johnson", phone: "555-666-7777", responsibility: "Emergency Responder" },
+    { id: "4", name: "Bob Williams", phone: "111-222-3333", responsibility: "Field Inspector" },
+  ]); // Manually added users
+  
+  const handleUserChange = (event) => {
+    const userId = event.target.value;
+    setSelectedUser(userId);
 
-  // }, []);
+    // Find the selected user details (assuming user objects have id, name, phone, responsibility)
+    const user = users.find((u) => u.id === userId);
+    setUserDetails(user || null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,7 +75,17 @@ const EventReport = () => {
       }
     };
 
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get("/users");
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
     fetchData();
+    fetchUsers();
   }, []);
 
   // Only format date & time if reportData is available
@@ -90,16 +102,19 @@ const EventReport = () => {
   }
 
   return (
-    <section className="dashboard-main-page-wrapper" style={{backgroundColor:"#eaf8ff"}}>
+    <section
+      className="dashboard-main-page-wrapper"
+      style={{ backgroundColor: "#eaf8ff" }}
+    >
       <header>
         <div className="container">
           <div className="row">
             <div className="col-md-12">
               <div className="top-1">
                 <div className="logo">
-                  <Link to={'/dashboard'}>
+                  <Link to={"/dashboard"}>
                     <img src="./images/logo-small.png" alt="Logo" />
-                    </Link>
+                  </Link>
                 </div>
 
                 <React.Fragment>
@@ -148,7 +163,9 @@ const EventReport = () => {
                           letterSpacing: "1px",
                         }}
                       >
-                        <h5>AGENCY</h5>
+                        <Link to="/dashboard">
+                          <h5>AGENCY</h5>
+                        </Link>
                       </div>
                     </MenuItem>
                     {/* <MenuItem onClick={handleClose}>
@@ -297,22 +314,55 @@ const EventReport = () => {
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
                     <img src="./images/user.png" alt="" title="" />
-                    </div>
-                    <h4 className="text-uppercase"  style={{marginLeft: "10px" }}>ASSIGN TO</h4>
-                  
+                  </div>
+                  <h4 className="text-uppercase" style={{ marginLeft: "10px" }}>
+                    ASSIGN TO
+                  </h4>
                 </div>
                 <form>
                   <select
                     aria-label="Select User"
                     id="userSelect"
                     className="form-control"
+                    value={selectedUser}
+                    onChange={handleUserChange}
                   >
-                    <option selected>Select</option>
-                    <option value="1">Manasi</option>
-                    <option value="2">Prasad</option>
-                    <option value="3">Milan</option>
+                    {users.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {" "}
+                        {/* Changed user.is → user.id */}
+                        {user.name}
+                      </option>
+                    ))}
                   </select>
                 </form>
+                {userDetails && (
+                  <div
+                    className="assign-details"
+                    style={{
+                      marginTop: "10px",
+                      background: "#f9f9f9",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      <li>
+                        <b>Name:</b> {userDetails.name}
+                      </li>
+                      <li>
+                        <b>Phone:</b> {userDetails.phone}
+                      </li>
+                      <li>
+                        <b>Responsibility:</b> {userDetails.responsibility}
+                      </li>
+                    </ul>
+                    <div style={{ textAlign: "center", marginTop: "10px" }}>
+                      <button className="btn btn-success">Assign</button>
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <span id="designation"></span>
                 </div>
@@ -322,8 +372,8 @@ const EventReport = () => {
         </div>
       </section>
       <footer>
-            <img src="./images/footer-bg.png" alt=""/>
-        </footer>
+        <img src="./images/footer-bg.png" alt="" />
+      </footer>
     </section>
   );
 };

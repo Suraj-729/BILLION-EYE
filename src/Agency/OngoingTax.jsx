@@ -112,7 +112,7 @@ const OngoingTax = () => {
             <div className="col-md-12">
               <div className="table-card">
                 <div className="row">
-                  <div className="col-md-3 col-4">
+                  <div className="col-md-3 col-4" style={{marginLeft:"14px"}}>
                     <figure>
                       <img src={reportData.imageUrl} alt="" className="w-100" />
                     </figure>

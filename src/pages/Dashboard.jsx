@@ -1,10 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import api from "../api";
 import "../public/assets/css/Dashboard.css";
 //import api from "../api";
 const Dashboard = () => {
+  const navigate = useNavigate();
   const handleNavigation = (route) => {
     console.log(`Navigating to ${route}`);
     // Add your navigation logic here, such as using React Router
@@ -12,6 +14,7 @@ const Dashboard = () => {
   };
 
   const [reportData, setReportData] = useState(null);
+  //error
   const reportArray = Array.isArray(reportData) ? reportData : [reportData];
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,10 +30,32 @@ const Dashboard = () => {
     setIsZoomed(null);
   };
 
-  const approveTicket = (ticketNo) => {
-    console.log("Approved ticket:", ticketNo);
-  };
+  const approveTicket = async (incidentID) => {
+    console.log("Approving ticket for incident:", incidentID);
 
+    if (!incidentID) {
+      console.error("Incident ID is missing");
+      return;
+    }
+
+    try {
+      const response = await api.put(`/images/status/${incidentID}`, {
+        status: "APPROVED",
+        accepted: true, // Update 'accepted' in MongoDB
+      });
+
+      console.log("API Response:", response);
+
+      if (response.status === 200) {
+        console.log("Ticket approved successfully:", incidentID);
+        setTimeout(() => navigate("/eventReport"), 500);
+      } else {
+        console.error("Failed to approve ticket:", response.data);
+      }
+    } catch (error) {
+      console.error("Error approving ticket:", error);
+    }
+  };
   const reject = (ticketNo) => {
     console.log("Rejected ticket:", ticketNo);
   };
@@ -71,7 +96,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchReportsByTab = async () => {
       try {
-        let endpoint = "/images/recent"; // Default for Recent Reports
+        let endpoint = "/user/images/latest"; // Default for Recent Reports
 
         if (activeTab === "ActiveEvents") {
           endpoint = "/images/ACTIVE";
@@ -303,7 +328,7 @@ const Dashboard = () => {
                                 />
                               </td>
                               <td>
-                                {report?.status &&
+                                {/* {report?.status &&
                                   report.status !== "RESOLVED" &&
                                   report.status !== "Rejected By Admin" && (
                                     <>
@@ -332,7 +357,48 @@ const Dashboard = () => {
                                         Hold
                                       </button>
                                     </>
-                                  )}
+                                  )} */}
+
+                                {report &&
+                                report.status !== "RESOLVED" &&
+                                report.status !== "Rejected By Admin" ? (
+                                  <>
+                                    <button
+                                      className="btn btn-success"
+                                      style={{ marginRight: "8px" }}
+                                      onClick={() => {
+                                        if (!report?.incidentID) {
+                                          console.error(
+                                            "Incident ID is missing. Cannot approve."
+                                          );
+                                          return;
+                                        }
+                                        approveTicket(report.incidentID);
+                                      }}
+                                    >
+                                      Accept
+                                    </button>
+                                    <button
+                                      className="btn btn-danger"
+                                      style={{ marginRight: "12px" }}
+                                      onClick={() =>
+                                        reject(report.incidentID)
+                                      }
+                                    >
+                                      Reject
+                                    </button>
+                                    <button
+                                      className="btn btn-primary"
+                                      onClick={() =>
+                                        hold(report.incidentID)
+                                      }
+                                    >
+                                      Hold
+                                    </button>
+                                  </>
+                                ) : (
+                                  <p>No actions available</p> // Show message if no actions
+                                )}
                               </td>
                             </tr>
                           ) : null
