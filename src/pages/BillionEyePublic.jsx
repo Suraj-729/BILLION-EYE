@@ -36,7 +36,7 @@ const BillionEyePublic = () => {
         <section className="emergency-section text-center">
           <Link to={'/Camera'}>
           <button className="btn btn-danger">
-            <i className="bi bi-camera-fill"></i> Capture & Report
+            <i className="bi bi-camera-fill"></i> Incident & Report
           </button>
         </Link>
         </section>
