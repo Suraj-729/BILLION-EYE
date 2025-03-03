@@ -4,10 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 dotenv.config(); 
 const cors = require('cors');
-// const connectToDb = require('./Db/db')
-// const userRoutes = require('./routes/user.routes');
 
-// connectToDb();
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors());
 app.use(express.json());
@@ -23,3 +20,6 @@ app.get('*', (req, res) => {
 });
 
 module.exports = app;
+
+
+

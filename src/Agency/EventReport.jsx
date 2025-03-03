@@ -177,7 +177,7 @@ const EventReport = () => {
                       <ListItemIcon>
                         <PersonAdd fontSize="small" />
                       </ListItemIcon>
-                      Add Ground Satff
+                     <Link to='/assignGroundstaff'>Add Ground Satff</Link> 
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>

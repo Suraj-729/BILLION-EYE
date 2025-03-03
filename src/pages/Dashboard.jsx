@@ -275,7 +275,7 @@ const Dashboard = () => {
                           onClick={() => setActiveTab(tab.id)}
                         >
                           {tab.label}{" "}
-                          {tab.count !== null && <span>({tab.count})</span>}
+                          {tab.count !== null && <span>{tab.count}</span>}
                         </button>
                       </li>
                     ))}
@@ -295,7 +295,7 @@ const Dashboard = () => {
                         reportArray.map((report, index) =>
                           report ? (
                             <tr key={report.incidentID || index}>
-                              <td>{report.incidentID}</td>
+                              <td>{index+1}</td>
                               <td>{report.ObjDes}</td>
                               <td>
                                 {/* {formattedTime},{formattedDate} */}

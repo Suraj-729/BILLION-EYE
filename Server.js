@@ -1,14 +1,4 @@
-// const http = require('http')
-// const app = require('./app')
 
-// const port = process.env.PORT || 5000
-
-// const Server = http.createServer(app);
-
-// Server.listen(port, () => {
-//     console.log(`Server Is Listen and it Running on the ${port}`);
-    
-// })
 
 
 
@@ -41,3 +31,5 @@ http.createServer((req, res) => {
     res.writeHead(301, { Location: httpsUrl }); // Redirect to HTTPS
     res.end();
 })
+
+
