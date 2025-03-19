@@ -308,14 +308,14 @@ const EventReport = () => {
               <div
                 className="dashboard-report-assign"
                 style={{
-                  marginTop: "-115px",
+                  marginTop: "-15px",
                 }}
               >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
                     <img src="./images/user.png" alt="" title="" />
                   </div>
-                  <h4 className="text-uppercase" style={{ marginLeft: "10px" }}>
+                  <h4 className="text-uppercase" style={{ marginLeft: "-10px" }}>
                     ASSIGN TO
                   </h4>
                 </div>

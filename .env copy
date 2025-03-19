@@ -1,4 +1,0 @@
-PORT=3000
-
-DB_CONNECT=mongodb://0.0.0.0/BILLION-EYE
-JWT_PRIVATE_KEY=user-video-secret

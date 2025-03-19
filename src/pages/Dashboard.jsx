@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import api from "../api";
 import "../public/assets/css/Dashboard.css";
 //import api from "../api";
@@ -232,11 +231,11 @@ const Dashboard = () => {
       <section className="dashboard-map">
         <iframe
           title="Hospital Locations"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d239487.1652253839!2d85.65564125231477!3d20.300807016970502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909d2d5170aa5%3A0xfc580e2b68b33fa8!2sBhubaneswar%2C%20Odisha!5e0!3m2!1sen!2sin!4v1737381279368!5m2!1sen!2sin"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62417.61198332427!2d85.738052!3d20.3008649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909d2d5170aa5%3A0xfc580e2b68b33fa8!2sBhubaneswar%2C%20Odisha!5e0!3m2!1sen!2sin!4v1710859200000!5m2!1sen!2sin"
           width="600"
           height="450"
           style={{ border: 0, marginTop: "-20px" }}
-          allowFullScreen=""
+          allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
@@ -295,7 +294,7 @@ const Dashboard = () => {
                         reportArray.map((report, index) =>
                           report ? (
                             <tr key={report.incidentID || index}>
-                              <td>{index+1}</td>
+                              <td>{index + 1}</td>
                               <td>{report.ObjDes}</td>
                               <td>
                                 {/* {formattedTime},{formattedDate} */}
@@ -381,17 +380,13 @@ const Dashboard = () => {
                                     <button
                                       className="btn btn-danger"
                                       style={{ marginRight: "12px" }}
-                                      onClick={() =>
-                                        reject(report.incidentID)
-                                      }
+                                      onClick={() => reject(report.incidentID)}
                                     >
                                       Reject
                                     </button>
                                     <button
                                       className="btn btn-primary"
-                                      onClick={() =>
-                                        hold(report.incidentID)
-                                      }
+                                      onClick={() => hold(report.incidentID)}
                                     >
                                       Hold
                                     </button>
