@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate , useParams} from "react-router-dom";
+
 import api from "../api";
 import "../public/assets/css/Dashboard.css";
 //import api from "../api";
@@ -11,10 +12,14 @@ const Dashboard = () => {
     // Add your navigation logic here, such as using React Router
     // Example: navigate(route) if using react-router-dom
   };
-
-  const [reportData, setReportData] = useState(null);
+  
+  const { agencyId } = useParams();
+  const [assignedAgency, setAssignedAgency] = useState("Loading...");
+   const [dashboardData, setDashboardData] = useState([]);
+  // const [reportData, setReportData] = useState(null);
+  
   //error
-  const reportArray = Array.isArray(reportData) ? reportData : [reportData];
+  //const reportArray = Array.isArray(reportData) ? reportData : [reportData];
   const [isOpen, setIsOpen] = useState(false);
 
   const [isZoomed, setIsZoomed] = useState(false);
@@ -65,55 +70,90 @@ const Dashboard = () => {
 
   const [activeTab, setActiveTab] = useState("RecentReports");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/user/images/latest");
+  // useEffect(() => {
+  //   const fetchAssignedAgency = async () => {
+  //     try {
+  //       const response = await api.get("/event-with-agency/event-123");
 
-        if (Array.isArray(response.data)) {
-          if (response.data.length > 0) {
-            setReportData(response.data[0]); // Use first object if it's an array
-          } else {
-            console.warn("Response is an empty array.");
-          }
-        } else if (
-          typeof response.data === "object" &&
-          response.data !== null
-        ) {
-          setReportData(response.data); // Set directly if it's an object
-        } else {
-          console.warn("Unexpected response format:", response.data);
+  //       // Ensure correct data extraction
+  //       setAssignedAgency(response.data.assigned_agency_name);
+  //     } catch (error) {
+  //       console.error("Error fetching assigned agency:", error);
+  //     }
+  //   };
+
+  //   fetchAssignedAgency();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!agencyId) {
+  //     console.error("Agency ID is missing");
+  //     return; // Stop execution if agencyId is undefined/null
+  //   }
+  
+  //   const fetchDashboardByAgencyID = async () => {
+  //     try {
+  //       const response = await api.get(`/agency-dashboard/${agencyId}`); // ✅ Fixed template literal
+  //       setDashboardData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching report data for tab:", error);
+  //     }
+  //   };
+  
+  //   fetchDashboardByAgencyID();
+  // }, [agencyId]);
+
+
+  useEffect(() => {
+    if (!agencyId) {
+        console.error("Agency ID is missing");
+        return;
+    }
+
+    const fetchDashboardData = async () => {
+        try {
+            const response = await api.get(`/agency-dashboard/${agencyId}`);
+            console.log("API Response:", response.data);
+
+            if (response.data?.assignedEvents) {
+                setDashboardData(response.data.assignedEvents); // Set full assignedEvents array
+            } else {
+                setDashboardData([]);
+            }
+
+            setAssignedAgency(response.data?.AgencyName || "Unknown Agency");
+        } catch (error) {
+            console.error("Error fetching report data:", error);
+            setAssignedAgency("Error loading agency");
         }
-      } catch (error) {
-        console.error("Error fetching report data:", error);
-      }
     };
 
-    fetchData();
-  }, []);
+    fetchDashboardData();
+}, [agencyId]);
 
-  useEffect(() => {
-    const fetchReportsByTab = async () => {
-      try {
-        let endpoint = "/user/images/latest"; // Default for Recent Reports
 
-        if (activeTab === "ActiveEvents") {
-          endpoint = "/images/ACTIVE";
-        } else if (activeTab === "AssignedEvents") {
-          endpoint = "/images/ASSIGNED";
-        } else if (activeTab === "ResolvedEvents") {
-          endpoint = "/images/RESOLVED";
-        }
+//  useEffect(() => {
+//     const fetchReportsByTab = async () => {
+//       try {
+//         let endpoint = "/user/images/latest"; // Default for Recent Reports
 
-        const response = await api.get(endpoint);
-        setReportData(response.data);
-      } catch (error) {
-        console.error("Error fetching report data for tab:", error);
-      }
-    };
+//         if (activeTab === "ActiveEvents") {
+//           endpoint = "/images/ACTIVE";
+//         } else if (activeTab === "AssignedEvents") {
+//           endpoint = "/images/ASSIGNED";
+//         } else if (activeTab === "ResolvedEvents") {
+//           endpoint = "/images/RESOLVED";
+//         }
 
-    fetchReportsByTab();
-  }, [activeTab]); // Runs when activeTab changes
+//         const response = await api.get(endpoint);
+//         setReportData(response.data);
+//       } catch (error) { 
+//         console.error("Error fetching report data for tab:", error);
+//       }
+//     };
+
+//     fetchReportsByTab();
+//   }, [activeTab]); // Runs when activeTab changes
 
   // const formattedDate = reportData?.timestamp
   //   ? new Date(
@@ -222,7 +262,11 @@ const Dashboard = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>Govt. Of Odisha</h3>
+              {/* <h3>
+                Assigned Agency:{" "}
+                {assignedAgency ? assignedAgency : "Loading..."}
+              </h3> */}
+              <h3>Assigned Agency: {assignedAgency}</h3>
             </div>
           </div>
         </div>
@@ -290,120 +334,77 @@ const Dashboard = () => {
                     </tr>
 
                     <tbody>
-                      {reportArray && reportArray.length > 0 ? (
-                        reportArray.map((report, index) =>
-                          report ? (
-                            <tr key={report.incidentID || index}>
-                              <td>{index + 1}</td>
-                              <td>{report.ObjDes}</td>
-                              <td>
-                                {/* {formattedTime},{formattedDate} */}
-                                {report.timestamp
-                                  ? new Date(
-                                      report.timestamp.$date || report.timestamp
-                                    ).toLocaleTimeString()
-                                  : "N/A"}
-                                ,{" "}
-                                {report.timestamp
-                                  ? new Date(
-                                      report.timestamp.$date || report.timestamp
-                                    ).toLocaleDateString()
-                                  : "N/A"}
-                              </td>
-                              <td>
-                                {report.latitude}, {report.longitude}
-                              </td>
-                              <td>
-                                <img
-                                  className={`default-class ${
-                                    isZoomed ? "zoomed" : ""
-                                  }`}
-                                  onClick={() => {
-                                    handleZoom();
-                                    setIsZoomed(report.imageUrl);
-                                  }}
-                                  src={report.imageUrl}
-                                  alt={report.ObjDes}
-                                />
-                              </td>
-                              <td>
-                                {/* {report?.status &&
-                                  report.status !== "RESOLVED" &&
-                                  report.status !== "Rejected By Admin" && (
-                                    <>
-                                      <button
-                                        className="btn btn-success"
-                                        style={{ marginRight: "8px" }}
-                                        onClick={() =>
-                                          approveTicket(report.incidentID)
-                                        }
-                                      >
-                                        Accpet
-                                      </button>
-                                      <button
-                                        className="btn btn-danger"
-                                        style={{ marginRight: "12px" }}
-                                        onClick={() =>
-                                          reject(report.incidentID)
-                                        }
-                                      >
-                                        Reject
-                                      </button>
-                                      <button
-                                        className="btn btn-primary"
-                                        onClick={() => hold(report.incidentID)}
-                                      >
-                                        Hold
-                                      </button>
-                                    </>
-                                  )} */}
-
-                                {report &&
-                                report.status !== "RESOLVED" &&
-                                report.status !== "Rejected By Admin" ? (
-                                  <>
-                                    <button
-                                      className="btn btn-success"
-                                      style={{ marginRight: "8px" }}
-                                      onClick={() => {
-                                        if (!report?.incidentID) {
-                                          console.error(
-                                            "Incident ID is missing. Cannot approve."
-                                          );
-                                          return;
-                                        }
-                                        approveTicket(report.incidentID);
-                                      }}
-                                    >
-                                      Accept
-                                    </button>
-                                    <button
-                                      className="btn btn-danger"
-                                      style={{ marginRight: "12px" }}
-                                      onClick={() => reject(report.incidentID)}
-                                    >
-                                      Reject
-                                    </button>
-                                    <button
-                                      className="btn btn-primary"
-                                      onClick={() => hold(report.incidentID)}
-                                    >
-                                      Hold
-                                    </button>
-                                  </>
-                                ) : (
-                                  <p>No actions available</p> // Show message if no actions
-                                )}
-                              </td>
-                            </tr>
-                          ) : null
-                        )
-                      ) : (
-                        <tr>
-                          <td colSpan="6">No events found</td>
-                        </tr>
-                      )}
-                    </tbody>
+    {dashboardData && dashboardData.length > 0 ? (
+      dashboardData.map((report, index) => (
+        <tr key={report.event_id || index}>
+          <td>{index + 1}</td>
+          <td>{report.description}</td>
+          <td>
+            {report.timestamp
+              ? new Date(report.timestamp).toLocaleTimeString()
+              : "N/A"}
+            ,{" "}
+            {report.timestamp
+              ? new Date(report.timestamp).toLocaleDateString()
+              : "N/A"}
+          </td>
+          <td>
+            {report.location?.coordinates[1]}, {report.location?.coordinates[0]}
+          </td>
+          <td>
+            {report.imageUrl ? (
+              <img
+                className={`default-class ${isZoomed ? "zoomed" : ""}`}
+                onClick={() => {
+                  handleZoom();
+                  setIsZoomed(report.imageUrl);
+                }}
+                src={report.imageUrl}
+                alt="Event"
+              />
+            ) : (
+              "No Image"
+            )}
+          </td>
+          <td>
+            {report.status !== "RESOLVED" && report.status !== "Rejected By Admin" ? (
+              <>
+                <button
+                  className="btn btn-success"
+                  style={{ marginRight: "8px" }}
+                  onClick={() => {
+                    if (!report.incidentID) {
+                      console.error("Incident ID is missing. Cannot approve.");
+                      return;
+                    }
+                    approveTicket(report.incidentID);
+                  }}
+                >
+                  Accept
+                </button>
+                <button
+                  className="btn btn-danger"
+                  style={{ marginRight: "12px" }}
+                  onClick={() => reject(report.incidentID)}
+                >
+                  Reject
+                </button>
+                <button className="btn btn-primary" onClick={() => hold(report.incidentID)}>
+                  Hold
+                </button>
+              </>
+            ) : (
+              <p>No actions available</p>
+            )}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="6">No events found</td>
+      </tr>
+    )}
+  </tbody>
                   </table>
                 </div>
               </div>
@@ -412,13 +413,29 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Pop-up for Zoomed Image */}
+      {/* Example usage of dashboardData */}
+     {/* <div>
+        {dashboardData && dashboardData.length > 0 ? (
+          dashboardData.map((event, index) => (
+            <div key={index}>
+              <p>{event.name}</p>
+              <p>{event.date}</p>
+            </div>
+          ))
+        ) : (
+          <p>No events available</p>
+        )}
+      </div> */}
+
+      {/* Pop-up for Z oomed Image */}
 
       {isZoomed && (
         <>
           <div className="overlay" onClick={closePopup}></div>
         </>
       )}
+
+     
     </section>
   );
 };

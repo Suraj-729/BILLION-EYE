@@ -56,7 +56,8 @@ function App() {
         <Route path="/agencyRegisiter" element={< AgencyRegister />} />
         <Route path="/groundstaffTax" element={<GroundStaffTax />} />
         <Route path="/ongoingTax" element={<OngoingTax />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/:agencyId" element={<Dashboard />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         <Route path="/assignGroundstaff" element={<AssignGroundStaff />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}

@@ -253,13 +253,16 @@ const CameraPage = () => {
   //   }
   // };
   const sendImageToServer = async (base64String, latitude, longitude) => {
-    if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
-      console.error("❌ Invalid location data. Latitude or Longitude is NaN.");
-      alert("Failed to get valid location. Please enable GPS and try again.");
-      return;
-    }
+    latitude = parseFloat(latitude);
+  longitude = parseFloat(longitude);
+
+  if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+    console.error("❌ Invalid location data. Latitude or Longitude is NaN.");
+    alert("Failed to get valid location. Please enable GPS and try again.");
+    return;
+  }
   
-    const userId = "12345";
+    const userId = '12345';
     const timestamp = new Date().toISOString();
   
     try {
@@ -269,11 +272,13 @@ const CameraPage = () => {
   
       // Prepare JSON payload
       const payload = {
+
+
         userId,
-        location: {
+         location : {
           type: "Point",
-          coordinates: [longitude, latitude], // Ensure correct order
-        },
+          coordinates: [
+          longitude, latitude ] },
         timestamp,
         base64String, // Send Base64 directly
       };
