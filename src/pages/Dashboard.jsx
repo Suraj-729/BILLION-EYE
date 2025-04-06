@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useNavigate , useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import api from "../api";
 import "../public/assets/css/Dashboard.css";
@@ -12,12 +12,12 @@ const Dashboard = () => {
     // Add your navigation logic here, such as using React Router
     // Example: navigate(route) if using react-router-dom
   };
-  
+
   const { agencyId } = useParams();
   const [assignedAgency, setAssignedAgency] = useState("Loading...");
-   const [dashboardData, setDashboardData] = useState([]);
+  const [dashboardData, setDashboardData] = useState([]);
   // const [reportData, setReportData] = useState(null);
-  
+
   //error
   //const reportArray = Array.isArray(reportData) ? reportData : [reportData];
   const [isOpen, setIsOpen] = useState(false);
@@ -32,40 +32,6 @@ const Dashboard = () => {
 
   const closePopup = () => {
     setIsZoomed(null);
-  };
-
-  const approveTicket = async (incidentID) => {
-    console.log("Approving ticket for incident:", incidentID);
-
-    if (!incidentID) {
-      console.error("Incident ID is missing");
-      return;
-    }
-
-    try {
-      const response = await api.put(`/images/status/${incidentID}`, {
-        status: "APPROVED",
-        accepted: true, // Update 'accepted' in MongoDB
-      });
-
-      console.log("API Response:", response);
-
-      if (response.status === 200) {
-        console.log("Ticket approved successfully:", incidentID);
-        setTimeout(() => navigate("/eventReport"), 500);
-      } else {
-        console.error("Failed to approve ticket:", response.data);
-      }
-    } catch (error) {
-      console.error("Error approving ticket:", error);
-    }
-  };
-  const reject = (ticketNo) => {
-    console.log("Rejected ticket:", ticketNo);
-  };
-
-  const hold = (ticketNo) => {
-    console.log("Held ticket:", ticketNo);
   };
 
   const [activeTab, setActiveTab] = useState("RecentReports");
@@ -90,7 +56,7 @@ const Dashboard = () => {
   //     console.error("Agency ID is missing");
   //     return; // Stop execution if agencyId is undefined/null
   //   }
-  
+
   //   const fetchDashboardByAgencyID = async () => {
   //     try {
   //       const response = await api.get(`/agency-dashboard/${agencyId}`); // ✅ Fixed template literal
@@ -99,73 +65,67 @@ const Dashboard = () => {
   //       console.error("Error fetching report data for tab:", error);
   //     }
   //   };
-  
+
   //   fetchDashboardByAgencyID();
   // }, [agencyId]);
 
-
   useEffect(() => {
     if (!agencyId) {
-        console.error("Agency ID is missing");
-        return;
+      console.error("Agency ID is missing");
+      return;
     }
 
     const fetchDashboardData = async () => {
-        try {
-            const response = await api.get(`/agency-dashboard/${agencyId}`);
-            console.log("API Response:", response.data);
+      try {
+        const response = await api.get(`/agency-dashboard/${agencyId}`);
+        console.log("API Response:", response.data);
 
-            if (response.data?.assignedEvents) {
-                setDashboardData(response.data.assignedEvents); // Set full assignedEvents array
-            } else {
-                setDashboardData([]);
-            }
-
-            setAssignedAgency(response.data?.AgencyName || "Unknown Agency");
-        } catch (error) {
-            console.error("Error fetching report data:", error);
-            setAssignedAgency("Error loading agency");
+        if (response.data?.assignedEvents) {
+          setDashboardData(response.data.assignedEvents); // Set full assignedEvents array
+        } else {
+          setDashboardData([]);
         }
+
+        setAssignedAgency(response.data?.AgencyName || "Unknown Agency");
+      } catch (error) {
+        console.error("Error fetching report data:", error);
+        setAssignedAgency("Error loading agency");
+      }
     };
 
     fetchDashboardData();
-}, [agencyId]);
+  }, [agencyId]);
 
+  const updateEventStatus = async (event_id, newStatus) => {
+    try {
+      const response = await api.put(`/events/status/${event_id}`, {
+        status: newStatus,
+      });
 
-//  useEffect(() => {
-//     const fetchReportsByTab = async () => {
-//       try {
-//         let endpoint = "/user/images/latest"; // Default for Recent Reports
+      if (response.status === 200) {
+        console.log(`Event ${event_id} status updated to ${newStatus}`);
 
-//         if (activeTab === "ActiveEvents") {
-//           endpoint = "/images/ACTIVE";
-//         } else if (activeTab === "AssignedEvents") {
-//           endpoint = "/images/ASSIGNED";
-//         } else if (activeTab === "ResolvedEvents") {
-//           endpoint = "/images/RESOLVED";
-//         }
+        // Update UI for the specific event
+        setDashboardData((prevData) =>
+          prevData.map((event) =>
+            event.event_id === event_id
+              ? { ...event, status: newStatus }
+              : event
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
 
-//         const response = await api.get(endpoint);
-//         setReportData(response.data);
-//       } catch (error) { 
-//         console.error("Error fetching report data for tab:", error);
-//       }
-//     };
-
-//     fetchReportsByTab();
-//   }, [activeTab]); // Runs when activeTab changes
-
-  // const formattedDate = reportData?.timestamp
-  //   ? new Date(
-  //       reportData.timestamp.$date || reportData.timestamp
-  //     ).toLocaleDateString()
-  //   : "N/A";
-
-  // const formattedTime = reportData?.timestamp
-  //   ? new Date(
-  //       reportData.timestamp.$date || reportData.timestamp
-  //     ).toLocaleTimeString()
-  //   : "N/A";
+  // Event-Specific Status Update Functions
+  const approveEvent = (event_id) => {
+    updateEventStatus(event_id, "Accepted");
+    navigate(`/eventreport/${event_id}`, { state: { event_id } });
+  };
+  const rejectEvent = (event_id) => updateEventStatus(event_id, "Rejected");
+  const holdEvent = (event_id) => updateEventStatus(event_id, "On Hold");
 
   const tabs = [
     { id: "RecentReports", label: "Recent Reports" },
@@ -183,7 +143,7 @@ const Dashboard = () => {
               <div className="d-flex align-items-center justify-content-between">
                 {/* Logo */}
                 <div className="logo">
-                  <img src="./images/logo-small.png" alt="Logo" title="Logo" />
+                  <img src="../images/logo-small.png" alt="Logo" title="Logo" />
                 </div>
 
                 {/* Hamburger Menu Button */}
@@ -196,7 +156,7 @@ const Dashboard = () => {
                   }}
                   onClick={() => setIsOpen(true)}
                 >
-                  <img src="./images/menu-bar.svg" alt="" />
+                  <img src="../images/menu-bar.svg" alt="" />
                 </div>
               </div>
             </div>
@@ -306,7 +266,6 @@ const Dashboard = () => {
                     View All <i className="fa-solid fa-play"></i>
                   </button>
                 </div>
-
                 <div className="table-con table-responsive">
                   <ul className="nav nav-tabs" style={{ marginLeft: "-290px" }}>
                     {tabs.map((tab) => (
@@ -323,88 +282,96 @@ const Dashboard = () => {
                       </li>
                     ))}
                   </ul>
+
                   <table className="event-table">
                     <tr>
                       <th>Sl.No</th>
                       <th>Type</th>
-                      <th>Time</th>
+                      <th>Date and Time</th>
                       <th>Location</th>
                       <th>Images</th>
                       <th>Status View</th>
                     </tr>
 
                     <tbody>
-    {dashboardData && dashboardData.length > 0 ? (
-      dashboardData.map((report, index) => (
-        <tr key={report.event_id || index}>
-          <td>{index + 1}</td>
-          <td>{report.description}</td>
-          <td>
-            {report.timestamp
-              ? new Date(report.timestamp).toLocaleTimeString()
-              : "N/A"}
-            ,{" "}
-            {report.timestamp
-              ? new Date(report.timestamp).toLocaleDateString()
-              : "N/A"}
-          </td>
-          <td>
-            {report.location?.coordinates[1]}, {report.location?.coordinates[0]}
-          </td>
-          <td>
-            {report.imageUrl ? (
-              <img
-                className={`default-class ${isZoomed ? "zoomed" : ""}`}
-                onClick={() => {
-                  handleZoom();
-                  setIsZoomed(report.imageUrl);
-                }}
-                src={report.imageUrl}
-                alt="Event"
-              />
-            ) : (
-              "No Image"
-            )}
-          </td>
-          <td>
-            {report.status !== "RESOLVED" && report.status !== "Rejected By Admin" ? (
-              <>
-                <button
-                  className="btn btn-success"
-                  style={{ marginRight: "8px" }}
-                  onClick={() => {
-                    if (!report.incidentID) {
-                      console.error("Incident ID is missing. Cannot approve.");
-                      return;
-                    }
-                    approveTicket(report.incidentID);
-                  }}
-                >
-                  Accept
-                </button>
-                <button
-                  className="btn btn-danger"
-                  style={{ marginRight: "12px" }}
-                  onClick={() => reject(report.incidentID)}
-                >
-                  Reject
-                </button>
-                <button className="btn btn-primary" onClick={() => hold(report.incidentID)}>
-                  Hold
-                </button>
-              </>
-            ) : (
-              <p>No actions available</p>
-            )}
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan="6">No events found</td>
-      </tr>
-    )}
-  </tbody>
+                      {dashboardData && dashboardData.length > 0 ? (
+                        dashboardData.map((report, index) => (
+                          <tr key={report.event_id || index}>
+                            <td>{index + 1}</td>
+                            <td>{report.description}</td>
+                            <td>
+                              {report.assignment_time
+                                ? new Date(
+                                    report.assignment_time
+                                  ).toLocaleTimeString()
+                                : "N/A"}
+                              ,{" "}
+                              {report.assignment_time
+                                ? new Date(
+                                    report.assignment_time
+                                  ).toLocaleDateString()
+                                : "N/A"}
+                            </td>
+                            <td>
+                              {report.latitude},{" "}
+                              {report.longitude}
+                            </td>
+                            <td>
+                              {report.image_url ? (
+                                <img
+                                  className={`default-class ${
+                                    isZoomed ? "zoomed" : ""
+                                  }`}
+                                  onClick={() => {
+                                    handleZoom();
+                                    setIsZoomed(report.image_url);
+                                  }}
+                                  src={report.image_url}
+                                  alt="Event"
+                                />
+                              ) : (
+                                "No Image"
+                              )}
+                            </td>
+                            <td>
+                              {report.status !== "RESOLVED" &&
+                              report.status !== "Rejected By Admin" ? (
+                                <>
+                                  <button
+                                    className="btn btn-success"
+                                    style={{ marginRight: "8px" }}
+                                    onClick={() =>
+                                      approveEvent(report.event_id)
+                                    }
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    className="btn btn-danger"
+                                    style={{ marginRight: "12px" }}
+                                    onClick={() => rejectEvent(report.event_id)}
+                                  >
+                                    Reject
+                                  </button>
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={() => holdEvent(report.event_id)}
+                                  >
+                                    Hold
+                                  </button>
+                                </>
+                              ) : (
+                                <p>No actions available</p>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6">No events found</td>
+                        </tr>
+                      )}
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -414,7 +381,7 @@ const Dashboard = () => {
       </section>
 
       {/* Example usage of dashboardData */}
-     {/* <div>
+      {/* <div>
         {dashboardData && dashboardData.length > 0 ? (
           dashboardData.map((event, index) => (
             <div key={index}>
@@ -434,8 +401,6 @@ const Dashboard = () => {
           <div className="overlay" onClick={closePopup}></div>
         </>
       )}
-
-     
     </section>
   );
 };

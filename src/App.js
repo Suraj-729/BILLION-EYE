@@ -50,7 +50,7 @@ function App() {
         <Route path="/Camera" element={<CameraPage />} />
         {/* <Route path="/incidentReport" element={<IncidentReport />} /> */}
         <Route path="/onBoardingStaff" element={<OnBoardingStaff />} />
-        <Route path="/eventReport" element={< EventReport />} />
+        <Route path="/eventReport/:event_id" element={< EventReport />} />
         <Route path="/gomaps" element={< GoMapsTest />} />
         <Route path="/agencyLogin" element={< AgencyLogin />} />
         <Route path="/agencyRegisiter" element={< AgencyRegister />} />

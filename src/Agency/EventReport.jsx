@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//  import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // Ensure all imports are at the top
 import "../public/assets/css/EventReport.css";
 import api from "../api";
 
@@ -10,14 +10,13 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-// import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
 
 const EventReport = () => {
+  const { event_id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState();
   const open = Boolean(anchorEl);
 
@@ -28,20 +27,20 @@ const EventReport = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
+  const [loading, setLoading] = useState(true);
 
   const [reportData, setReportData] = useState(null);
-
-  
   const [selectedUser, setSelectedUser] = useState(""); // State for selected user
   const [userDetails, setUserDetails] = useState(null); // State for user details
 
-  const [users, setUsers] = useState([
+  const [users] = useState([
     { id: "1", name: "John Doe", phone: "123-456-7890", responsibility: "Traffic Officer" },
     { id: "2", name: "Jane Smith", phone: "987-654-3210", responsibility: "Road Safety Analyst" },
     { id: "3", name: "Alice Johnson", phone: "555-666-7777", responsibility: "Emergency Responder" },
     { id: "4", name: "Bob Williams", phone: "111-222-3333", responsibility: "Field Inspector" },
   ]); // Manually added users
-  
+
   const handleUserChange = (event) => {
     const userId = event.target.value;
     setSelectedUser(userId);
@@ -50,43 +49,33 @@ const EventReport = () => {
     const user = users.find((u) => u.id === userId);
     setUserDetails(user || null);
   };
-
   useEffect(() => {
+    if (!event_id) {
+      console.error("Event ID is missing");
+      return;
+    }
+
     const fetchData = async () => {
       try {
-        const response = await api.get("/user/images/latest");
-
-        if (Array.isArray(response.data)) {
-          if (response.data.length > 0) {
-            setReportData(response.data[0]); // Use first object if it's an array
-          } else {
-            console.warn("Response is an empty array.");
-          }
-        } else if (
-          typeof response.data === "object" &&
-          response.data !== null
-        ) {
-          setReportData(response.data); // Set directly if it's an object
-        } else {
-          console.warn("Unexpected response format:", response.data);
-        }
+        const response = await api.get(`/events/${event_id}`); // Adjust endpoint as needed
+        setReportData(response.data);
       } catch (error) {
         console.error("Error fetching report data:", error);
-      }
-    };
-
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get("/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-    fetchUsers();
-  }, []);
+  }, [event_id]); // Run effect when eventId changes
+
+  if (loading) {
+    return <p>Loading report data...</p>;
+  }
+
+  if (!reportData) {
+    return <p>No data found for event {event_id}</p>;
+  }
 
   // Only format date & time if reportData is available
   const formattedDate = reportData?.timestamp
@@ -235,13 +224,13 @@ const EventReport = () => {
                         <td>
                           <b>Report Id :</b>
                         </td>
-                        <td>{reportData.incidentID}</td>
+                        <td>{reportData.event_id}</td>
                       </tr>
                       <tr>
                         <td>
                           <b>Object Detected :</b>
                         </td>
-                        <td>{reportData.ObjDes}</td>
+                        <td>{reportData.description}</td>
                       </tr>
                       <tr>
                         <td>
