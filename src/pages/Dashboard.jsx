@@ -22,18 +22,11 @@ const Dashboard = () => {
   //const reportArray = Array.isArray(reportData) ? reportData : [reportData];
   const [isOpen, setIsOpen] = useState(false);
 
-  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomedImageUrl, setZoomedImageUrl] = useState(null);
+
   // const [zoomedImage, setZoomedImage] = useState(null);
 
-  const handleZoom = () => {
-    setIsZoomed((prev) => !prev);
-    console.log("Zoom state:", !isZoomed);
-  };
-
-  const closePopup = () => {
-    setIsZoomed(null);
-  };
-
+  
   const [activeTab, setActiveTab] = useState("RecentReports");
 
   // useEffect(() => {
@@ -313,21 +306,22 @@ const Dashboard = () => {
                                 : "N/A"}
                             </td>
                             <td>
-                              {report.latitude},{" "}
-                              {report.longitude}
+                              {report.latitude}, {report.longitude}
                             </td>
                             <td>
                               {report.image_url ? (
                                 <img
-                                  className={`default-class ${
-                                    isZoomed ? "zoomed" : ""
-                                  }`}
-                                  onClick={() => {
-                                    handleZoom();
-                                    setIsZoomed(report.image_url);
-                                  }}
+                                  className="default-class"
+                                  onClick={() =>
+                                    setZoomedImageUrl(report.image_url)
+                                  }
                                   src={report.image_url}
                                   alt="Event"
+                                  style={{
+                                    cursor: "zoom-in",
+                                    maxWidth: "100px",
+                                    borderRadius: "6px",
+                                  }}
                                 />
                               ) : (
                                 "No Image"
@@ -396,11 +390,28 @@ const Dashboard = () => {
 
       {/* Pop-up for Z oomed Image */}
 
-      {isZoomed && (
-        <>
-          <div className="overlay" onClick={closePopup}></div>
-        </>
+      {zoomedImageUrl && (
+        <div className="zoom-overlay" onClick={() => setZoomedImageUrl(null)}>
+          <div
+            className="zoomed-image-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close-button"
+              onClick={() => setZoomedImageUrl(null)}
+            >
+              ✕
+            </button>
+            <img
+              src={zoomedImageUrl}
+              alt="Zoomed Event"
+              className="zoomed-image"
+            />
+          </div>
+        </div>
       )}
+
+      <div></div>
     </section>
   );
 };

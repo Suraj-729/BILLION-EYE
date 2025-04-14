@@ -78,12 +78,12 @@ const EventReport = () => {
   }
 
   // Only format date & time if reportData is available
-  const formattedDate = reportData?.timestamp
-    ? new Date(reportData.timestamp).toLocaleDateString()
+  const formattedDate = reportData?.assignment_time
+    ? new Date(reportData.assignment_time).toLocaleDateString()
     : "N/A";
 
-  const formattedTime = reportData?.timestamp
-    ? new Date(reportData.timestamp).toLocaleTimeString()
+  const formattedTime = reportData?.assignment_time
+    ? new Date(reportData.assignment_time).toLocaleTimeString()
     : "N/A";
 
   if (!reportData) {
@@ -102,7 +102,7 @@ const EventReport = () => {
               <div className="top-1">
                 <div className="logo">
                   <Link to={"/dashboard"}>
-                    <img src="./images/logo-small.png" alt="Logo" />
+                    <img src="/images/logo-small.png" alt="Logo" />
                   </Link>
                 </div>
 
@@ -124,7 +124,7 @@ const EventReport = () => {
                         aria-expanded={open ? "true" : undefined}
                       >
                         <Avatar sx={{ width: 52, height: 52 }}>
-                          <img src="./images/adminlogo.ico" alt="image-logo" />
+                          <img src="/images/adminlogo.ico" alt="image-logo" />
                         </Avatar>
                       </IconButton>
                     </Tooltip>
@@ -138,7 +138,7 @@ const EventReport = () => {
                   >
                     <MenuItem onClick={handleClose}>
                       <img
-                        src="./images/enterprise.png"
+                        src="/images/enterprise.png"
                         style={{ width: 42, height: 42 }}
                         alt=""
                       />{" "}
@@ -158,7 +158,7 @@ const EventReport = () => {
                       </div>
                     </MenuItem>
                     {/* <MenuItem onClick={handleClose}>
-                       <img src="./images/enterprise.png" style={{ width: 42, height: 42 }} alt=""/> Agency       
+                       <img src="/images/enterprise.png" style={{ width: 42, height: 42 }} alt=""/> Agency       
                     </MenuItem> */}
 
                     <Divider />
@@ -212,7 +212,7 @@ const EventReport = () => {
               <div className="table-card-2">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/dashboard-icon.png" alt="Report " />
+                    <img src="/images/dashboard-icon.png" alt="Report " />
                   </div>
                   <h4 className="text-uppercase">Report</h4>
                 </div>
@@ -253,7 +253,7 @@ const EventReport = () => {
               <div className="dashboard-report-map">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/location.png" alt="Location " />
+                    <img src="/images/location.png" alt="Location " />
                     {/* <h4 className="text-uppercase">LOCATION</h4> */}
                   </div>
                 </div>
@@ -280,13 +280,13 @@ const EventReport = () => {
               <div className="dashboard-report-img">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/image-icon.png" alt="Incident" />
+                    <img src="/images/image-icon.png" alt="Incident" />
                   </div>
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
                 <figure>
                   <img
-                    src={reportData.imageUrl}
+                    src={reportData.image_url}
                     style={{ width: "200px" }}
                     alt="Accident"
                   />
@@ -302,7 +302,7 @@ const EventReport = () => {
               >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/user.png" alt="" title="" />
+                    <img src="/images/user.png" alt="" title="" />
                   </div>
                   <h4 className="text-uppercase" style={{ marginLeft: "-10px" }}>
                     ASSIGN TO
@@ -361,7 +361,7 @@ const EventReport = () => {
         </div>
       </section>
       <footer>
-        <img src="./images/footer-bg.png" alt="" />
+        <img src="/images/footer-bg.png" alt="" />
       </footer>
     </section>
   );
