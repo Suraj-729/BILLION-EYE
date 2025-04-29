@@ -335,3 +335,50 @@ header {
     box-shadow: 0 0 6px rgba(0,0,0,0.2);
   }
   
+
+  .footer {
+    background: linear-gradient(to right, #e0f7fa, #fce4ec); /* Soft pastel gradient */
+    padding: 0px 0;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 40px;
+  }
+  
+  .footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    letter-spacing: 0.5px;
+  }
+  
+  .footer .nic-credit {
+    font-weight: 500;
+    color: #007BFF; /* Bootstrap blue or customize */
+  }
+  
+
+  .carousel-prev,
+.carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.carousel-prev {
+  left: 10px;
+}
+
+.carousel-next {
+  right: 10px;
+}
+
+.carousel-item {
+  position: relative;
+}

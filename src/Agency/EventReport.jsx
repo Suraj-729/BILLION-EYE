@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom"; // Ensure all imports are at
 import "../public/assets/css/EventReport.css";
 import api from "../api";
 
+import MapCanvas from "../components/mapCanvas";
+
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -27,18 +29,38 @@ const EventReport = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
-  const [loading, setLoading] = useState(true);
 
+  const [loading, setLoading] = useState(true);
+  const [mapCoordinates, setMapCoordinates] = useState(null);
   const [reportData, setReportData] = useState(null);
   const [selectedUser, setSelectedUser] = useState(""); // State for selected user
   const [userDetails, setUserDetails] = useState(null); // State for user details
 
   const [users] = useState([
-    { id: "1", name: "John Doe", phone: "123-456-7890", responsibility: "Traffic Officer" },
-    { id: "2", name: "Jane Smith", phone: "987-654-3210", responsibility: "Road Safety Analyst" },
-    { id: "3", name: "Alice Johnson", phone: "555-666-7777", responsibility: "Emergency Responder" },
-    { id: "4", name: "Bob Williams", phone: "111-222-3333", responsibility: "Field Inspector" },
+    {
+      id: "1",
+      name: "John Doe",
+      phone: "123-456-7890",
+      responsibility: "Traffic Officer",
+    },
+    {
+      id: "2",
+      name: "Jane Smith",
+      phone: "987-654-3210",
+      responsibility: "Road Safety Analyst",
+    },
+    {
+      id: "3",
+      name: "Alice Johnson",
+      phone: "555-666-7777",
+      responsibility: "Emergency Responder",
+    },
+    {
+      id: "4",
+      name: "Bob Williams",
+      phone: "111-222-3333",
+      responsibility: "Field Inspector",
+    },
   ]); // Manually added users
 
   const handleUserChange = (event) => {
@@ -166,7 +188,7 @@ const EventReport = () => {
                       <ListItemIcon>
                         <PersonAdd fontSize="small" />
                       </ListItemIcon>
-                     <Link to='/assignGroundstaff'>Add Ground Satff</Link> 
+                      <Link to="/assignGroundstaff">Add Ground Satff</Link>
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
                       <ListItemIcon>
@@ -253,20 +275,53 @@ const EventReport = () => {
               <div className="dashboard-report-map">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/images/location.png" alt="Location " />
+                    <img src="/images/location.png" alt="Location" />
                     {/* <h4 className="text-uppercase">LOCATION</h4> */}
                   </div>
                 </div>
-                <iframe
-                  src="https://www.google.com/maps/embed?..."
-                  width="600"
-                  height="450"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Google Map"
-                ></iframe>
+
+                {/* Map rendering here */}
+                <div
+                  className="map-container"
+                  style={{
+                    height: "400px",
+                    width: "100%",
+                    position: "relative", // Needed to position button inside
+                  }}
+                >
+                  {/* Map or fallback message */}
+                  {mapCoordinates ? (
+                    <MapCanvas coordinates={mapCoordinates} />
+                  ) : (
+                    <p style={{ padding: "20px", textAlign: "center" }}>
+                      Click 📍 on an event to view its location.
+                    </p>
+                  )}
+
+                  {/* 📍 Button inside map section */}
+                  <button
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      background: "white",
+                      border: "1px solid #ccc",
+                      borderRadius: "50%",
+                      padding: "8px",
+                      cursor: "pointer",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                    }}
+                    title="Go to Event Location"
+                    onClick={() =>
+                      setMapCoordinates({
+                        lat: parseFloat(reportData.latitude), // You need access to a `report` here
+                        lng: parseFloat(reportData.longitude),
+                      })
+                    }
+                  >
+                    📍
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -287,13 +342,17 @@ const EventReport = () => {
                 <figure>
                   <img
                     src={reportData.image_url}
-                    style={{ width: "200px" }}
+                    style={{
+                      width: "200px",
+                      transform: "rotate(-90deg)",
+                      objectFit: "contain", // Ensures the full image is visible
+                    }}
                     alt="Accident"
                   />
                 </figure>
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6" style={{ marginTop: "-300px" }}>
               <div
                 className="dashboard-report-assign"
                 style={{
@@ -304,7 +363,10 @@ const EventReport = () => {
                   <div className="table-card-heading-icon">
                     <img src="/images/user.png" alt="" title="" />
                   </div>
-                  <h4 className="text-uppercase" style={{ marginLeft: "-10px" }}>
+                  <h4
+                    className="text-uppercase"
+                    style={{ marginLeft: "-10px" }}
+                  >
                     ASSIGN TO
                   </h4>
                 </div>
@@ -348,6 +410,11 @@ const EventReport = () => {
                     </ul>
                     <div style={{ textAlign: "center", marginTop: "10px" }}>
                       <button className="btn btn-success">Assign</button>
+                      <Link to='/dashboard/agency-125'>
+                        <button className="btn btn-success">
+                          Not Assigned
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 )}

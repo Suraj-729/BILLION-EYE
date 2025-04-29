@@ -27,6 +27,8 @@ import AgencyRegister from "./Agency/AgencyRegister";
 import GroundStaffTax from "./Agency/GroundStaff";
 import OngoingTax from "./Agency/OngoingTax";
 import AssignGroundStaff from "./Agency/assignGroundstaff";
+import ForgotPassword from "../src/Agency/ForgetPassword"
+// import PublicRegister from "./pages/userPublic";
 // Protected Route Component
 const ProtectedRoute = ({ element: Element }) => {
   const isAuthenticated = !!localStorage.getItem("token"); // Check if the user is authenticated
@@ -53,12 +55,13 @@ function App() {
         <Route path="/eventReport/:event_id" element={< EventReport />} />
         <Route path="/gomaps" element={< GoMapsTest />} />
         <Route path="/agencyLogin" element={< AgencyLogin />} />
-        <Route path="/agencyRegisiter" element={< AgencyRegister />} />
+        <Route path="/agencyRegister" element={< AgencyRegister />} />
         <Route path="/groundstaffTax" element={<GroundStaffTax />} />
         <Route path="/ongoingTax" element={<OngoingTax />} />
         <Route path="/dashboard/:agencyId" element={<Dashboard />} />
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         <Route path="/assignGroundstaff" element={<AssignGroundStaff />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* <Route
           path="/Camera" element={<CameraPage />} /> */}
 
