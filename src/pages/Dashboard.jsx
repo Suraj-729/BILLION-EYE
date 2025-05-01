@@ -296,25 +296,30 @@ const Dashboard = () => {
         </div>
       </section>
 
-      <section className="dashboard-map">
+    
+
+      <section className="dashboard-map" >
+        <div>
         {mapCoordinates ? (
-          <MapCanvas coordinates={mapCoordinates} />
+          <MapCanvas coordinates={mapCoordinates} style={{ height: "300px" }}/>
         ) : (
-          <p style={{ padding: "20px", textAlign: "center" }}>
+          <p style={{ padding: "130px", textAlign: "center" }}>
             Click 📍 on an event to view its location.
           </p>
         )}
+        </div>
+      
       </section>
 
-      <section className="dashboard-table-con">
+      <section className="dashboard-table-con"  style={{ marginTop: "-150px" }}>
         <div className="container">
           <div className="row">
             <div className="col-md-12" >
-              <div className="table-card" style={{ marginTop: "250px" }}>
+              <div className="table-card" style={{ marginTop: "130px" }}>
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
                     <img
-                      src="./billioneye/images/dashboard-icon.png"
+                      src="/billioneye/images/dashboard-icon.png"
                       alt="Dashboard Icon"
                       title="Dashboard Icon"
                     />
@@ -699,9 +704,9 @@ const Dashboard = () => {
           </div> {/* End Zoomed Image Container */}
         </div> /* End Zoom Overlay */
       )} {/* End Zoomed Image Section */}
-      <footer className="footer">
+      <footer className="footer" style={{ marginTop: "720px" }}>
         <div className="footer-container">
-          <div className="row">
+          <div className="row" >
             <div className="col-md-12 text-center">
               <p>
                 © 2025 All Rights Reserved.{" "}
