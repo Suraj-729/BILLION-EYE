@@ -8,7 +8,7 @@ const OngoingTax = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/user/billioneye/images/latest");
+        const response = await api.get("backend/user/billioneye/images/latest");
 
         if (Array.isArray(response.data)) {
           if (response.data.length > 0) {

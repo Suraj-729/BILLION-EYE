@@ -79,7 +79,7 @@ const EventReport = () => {
 
     const fetchData = async () => {
       try {
-        const response = await api.get(`/events/${event_id}`); // Adjust endpoint as needed
+        const response = await api.get(`backend/events/${event_id}`); // Adjust endpoint as needed
         setReportData(response.data);
       } catch (error) {
         console.error("Error fetching report data:", error);

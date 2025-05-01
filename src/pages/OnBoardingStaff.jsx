@@ -136,7 +136,7 @@ const OnBoardingStaff = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const response = await api.get("/user/incidents"); // Replace with your backend URL
+        const response = await api.get("backend/user/incidents"); // Replace with your backend URL
         setIncidents(response.data);
       } catch (error) {
         console.error("❌ Error fetching incidents:", error);

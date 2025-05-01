@@ -34,7 +34,7 @@ const LoginPage = () => {
 
       console.log("Sending login request with data:", payload);
 
-      const response = await api.post("/user/login", payload);
+      const response = await api.post("backend/user/login", payload);
       console.log("Login response:", response);
 
       if (response.status === 200) {

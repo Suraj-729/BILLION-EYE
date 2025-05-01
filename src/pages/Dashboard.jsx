@@ -23,7 +23,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const response = await api.get(`/agency-dashboard/${agencyId}`);
+        const response = await api.get(`backend/agency-dashboard/${agencyId}`);
         console.log("API Response:", response.data);
         setDashboardData(response.data?.assignedEvents || []);
         setAssignedAgency(response.data?.AgencyName || "Unknown Agency");
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   const updateEventStatus = async (event_id, newStatus) => {
     try {
-      const response = await api.put(`/events/status/${event_id}`, {
+      const response = await api.put(`backend/events/status/${event_id}`, {
         status: newStatus,
       });
       if (response.status === 200) {
@@ -58,7 +58,7 @@ const Dashboard = () => {
 
   const approveEvent = (event_id) => {
     updateEventStatus(event_id, "Accepted");
-    navigate(`/eventreport/${event_id}`, { state: { event_id } });
+    navigate(`backend/eventreport/${event_id}`, { state: { event_id } });
   };
   const rejectEvent = (event_id) => updateEventStatus(event_id, "Rejected");
   // const holdEvent = (event_id) => updateEventStatus(event_id, "On Hold");

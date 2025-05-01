@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const res = await api.post("/agencies/requestOtpAgency", {
+      const res = await api.post("backend/agencies/requestOtpAgency", {
         agencyId: agencyId.trim(),
         mobileNumber: mobileNumber.trim(),
       });
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
         return;
       }
   
-      const res = await api.post("/agencies/reset-password", {
+      const res = await api.post("backend/agencies/reset-password", {
         agencyId,
         newPassword: password,
       });

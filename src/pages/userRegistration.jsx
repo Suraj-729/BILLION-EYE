@@ -42,7 +42,7 @@ const RegisterPage = () => {
 
       console.log("Sending request with data:", payload);
 
-      const response = await api.post("/user/register", payload);
+      const response = await api.post("backend/user/register", payload);
       console.log("Response:", response);
 
       console.log("Success response:", response.data);

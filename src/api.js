@@ -1,21 +1,29 @@
 // // // // // // // // src/api.js
  import axios from "axios";
 
- const api = axios.create({
-  baseURL: `${window.location.protocol}//${window.location.hostname}`, // Update this if the backend is hosted elsewhere
-    // baseURL: "http://localhost:5000", // Update this if the backend is hosted elsewhere
+//  const api = axios.create({
+//   baseURL: `${window.location.protocol}//${window.location.hostname}` || "http://localhost:5000", // Update this if the backend is hosted elsewhere
+//     // baseURL: "http://localhost:5000", // Update this if the backend is hosted elsewhere
+//   timeout: 10000000,
+// });
+
+
+
+
+
+
+
+const backendHost = window.location.hostname === "localhost"
+  ? "http://localhost:5000"
+  : `${window.location.protocol}//${window.location.hostname}`;
+
+const api = axios.create({
+  baseURL: backendHost,
   timeout: 10000000,
 });
 
+
 export default api;
-
-
-
-
-
-
-
-
 
 
 
