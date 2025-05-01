@@ -124,7 +124,7 @@ const EventReport = () => {
               <div className="top-1">
                 <div className="logo">
                   <Link to={"/dashboard"}>
-                    <img src="/images/logo-small.png" alt="Logo" />
+                    <img src="/billioneye/images/logo-small.png" alt="Logo" />
                   </Link>
                 </div>
 
@@ -146,7 +146,7 @@ const EventReport = () => {
                         aria-expanded={open ? "true" : undefined}
                       >
                         <Avatar sx={{ width: 52, height: 52 }}>
-                          <img src="/images/adminlogo.ico" alt="image-logo" />
+                          <img src="/billioneye/images/adminlogo.ico" alt="image-logo" />
                         </Avatar>
                       </IconButton>
                     </Tooltip>
@@ -160,7 +160,7 @@ const EventReport = () => {
                   >
                     <MenuItem onClick={handleClose}>
                       <img
-                        src="/images/enterprise.png"
+                        src="/billioneye/images/enterprise.png"
                         style={{ width: 42, height: 42 }}
                         alt=""
                       />{" "}
@@ -180,7 +180,7 @@ const EventReport = () => {
                       </div>
                     </MenuItem>
                     {/* <MenuItem onClick={handleClose}>
-                       <img src="/images/enterprise.png" style={{ width: 42, height: 42 }} alt=""/> Agency       
+                       <img src="/billioneye/images/enterprise.png" style={{ width: 42, height: 42 }} alt=""/> Agency       
                     </MenuItem> */}
 
                     <Divider />
@@ -234,7 +234,7 @@ const EventReport = () => {
               <div className="table-card-2">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/images/dashboard-icon.png" alt="Report " />
+                    <img src="/billioneye/images/dashboard-icon.png" alt="Report " />
                   </div>
                   <h4 className="text-uppercase">Report</h4>
                 </div>
@@ -275,7 +275,7 @@ const EventReport = () => {
               <div className="dashboard-report-map">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/images/location.png" alt="Location" />
+                    <img src="/billioneye/images/location.png" alt="Location" />
                     {/* <h4 className="text-uppercase">LOCATION</h4> */}
                   </div>
                 </div>
@@ -335,7 +335,7 @@ const EventReport = () => {
               <div className="dashboard-report-img">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/images/image-icon.png" alt="Incident" />
+                    <img src="/billioneye/images/image-icon.png" alt="Incident" />
                   </div>
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
@@ -361,7 +361,7 @@ const EventReport = () => {
               >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/images/user.png" alt="" title="" />
+                    <img src="/billioneye/images/user.png" alt="" title="" />
                   </div>
                   <h4
                     className="text-uppercase"
@@ -428,7 +428,7 @@ const EventReport = () => {
         </div>
       </section>
       <footer>
-        <img src="/images/footer-bg.png" alt="" />
+        <img src="/billioneye/images/footer-bg.png" alt="" />
       </footer>
     </section>
   );

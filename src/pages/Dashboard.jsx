@@ -218,7 +218,7 @@ const Dashboard = () => {
             <div className="col-md-12">
               <div className="d-flex align-items-center justify-content-between">
                 <div className="logo">
-                  <img src="/images/logo-small.png" alt="Logo" title="Logo" />
+                  <img src="/billioneye/images/logo-small.png" alt="Logo" title="Logo" />
                 </div>
                 <div
                   style={{
@@ -229,7 +229,7 @@ const Dashboard = () => {
                   }}
                   onClick={() => setIsOpen(true)}
                 >
-                  <img src="../images/menu-bar.svg" alt="" />
+                  <img src="/billioneye/images/menu-bar.svg" alt="" />
                 </div>
               </div>
             </div>
@@ -309,12 +309,12 @@ const Dashboard = () => {
       <section className="dashboard-table-con">
         <div className="container">
           <div className="row">
-            <div className="col-md-12" style={{ marginTop: "-110px" }}>
-              <div className="table-card">
+            <div className="col-md-12" >
+              <div className="table-card" style={{ marginTop: "250px" }}>
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
                     <img
-                      src="/images/dashboard-icon.png"
+                      src="./billioneye/images/dashboard-icon.png"
                       alt="Dashboard Icon"
                       title="Dashboard Icon"
                     />

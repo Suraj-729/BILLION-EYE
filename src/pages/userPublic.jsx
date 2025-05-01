@@ -146,7 +146,7 @@ const PublicRegister = () => {
               <div className="col-md-12">
                 <figure className="logo-con">
                   <Link to="/">
-                    <img src="./images/logo.png" alt="Logo" />
+                    <img src="./billioneye/images/logo.png" alt="Logo" />
                   </Link>
                 </figure>
               </div>

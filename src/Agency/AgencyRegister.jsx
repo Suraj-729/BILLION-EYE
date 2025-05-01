@@ -107,11 +107,11 @@
 //         <section className="pag-2-wrapper-sec-1">
 //           <div className="pag-2-wrapper-sec-1-bgimg dashboard-hospital-logo-bg">
 //             <figure>
-//               <img src="./images/pag-2-logo-bg.png" alt="Background Left" />
+//               <img src="/billioneye/images/pag-2-logo-bg.png" alt="Background Left" />
 //             </figure>
 //             <figure>
 //               <img
-//                 src="./images/pag-2-logo-bg-right.png"
+//                 src="/billioneye/images/pag-2-logo-bg-right.png"
 //                 alt="Background Right"
 //               />
 //             </figure>
@@ -123,7 +123,7 @@
 //               <div className="col-md-12">
 //                 <figure className="logo-con" style={{marginTop: "18px"}}>
 //                   <a href="index.html">
-//                     <img src="./images/logo-blue.png" alt="Logo"  />
+//                     <img src="/billioneye/images/logo-blue.png" alt="Logo"  />
 //                   </a>
 //                 </figure>
 //               </div>
@@ -243,14 +243,14 @@
 //                     <ul>
 //                       <li>
 //                         <img
-//                           src="./images/odisha-logo-blue.png"
+//                           src="/billioneye/images/odisha-logo-blue.png"
 //                           alt="Odisha Logo"
 //                           title="Odisha"
 //                         />
 //                       </li>
 //                       <li>
 //                         <img
-//                           src="./images/nic-logo.png"
+//                           src="/billioneye/images/nic-logo.png"
 //                           alt="NIC Logo"
 //                           title="NIC"
 //                         />
@@ -266,7 +266,7 @@
 
 //       {/* Footer */}
 //       <footer style={{ marginTop: "-50px" }}>
-//         <img src="./images/footer-bg.png" alt="Footer Background" />
+//         <img src="/billioneye/images/footer-bg.png" alt="Footer Background" />
 //       </footer>
 //     </section>
 //   );
@@ -477,11 +477,11 @@ const AgencyRegister = () => {
         <section className="pag-2-wrapper-sec-1">
           <div className="pag-2-wrapper-sec-1-bgimg dashboard-hospital-logo-bg">
             <figure>
-              <img src="./images/pag-2-logo-bg.png" alt="Background Left" />
+              <img src="/billioneye/images/pag-2-logo-bg.png" alt="Background Left" />
             </figure>
             <figure>
               <img
-                src="./images/pag-2-logo-bg-right.png"
+                src="/billioneye/images/pag-2-logo-bg-right.png"
                 alt="Background Right"
               />
             </figure>
@@ -493,7 +493,7 @@ const AgencyRegister = () => {
               <div className="col-md-12">
                 <figure className="logo-con" style={{ marginTop: "18px" }}>
 
-                  <img src="./images/logo-blue.png" alt="Logo" style={{ marginTop : "-100px"}} />
+                  <img src="/billioneye/images/logo-blue.png" alt="Logo" style={{ marginTop : "-100px"}} />
 
                 </figure>
               </div>
@@ -628,14 +628,14 @@ const AgencyRegister = () => {
                     <ul>
                       <li>
                         <img
-                          src="./images/odisha-logo-blue.png"
+                          src="/billioneye/images/odisha-logo-blue.png"
                           alt="Odisha Logo"
                           title="Odisha"
                         />
                       </li>
                       <li>
                         <img
-                          src="./images/nic-logo.png"
+                          src="/billioneye/images/nic-logo.png"
                           alt="NIC Logo"
                           title="NIC"
                         />
@@ -651,7 +651,7 @@ const AgencyRegister = () => {
 
       {/* Footer */}
       <footer style={{ marginTop: "-50px" }}>
-        <img src="./images/footer-bg.png" alt="Footer Background" />
+        <img src="/billioneye/images/footer-bg.png" alt="Footer Background" />
       </footer>
     </section>
   );

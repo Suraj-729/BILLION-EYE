@@ -15,7 +15,7 @@ const AssignGroundStaff = () => {
                 <div className="top-1">
                   <div className="logo">
                     <a href="dashboard-admin-bmc.html">
-                      <img src="./images/logo-small.png" alt="Logo" title="" />
+                      <img src="/billioneye/images/logo-small.png" alt="Logo" title="" />
                     </a>
                   </div>
                   {/* Hamburger Menu Button */}
@@ -28,7 +28,7 @@ const AssignGroundStaff = () => {
                     }}
                     onClick={() => setIsOpen(true)}
                   >
-                    <img src="./images/menu-bar.svg" alt="" />
+                    <img src="/billioneye/images/menu-bar.svg" alt="" />
                   </div>
                   {/* Backdrop to close the menu when clicking outside */}
                   {isOpen && (
@@ -124,7 +124,7 @@ const AssignGroundStaff = () => {
                   <div className="table-card-heading">
                     <div className="table-card-heading-icon">
                       <img
-                        src="./images/On-boarding.png"
+                        src="/billioneye/images/On-boarding.png"
                         alt="Onboarding"
                         title=""
                       />
@@ -250,7 +250,7 @@ const AssignGroundStaff = () => {
       </section>
 
       <footer>
-        <img src="./images/footer-bg.png" alt="Footer" />
+        <img src="/billioneye/images/footer-bg.png" alt="Footer" />
       </footer>
     </section>
   );

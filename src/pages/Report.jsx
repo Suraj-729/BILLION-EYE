@@ -17,7 +17,7 @@ const BmcDashboard = () => {
                 <div className="top-1">
                   <div className="logo">
                     <button onClick={() => handleNavigation("/")}>
-                      <img src="./images/logo-small.png" alt="Company Logo" title="Company Logo" />
+                      <img src="./billioneye/images/logo-small.png" alt="Company Logo" title="Company Logo" />
                     </button>
                   </div>
                   <div className="menu-con">
@@ -57,7 +57,7 @@ const BmcDashboard = () => {
                 <div className="table-card-2">
                   <div className="table-card-heading">
                     <div className="table-card-heading-icon">
-                      <img src="./images/dashboard-icon.png" alt="Dashboard" title="Dashboard" />
+                      <img src="./billioneye/images/dashboard-icon.png" alt="Dashboard" title="Dashboard" />
                     </div>
                     <h4 className="text-uppercase">Report</h4>
                   </div>
@@ -95,7 +95,7 @@ const BmcDashboard = () => {
               <div className="col-md-12">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/location.png" alt="Location" title="Location" />
+                    <img src="./billioneye/images/location.png" alt="Location" title="Location" />
                   </div>
                   <h4 className="text-uppercase">LOCATION</h4>
                 </div>
@@ -120,12 +120,12 @@ const BmcDashboard = () => {
               <div className="col-md-12">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/image-icon.png" alt="Gallery Icon" title="Gallery Icon" />
+                    <img src="./billioneye/images/image-icon.png" alt="Gallery Icon" title="Gallery Icon" />
                   </div>
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
                 <figure>
-                  <img src="./images/accident-img.png" alt="Car Accident Scene" />
+                  <img src="./billioneye/images/accident-img.png" alt="Car Accident Scene" />
                 </figure>
               </div>
             </div>
@@ -133,12 +133,12 @@ const BmcDashboard = () => {
               <div className="col-md-12">
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="./images/image-icon.png" alt="Gallery Icon" title="Gallery Icon" />
+                    <img src="./billioneye/images/image-icon.png" alt="Gallery Icon" title="Gallery Icon" />
                   </div>
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
                 <figure>
-                  <img src="./images/accident-img.png" alt="Car Accident Scene" />
+                  <img src="./billioneye/images/accident-img.png" alt="Car Accident Scene" />
                 </figure>
               </div>
             </div>

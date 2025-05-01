@@ -16,7 +16,7 @@ const BillionEye = () => {
   return (
     <section
       className="bg-cover main home-page"
-      style={{ backgroundImage: "url(/images/bg-1.png)" }}
+      style={{ backgroundImage: "url(/billioneye/images/bg-1.png)" }}
     >
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-dark">
@@ -44,14 +44,14 @@ const BillionEye = () => {
       <div className="pag-1-wrapper">
         <section className="pag-1-wrapper-sec-1">
           <figure>
-            <img src="/images/pag-1-logo-bg.png" alt="Background Logo" />
+            <img src="/billioneye/images/pag-1-logo-bg.png" alt="Background Logo" />
           </figure>
           <div className="container">
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con">
                   <Link to="/signup">
-                    <img src="/images/logo.png" alt="Logo" />
+                    <img src="/billioneye/images/logo.png" alt="Logo" />
                   </Link>
                 </figure>
               </div>
@@ -71,13 +71,13 @@ const BillionEye = () => {
                     <ul>
                       <li>
                         <img
-                          src="/images/odisha-logo-white.png"
+                          src="/billioneye/images/odisha-logo-white.png"
                           alt="Odisha"
                           title="Odisha"
                         />
                       </li>
                       <li>
-                        <img src="/images/nic-logo.png" alt="NIC" title="NIC" />
+                        <img src="/billioneye/images/nic-logo.png" alt="NIC" title="NIC" />
                       </li>
                     </ul>
                   </div>

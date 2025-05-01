@@ -8,7 +8,7 @@ const OngoingTax = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("/user/images/latest");
+        const response = await api.get("/user/billioneye/images/latest");
 
         if (Array.isArray(response.data)) {
           if (response.data.length > 0) {
@@ -55,7 +55,7 @@ const OngoingTax = () => {
                 <div className="logo">
                   <a href="index.html">
                     <img
-                      src="./images/logo-small.png"
+                      src="./billioneye/images/logo-small.png"
                       alt="Logo"
                       title=""
                     />
@@ -137,7 +137,7 @@ const OngoingTax = () => {
         </div>
       </section>
       <footer>
-        <img src="./images/footer-bg.png" alt="" />
+        <img src="./billioneye/images/footer-bg.png" alt="" />
       </footer>
     </section>
   );

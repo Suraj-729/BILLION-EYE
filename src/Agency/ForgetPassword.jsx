@@ -174,7 +174,7 @@ const ForgotPassword = () => {
 
       {/* Footer */}
       <footer style={{ marginTop: "-50px" }}>
-        <img src="./images/footer-bg.png" alt="Footer" />
+        <img src="./billioneye/images/footer-bg.png" alt="Footer" />
       </footer>
     </section>
   );

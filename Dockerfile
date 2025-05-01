@@ -8,13 +8,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
 
 # Copy the entire project to the container
 COPY . .
 
 # Expose React's default port
-EXPOSE 3000
+
 
 # Start the React application
-CMD ["npm", "start"]
+RUN npm install | npm install pm2 -g
+#CMD [ "node", "app.js" ]
+CMD ["pm2-runtime", "app.js"]
+EXPOSE 3000

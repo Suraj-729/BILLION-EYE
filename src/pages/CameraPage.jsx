@@ -106,7 +106,7 @@ const CameraPage = () => {
       return;
     }
 
-    const shutterSound = new Audio("/images/camera-shutter-6305.mp3"); // Ensure the path is correct
+    const shutterSound = new Audio("/billioneye/images/camera-shutter-6305.mp3"); // Ensure the path is correct
     shutterSound
       .play()
       .catch((err) => console.error("Audio playback failed:", err));
@@ -287,7 +287,8 @@ const CameraPage = () => {
   
       // Send data to backend
       console.log(window.location.origin , "api");
-      const response = await api.post("user/upload-image", payload, {
+      console.log(api , "api call data");
+      const response = await api.post("backend/user/upload-image", payload, {
         headers: { "Content-Type": "application/json" },
       });
   
@@ -393,7 +394,7 @@ const CameraPage = () => {
             Capture
           </button>
           <button onClick={toggleCamera} className="switch-camera-button">
-            <img src="./images/switch-camera.png" alt="Switch Camera" />
+            <img src="./billioneye/images/switch-camera.png" alt="Switch Camera" />
           </button>
         </div>
 

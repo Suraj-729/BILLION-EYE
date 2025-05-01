@@ -84,11 +84,11 @@ const LoginPage = () => {
         <section className="pag-2-wrapper-sec-1">
           <div className="pag-2-wrapper-sec-1-bgimg">
             <figure>
-              <img src="./images/pag-2-logo-bg.png" alt="Background" />
+              <img src="./billioneye/images/pag-2-logo-bg.png" alt="Background" />
             </figure>
             <figure>
               <img
-                src="./images/pag-2-logo-bg-right.png"
+                src="./billioneye/images/pag-2-logo-bg-right.png"
                 alt="Background Right"
               />
             </figure>
@@ -98,7 +98,7 @@ const LoginPage = () => {
               <div className="col-md-12">
                 <figure className="logo-con">
                   <a href="index.html">
-                    <img src="./images/logo.png" alt="Logo" />
+                    <img src="./billioneye/images/logo.png" alt="Logo" />
                   </a>
                 </figure>
               </div>
@@ -190,14 +190,14 @@ const LoginPage = () => {
                     <ul>
                       <li>
                         <img
-                          src="./images/odisha-logo-white.png"
+                          src="./billioneye/images/odisha-logo-white.png"
                           alt="Odisha"
                           title="Odisha"
                         />
                       </li>
                       <li>
                         <img
-                          src="./images/nic-logo.png"
+                          src="./billioneye/images/nic-logo.png"
                           alt="NIC"
                           title="NIC"
                         />
@@ -211,7 +211,7 @@ const LoginPage = () => {
         </section>
       </div>
       {/* <footer>
-        <img src="./images/footer-bg.png" alt="Footer" />
+        <img src="./billioneye/images/footer-bg.png" alt="Footer" />
       </footer> */}
     </section>
   );
