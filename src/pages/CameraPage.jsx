@@ -394,7 +394,7 @@ const CameraPage = () => {
             Capture
           </button>
           <button onClick={toggleCamera} className="switch-camera-button">
-            <img src="./billioneye/images/switch-camera.png" alt="Switch Camera" />
+            <img src="/billioneye/images/switch-camera.png" alt="Switch Camera" />
           </button>
         </div>
 
