@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "../public/assets/css/CameraPage.css"; // Ensure you have a CSS file for styling
 import api from "../api";
 import ExifReader from "exifreader";
-// import EXIF from "exif-js";
+import Loader from "./loader"; // Import the Loader component
+
 const CameraPage = () => {
+  const [loading, setLoading] = useState(false);
   const videoRef = useRef(null); // Reference for the video element
   const canvasRef = useRef(null); // Reference for the canvas element
   const [capturedImage, setCapturedImage] = useState(null); // State to store the captured image
@@ -17,20 +19,8 @@ const CameraPage = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
-  // const [exifData, setExifData] = useState(null);
-  const [exifData, setExifData] = useState(null);
 
-  // const popupStyle = {
-  //   position: "fixed",
-  //   top: "50%",
-  //   left: "50%",
-  //   transform: "translate(-50%, -50%)",
-  //   background: "rgba(0, 0, 0, 0.8)",
-  //   color: "white",
-  //   padding: "10px 20px",
-  //   borderRadius: "5px",
-  //   zIndex: 1000,
-  // };
+  const [exifData, setExifData] = useState(null);
 
   // Get available camera devices
 
@@ -65,12 +55,14 @@ const CameraPage = () => {
         };
 
         console.log("Requesting camera access...");
-
+        setLoading(true);
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+         
           console.log("Camera access granted.");
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error accessing camera:", error);
         setCameraError(
@@ -106,7 +98,9 @@ const CameraPage = () => {
       return;
     }
 
-    const shutterSound = new Audio("/billioneye/images/camera-shutter-6305.mp3"); // Ensure the path is correct
+    const shutterSound = new Audio(
+      "/billioneye/images/camera-shutter-6305.mp3"
+    ); // Ensure the path is correct
     shutterSound
       .play()
       .catch((err) => console.error("Audio playback failed:", err));
@@ -117,33 +111,12 @@ const CameraPage = () => {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const imageData = canvas.toDataURL("image/jpeg");
-    // console.log("Captured imageData:", imageData);
 
     const base64String = imageData.split(",")[1];
 
     console.log("Captured image:", base64String);
-    
+
     extractExifMetadata(base64String);
-
-
-    // Extract EXIF data
-    // const imageexif = new Image();
-    // imageexif.onload = () => {
-    //   EXIF.getData(imageexif, function () {
-    //     const allExifData = EXIF.getAllTags(this);
-    //     console.log("EXIF data:", allExifData);
-    //     setExifData(allExifData);
-    //   });
-    // };
-    // imageexif.src = imageData;
-
-    // Create a link element to download the image
-    // const link = document.createElement("a");
-    // link.href = imageData;
-    // link.download = "captured-image.jpg";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
 
     setCapturedImage(base64String);
     setShowPopup(true);
@@ -159,8 +132,6 @@ const CameraPage = () => {
       }, 3000);
     }, 3000);
   };
-
-  // navigate("/");
 
   // Memoize the getLocation function with useCallback
   const getLocation = useCallback(() => {
@@ -214,84 +185,44 @@ const CameraPage = () => {
     }
   }, [capturedImage, getLocation]);
 
-  // const sendImageToServer = async (base64String, latitude, longitude) => {
-  //   const userId = "12345";
-  //   const timestamp = new Date().toISOString();
-
-  //   try {
-  //     if (!base64String) {
-  //       throw new Error("Invalid image: imageUrl is null or undefined.");
-  //     }
-
-  //     // Prepare JSON payload
-  //     const payload = {
-  //       userId,
-  //       location: {
-  //         type: "Point",
-  //         coordinates: [longitude, latitude], // Ensure correct order
-  //       },
-  //       timestamp,
-  //       base64String, // Send Base64 directly
-  //     };
-
-  //     // Send data to backend
-  //     const response = await api.post("user/upload-image", payload, {
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-
-  //     if (response.status === 200) {
-  //       console.log("✅ Image and location data uploaded successfully!");
-  //       setImageId(response.data.imageId);
-  //     } else {
-  //       alert("❌ Failed to upload image and location data.");
-
-  //       console.error("❌ Failed to upload image and location data.");
-  //     }
-  //   } catch (error) {
-  //     // alert(error)
-  //     console.error("❌ Error uploading image:", error.message);
-  //   }
-  // };
   const sendImageToServer = async (base64String, latitude, longitude) => {
     latitude = parseFloat(latitude);
-  longitude = parseFloat(longitude);
+    longitude = parseFloat(longitude);
 
-  if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
-    console.error("❌ Invalid location data. Latitude or Longitude is NaN.");
-    alert("Failed to get valid location. Please enable GPS and try again.");
-    return;
-  }
-  
-    const userId = '12345';
+    if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
+      console.error("❌ Invalid location data. Latitude or Longitude is NaN.");
+      alert("Failed to get valid location. Please enable GPS and try again.");
+      return;
+    }
+
+    const userId = "12345";
     const timestamp = new Date().toISOString();
-  
+
     try {
       if (!base64String) {
         throw new Error("Invalid image: base64String is null or undefined.");
       }
-  
+
       // Prepare JSON payload
       const payload = {
-
-
         userId,
-         location : {
+        location: {
           type: "Point",
-          coordinates: [
-          longitude, latitude ] },
+          coordinates: [longitude, latitude],
+        },
         timestamp,
         base64String, // Send Base64 directly
       };
-  
+
       console.log("📤 Sending data to server:", payload);
-  
+
       // Send data to backend
-      console.log(window.location.origin , "api");
-      console.log(api , "api call data");
+      console.log(window.location.origin, "api");
+      console.log(api, "api call data");
       const response = await api.post("backend/user/upload-image", payload, {
         headers: { "Content-Type": "application/json" },
       });
-  
+
       if (response.status === 200) {
         console.log("✅ Image and location data uploaded successfully!");
         setImageId(response.data.imageId);
@@ -303,80 +234,37 @@ const CameraPage = () => {
       console.error("❌ Error uploading image:", error.message);
     }
   };
-  
-
-
 
   const extractExifMetadata = async (base64String) => {
     try {
-        // Convert Base64 string to a binary format
-        const binaryStr = atob(base64String);
-        const len = binaryStr.length;
-        const uint8Array = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-            uint8Array[i] = binaryStr.charCodeAt(i);
-        }
+      // Convert Base64 string to a binary format
+      const binaryStr = atob(base64String);
+      const len = binaryStr.length;
+      const uint8Array = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        uint8Array[i] = binaryStr.charCodeAt(i);
+      }
 
-        // Use ExifReader to load metadata
-        const tags = await ExifReader.load(uint8Array.buffer);
+      // Use ExifReader to load metadata
+      const tags = await ExifReader.load(uint8Array.buffer);
 
-        console.log("📝 Parsed EXIF Data:", tags);
-        setExifData({
-            latitude: tags.GPSLatitude?.description || "Not available",
-            longitude: tags.GPSLongitude?.description || "Not available",
-            timestamp: tags.DateTimeOriginal?.description || "Not available",
-            cameraModel: tags.Model?.description || "Not available",
-            make: tags.Make?.description || "Not available",
-        });
+      console.log("📝 Parsed EXIF Data:", tags);
+      setExifData({
+        latitude: tags.GPSLatitude?.description || "Not available",
+        longitude: tags.GPSLongitude?.description || "Not available",
+        timestamp: tags.DateTimeOriginal?.description || "Not available",
+        cameraModel: tags.Model?.description || "Not available",
+        make: tags.Make?.description || "Not available",
+      });
     } catch (error) {
-        console.error("[extractExifMetadata] Error extracting EXIF data:", error);
+      console.error("[extractExifMetadata] Error extracting EXIF data:", error);
     }
-};
-
-
-
-  // const sendImageToServer = async (imageUrl, latitude, longitude) => {
-  //   const userId = "12345";
-  //   const timestamp = new Date().toISOString();
-
-  //   try {
-  //       if (!imageUrl) {
-  //           throw new Error("Invalid image: imageUrl is null or undefined.");
-  //       }
-
-  //       // Prepare JSON payload
-  //       const payload = {
-  //           userId,
-  //           latitude,
-  //           longitude,
-  //           timestamp,
-  //           base64String: imageUrl, // Ensure it's a valid Base64 string
-  //       };
-
-  //       // Send data to backend
-  //       const response = await api.post("/user/upload-image", payload, {
-  //           headers: { "Content-Type": "application/json" },
-  //       });
-
-  //       if (response.status >= 200 && response.status < 300) {
-  //           console.log("✅ Image and location data uploaded successfully!");
-  //           if (typeof setImageId === "function") {
-  //               setImageId(response.data.imageId); // Ensure setImageId is defined
-  //           }
-  //       } else {
-  //           alert("❌ Failed to upload image and location data.");
-  //           console.error("❌ Failed to upload image and location data:", response);
-  //       }
-  //   } catch (error) {
-  //       alert(`❌ Error: ${error.message}`);
-  //       console.error("❌ Error uploading image:", error?.response?.data || error.message);
-  //   }
-  // };
+  };
 
   const toggleCamera = () => {
     setCameraType((prevType) => (prevType === "user" ? "environment" : "user"));
   };
-
+  if (loading) return <Loader />;
   return (
     <section className="main camera-page">
       <div className="camera-space">
@@ -391,10 +279,14 @@ const CameraPage = () => {
         {/* Camera Buttons */}
         <div className="camera-btn">
           <button onClick={captureImage} className="capture-button">
+          
             Capture
           </button>
           <button onClick={toggleCamera} className="switch-camera-button">
-            <img src="/billioneye/images/switch-camera.png" alt="Switch Camera" />
+            <img
+              src="/billioneye/images/switch-camera.png"
+              alt="Switch Camera"
+            />
           </button>
         </div>
 
@@ -403,7 +295,6 @@ const CameraPage = () => {
 
         {/* Image Upload Status */}
         {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
-
 
         {showPopup && (
           <div className="popup">
@@ -446,29 +337,31 @@ const CameraPage = () => {
         </ul>
 
         {/* Display EXIF Data */}
-        {/* {exifData && (
-          <div className="exif-data">
-            <h3>EXIF Data:</h3>
-            <pre>{JSON.stringify(exifData, null, 2)}</pre>
-          </div>
-        )} */}
-
-
 
         {/* Error Messages */}
         {cameraError && <p className="error-message">{cameraError}</p>}
         {locationError && <p className="error-message">{locationError}</p>}
 
         {exifData && (
-        <div>
-          <h3>EXIF Data:</h3>
-          <p><strong>Latitude:</strong> {exifData.latitude}</p>
-          <p><strong>Longitude:</strong> {exifData.longitude}</p>
-          <p><strong>Timestamp:</strong> {exifData.timestamp}</p>
-          <p><strong>Camera Model:</strong> {exifData.cameraModel}</p>
-          <p><strong>Make:</strong> {exifData.make}</p>
-        </div>
-      )}
+          <div>
+            <h3>EXIF Data:</h3>
+            <p>
+              <strong>Latitude:</strong> {exifData.latitude}
+            </p>
+            <p>
+              <strong>Longitude:</strong> {exifData.longitude}
+            </p>
+            <p>
+              <strong>Timestamp:</strong> {exifData.timestamp}
+            </p>
+            <p>
+              <strong>Camera Model:</strong> {exifData.cameraModel}
+            </p>
+            <p>
+              <strong>Make:</strong> {exifData.make}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
