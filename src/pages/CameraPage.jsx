@@ -138,12 +138,12 @@ const CameraPage = () => {
     // imageexif.src = imageData;
 
     // Create a link element to download the image
-    const link = document.createElement("a");
-    link.href = imageData;
-    link.download = "captured-image.jpg";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // const link = document.createElement("a");
+    // link.href = imageData;
+    // link.download = "captured-image.jpg";
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
 
     setCapturedImage(base64String);
     setShowPopup(true);
@@ -404,19 +404,6 @@ const CameraPage = () => {
         {/* Image Upload Status */}
         {imageId && <p>✅ Image Uploaded Successfully! Image ID: {imageId}</p>}
 
-        {/* Display Captured Image */}
-        {capturedImage && (
-          <div className="captured-image">
-            <img src={capturedImage} alt="Captured" />
-            <a
-              href={capturedImage}
-              download="captured-image.png"
-              className="download-button"
-            >
-              Download Image
-            </a>
-          </div>
-        )}
 
         {showPopup && (
           <div className="popup">

@@ -23,9 +23,9 @@ const BillionEyePublic = () => {
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con">
-                  <Link to="/signup">
+                  
                     <img src="/billioneye/images/logo.png" alt="Logo" />
-                  </Link>
+                 
                 </figure>
               </div>
             </div>

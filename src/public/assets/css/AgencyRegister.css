@@ -1,3 +1,4 @@
+/* General Reset */
 img,
 iframe {
     max-width: 100%;
@@ -8,13 +9,11 @@ figure {
 }
 
 body {
-    /* font-family: 'Cocogoose Pro'; */
     font-family: 'Poppins', sans-serif;
     color: #141414;
     font-size: 16px;
     line-height: 32px;
 }
-
 
 a {
     text-decoration: none;
@@ -25,12 +24,7 @@ section {
     float: left;
 }
 
-
-
-/*
- *  Custom Scrollbar
- */
-
+/* Custom Scrollbar */
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
@@ -45,23 +39,25 @@ section {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 20px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background: #00048c;
 }
 
+/* Main Section */
 section.main {
     height: 100vh;
     background: #061435;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* background-image: url(../images/bg-1.png); */
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: bottom;
     overflow: hidden;
     position: relative;
 }
+
+/* Page Wrapper */
 .pag-1-wrapper {
     display: flex;
     justify-content: center;
@@ -69,17 +65,18 @@ section.main {
     text-align: center;
     height: max-content;
 }
+
 section.pag-1-wrapper-sec-1 {
     position: relative;
     padding-top: 40px;
     margin-bottom: 0;
 }
-section.pag-1-wrapper-sec-1>figure {
+
+section.pag-1-wrapper-sec-1 > figure {
     width: 100%;
     margin: auto;
     max-width: 400px;
 }
-
 
 .pag-1-wrapper-sec-2-wrapper h4 {
     font-size: 32px;
@@ -90,10 +87,11 @@ section.pag-1-wrapper-sec-1>figure {
     margin-bottom: 30px;
 }
 
-.pag-1-wrapper-sec-2-wrapper h4 a{
+.pag-1-wrapper-sec-2-wrapper h4 a {
     color: #5bb3cc;
 }
- ul {
+
+ul {
     display: flex;
     justify-content: center;
     gap: 25px;
@@ -114,8 +112,7 @@ figure.logo-con {
     max-width: 239px;
 }
 
-/**/
-
+/* Sign-Up Section */
 section.main.sign-up {
     background: #061738;
     background-image: none;
@@ -125,14 +122,13 @@ section.pag-2-wrapper-sec-1 {
     position: relative;
     margin-top: 30px;
 }
-section.pag-2-wrapper-sec-1 {
-    position: relative;
-}
+
 .pag-2-wrapper-sec-1-bgimg {
     display: flex;
     justify-content: space-between;
     position: relative;
 }
+
 .pag-2-wrapper-sec-1-bgimg figure img {
     max-width: 118px;
     opacity: 0.3;
@@ -141,41 +137,64 @@ section.pag-2-wrapper-sec-1 {
 section.sign-up-form .container {
     max-width: 370px;
 }
+
 section.main.sign-up .pag-1-wrapper {
     margin: 0;
 }
-section.sign-up-form .container form  input, section.sign-up-form .container form  optgroup, section.sign-up-form .container form  select, section.sign-up-form .container form  textarea, section.sign-up-form .container form  button {
-    background: #061435;
-    color: #ffffff;
+
+section.sign-up-form .container form input,
+section.sign-up-form .container form optgroup,
+section.sign-up-form .container form select,
+section.sign-up-form .container form textarea,
+section.sign-up-form .container form button {
+    background: #ffffff; /* Ensure input fields are visible */
+    color: #000000; /* Text color for better readability */
     padding: 10px;
     border-radius: 10px;
     width: 100%;
-    border: 2px solid #fff;
+    border: 2px solid #ccc; /* Neutral border color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    font-size: 16px; /* Ensure text is legible */
 }
-section.sign-up-form .container form  button {
+
+section.sign-up-form .container form input:focus,
+section.sign-up-form .container form select:focus,
+section.sign-up-form .container form textarea:focus {
+    border-color: #1157bf; /* Highlight border on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 8px rgba(17, 87, 191, 0.5); /* Add focus shadow */
+}
+
+section.sign-up-form .container form button {
     background: #1157bf;
     border-color: #1157bf;
     position: relative;
     min-height: 46px;
-}
-section.sign-up-form .container form button a {
-    color: #fff;
-    display: inline-block;
-    width: 100%;
-}
-section.sign-up-form .container form  input::placeholder, 
-section.sign-up-form .container form  optgroup::placeholder, 
-section.sign-up-form .container form  select::placeholder, 
-section.sign-up-form .container form  textarea::placeholder {
-color: #909090;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
+section.sign-up-form .container form button:hover {
+    background: #0e346d; /* Darker shade on hover */
+}
+
+section.sign-up-form .container form input::placeholder,
+section.sign-up-form .container form optgroup::placeholder,
+section.sign-up-form .container form select::placeholder,
+section.sign-up-form .container form textarea::placeholder {
+    color: #909090;
+}
+
+/* Headings */
 .heading-1 {
     color: #fff;
     position: relative;
     padding-bottom: 3px;
     margin-bottom: 25px;
 }
+
 .heading-1::before {
     content: '';
     position: absolute;
@@ -188,15 +207,25 @@ color: #909090;
     margin: auto;
     border-radius: 5px;
 }
+
 .heading-1 h4 {
     font-weight: 200;
 }
 
+/* Footer */
 .footer-logo-1 {
     margin-top: 50px;
 }
 
+footer {
+    width: 100%;
+}
 
+footer img {
+    width: 100%;
+}
+
+/* Camera Section */
 .camera {
     height: 100vh;
     overflow: hidden;
@@ -207,6 +236,7 @@ color: #909090;
     align-items: center;
     justify-content: center;
 }
+
 .camera-btn {
     position: absolute;
     bottom: 0;
@@ -227,6 +257,7 @@ color: #909090;
     overflow: hidden;
     position: relative;
 }
+
 .camera-btn button a {
     opacity: 0;
     position: absolute;
@@ -235,15 +266,17 @@ color: #909090;
     left: 0;
     top: 0;
 }
+
 .camera-btn button:hover {
     background: #5e0e0f;
 }
 
-
+/* Dashboard Section */
 section.main.dashboard-main {
     padding-top: 40px;
     background: #eaf8ff;
 }
+
 .top-1 {
     display: flex;
     justify-content: space-between;
@@ -254,27 +287,32 @@ section.main.dashboard-main {
 .menu-con ul {
     margin-top: 56px;
 }
+
 .menu-con ul li {
     padding: 5px 14px;
 }
-.menu-con ul li a{
+
+.menu-con ul li a {
     color: #000;
 }
+
 .nav-wrapper i.fa-solid.fa-bars {
     font-size: 38px;
 }
+
 section.main.dashboard-main {
     padding-top: 10px;
     background-image: none;
 }
 
 section.page-heading {
-    background: linear-gradient(45deg, #113c75, #2672a7,  #113c75);
+    background: linear-gradient(45deg, #113c75, #2672a7, #113c75);
     color: #ffffff;
     padding: 10px 0;
     text-align: center;
 }
-section.page-heading  h3 {
+
+section.page-heading h3 {
     margin-bottom: 0;
 }
 
@@ -286,6 +324,7 @@ section.dashboard-map iframe {
 section.dashboard-map {
     position: relative;
 }
+
 section.dashboard-map::before {
     content: '';
     position: absolute;
@@ -300,6 +339,7 @@ section.dashboard-table-con {
     position: relative;
     z-index: 10;
 }
+
 .table-card {
     background: #fff;
     padding: 20px;
@@ -307,16 +347,19 @@ section.dashboard-table-con {
     box-shadow: 0 0 14px 7px #00000024;
     margin-top: 23px;
 }
+
 .dashboard-tab-content {
     border: 1px solid #dee2e6;
     border-top: none;
     padding: 15px;
     border-radius: 0 0 5px 5px;
 }
+
 section.dashboard-table-con .nav-tabs .nav-link {
     color: #000000;
     font-size: 19px;
 }
+
 section.dashboard-table-con .nav-tabs .nav-link span {
     color: #0f518d;
     display: inline-block;
@@ -326,6 +369,7 @@ section.dashboard-table-con .nav-tabs .nav-link span {
 .table-con thead {
     position: relative;
 }
+
 .table-con thead:before {
     content: '';
     position: absolute;
@@ -334,9 +378,11 @@ section.dashboard-table-con .nav-tabs .nav-link span {
     background: #1c7cd3;
     border-radius: 16px;
 }
-.table-con thead div{
+
+.table-con thead div {
     position: relative;
 }
+
 .table-con thead td {
     color: #fff;
 }
@@ -354,14 +400,12 @@ section.dashboard-table-con .nav-tabs .nav-link span {
     margin: 0;
 }
 
-
 .table-card-btn {
     position: absolute;
     right: 0;
     color: #404040;
     text-decoration: none;
 }
-
 
 .table-card-heading-icon img {
     height: 37px;
@@ -372,72 +416,59 @@ section.dashboard-table-con .nav-tabs .nav-link span {
     color: #bebebe;
 }
 
-
-.table-card-btn:hover i, .table-card-btn:hover{
+.table-card-btn:hover i,
+.table-card-btn:hover {
     color: #1c7cd3;
 }
 
-
-.table-heading table{
+.table-heading table {
     padding: 0;
     margin: 0;
 }
+
 .table-heading table td {
     color: #fff;
     font-weight: unset;
 }
-
 
 .table-con .table-heading table thead * {
     background: none;
 }
 
 .table-con .table-heading table {
-    border-radius: 30px!important; /* Add border-radius to the table */
-    overflow: hidden; /* Ensures the border-radius is visible */
+    border-radius: 30px !important;
+    overflow: hidden;
 }
 
 .table-con .table-heading table thead {
     background: #1c7cd3;
 }
+
 .table-con table tr td div {
     word-wrap: break-word;
 }
 
-.table-con table tr td div a{
+.table-con table tr td div a {
     color: #000;
 }
 
-
-/* .table-con table tr td:nth-child(1) div {
-    width: 39px;
-}
-.table-con table tr td:nth-child(2) div {
-    width: 160px;
+.table-con .table > tbody tr {
+    background: #f4f4f4 !important;
 }
 
-.table-con table tr td:nth-child(3) div {
-    width: 130px;
-}
-.table-con table tr td:nth-child(5) div{
-    width: 130px;
-} */
-
-.table>tbody tr {
-    background: #f4f4f4!important;
-}
-.table>tbody tr td *{
+.table-con .table > tbody tr td * {
     background: none;
 }
+
 footer {
     width: 100%;
 }
+
 footer img {
     width: 100%;
 }
 
-
-.table-con .table>tbody tr td {
+.table-con .table > tbody tr td {
     vertical-align: middle;
     background: none;
     margin: 5px 0;
@@ -445,38 +476,39 @@ footer img {
     border-bottom: none;
 }
 
-
-
-
 section.main.dashboard-hospital {
     background: linear-gradient(177deg, #eefffd, #f7faff);
 }
-
 
 .pag-2-wrapper-sec-1-bgimg.dashboard-hospital-logo-bg img {
     opacity: 0.3;
 }
 
-
-section.sign-up-form.dashboard-hospital-sign-up .container form  input, section.sign-up-form.dashboard-hospital-sign-up .container form  optgroup, section.sign-up-form.dashboard-hospital-sign-up .container form  select, section.sign-up-form.dashboard-hospital-sign-up .container form  textarea, section.sign-up-form.dashboard-hospital-sign-up .container form  button {
+section.sign-up-form.dashboard-hospital-sign-up .container form input,
+section.sign-up-form.dashboard-hospital-sign-up .container form optgroup,
+section.sign-up-form.dashboard-hospital-sign-up .container form select,
+section.sign-up-form.dashboard-hospital-sign-up .container form textarea,
+section.sign-up-form.dashboard-hospital-sign-up .container form button {
     background: #ffffff;
     box-shadow: 0 7px 8px #4cc8ff42;
 }
-section.sign-up-form.dashboard-hospital-sign-up .container form  button {
+
+section.sign-up-form.dashboard-hospital-sign-up .container form button {
     background: #0e346d;
     border-color: #0e346d;
 }
-section.sign-up-form.dashboard-hospital-sign-up .container form  input::placeholder, 
-section.sign-up-form.dashboard-hospital-sign-up .container form  optgroup::placeholder, 
-section.sign-up-form.dashboard-hospital-sign-up .container form  select::placeholder, 
-section.sign-up-form.dashboard-hospital-sign-up .container form  textarea::placeholder {
-color: #909090;
+
+section.sign-up-form.dashboard-hospital-sign-up .container form input::placeholder,
+section.sign-up-form.dashboard-hospital-sign-up .container form optgroup::placeholder,
+section.sign-up-form.dashboard-hospital-sign-up .container form select::placeholder,
+section.sign-up-form.dashboard-hospital-sign-up .container form textarea::placeholder {
+    color: #909090;
 }
+
 section.dashboard-main-page-wrapper {
     z-index: 1;
     position: relative;
 }
-
 
 .dashboard-report-map {
     padding-top: 30px;
@@ -491,7 +523,7 @@ section.dashboard-main-page-wrapper {
     margin-top: 30px;
 }
 
-.table-card-2 .table-striped>tbody>tr:nth-of-type(odd)>* {
+.table-card-2 .table-striped > tbody > tr:nth-of-type(odd) > * {
     background: #ffffff;
 }
 
@@ -499,6 +531,7 @@ section.dashboard-main-page-wrapper {
     border-bottom: 6px solid #eaf8ff !important;
     background: #deecf2;
 }
+
 .dashboard-report-img {
     padding-top: 30px;
     position: relative;
@@ -521,24 +554,30 @@ section.dashboard-main-page-wrapper {
     flex-wrap: wrap;
     margin: 15px 0;
 }
+
 .dashboard-report-assign {
     padding: 30px 0 0;
 }
+
 /* Section Assign To */
 section.dashboard-report-assign {
     padding-top: 30px;
 }
+
 section.dashboard-report-assign .table-card-heading {
     padding-right: 15px;
 }
+
 section.dashboard-report-assign form select {
     border-radius: 5px;
     width: 100%;
 }
-/* Section Assign To End*/
+
+/* Section Assign To End */
 section.onboarding_ground_staff_wrapper {
     padding: 30px 0 0;
 }
+
 /**/
 section.assigned-task-event-con {
     margin-top: 30px;
@@ -556,14 +595,17 @@ section.assigned-task-event-con {
     box-shadow: 0 0 11px 5px #00000003;
     margin-top: 23px;
 }
+
 .assigned-task-wrapper h5 {
     text-align: center;
 }
+
 section.dashboard-table-con.ongoing_task_details button.btn.btn-primary {
     width: 100%;
     color: #fff;
     margin-top: 25px;
 }
+
 section.dashboard-table-con.ongoing_task_details button.btn.btn-primary a {
     color: #fff;
 }
@@ -575,41 +617,50 @@ button.btn.btn-primary a {
 }
 
 @media screen and (min-width: 768px) {
-section.main {
-    height: auto;
+    section.main {
+        height: auto;
+    }
 }
-}
+
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 768px) {
-    .container, .container-sm {
+    .container,
+    .container-sm {
         max-width: 100%;
     }
+
     section.sign-up-form {
         margin-top: -85px;
         position: relative;
         z-index: 1;
     }
+
     section.dashboard-table-con .nav-tabs .nav-link {
         color: #000000;
         font-size: 12px;
         padding: 5px 10px;
         line-height: 20px;
     }
-    .table-card-2 .table-striped>tbody>tr>* {
+
+    .table-card-2 .table-striped > tbody > tr > * {
         line-height: 12px;
         font-size: 12px;
         padding: 7px 5px;
     }
+
     figure.logo-con {
         max-width: 210px;
     }
+
     .footer-logo-1 {
         margin-top: 30px;
     }
+
     .pag-1-wrapper-sec-2-wrapper {
         position: relative;
         z-index: 1;
     }
+
     .footer-logo-1 ul li img {
         height: 42px;
     }
@@ -619,46 +670,60 @@ section.main {
         opacity: 0.2;
     }
 
-    section.sign-up-form .container form  input, section.sign-up-form .container form  optgroup, section.sign-up-form .container form  select, section.sign-up-form .container form  textarea, section.sign-up-form .container form  button {
+    section.sign-up-form .container form input,
+    section.sign-up-form .container form optgroup,
+    section.sign-up-form .container form select,
+    section.sign-up-form .container form textarea,
+    section.sign-up-form .container form button {
         padding: 11px;
         font-size: 14px;
     }
+
     .camera-btn button {
         width: 70px;
         height: 70px;
-       
     }
+
     section.main.dashboard-main .logo img {
         width: auto;
         height: 39px;
     }
+
     section.dashboard-map iframe {
         height: 310px;
     }
-    .table-con .table>tbody tr td {
+
+    .table-con .table > tbody tr td {
         padding: 4px;
     }
-    .table-con .table>tbody tr td a {
+
+    .table-con .table > tbody tr td a {
         color: #000;
     }
+
     .table-con.table-responsive {
         max-height: 450px;
         overflow-y: auto;
     }
-.dashboard-report-map iframe {
+
+    .dashboard-report-map iframe {
         width: 100%;
         height: 100px;
     }
+
     .table-card-heading {
-           gap: 5px;
+        gap: 5px;
     }
+
     .table-card-heading-icon img {
         height: 20px;
         width: auto;
     }
+
     .table-card-heading h4 {
         font-size: 16px;
     }
+
     section.main.dashboard-main {
         padding-top: 10px;
         height: 100vh;
@@ -671,15 +736,15 @@ section.main {
         width: 100%;
         bottom: 0;
     }
-  }
+}
 
-  @media screen and (max-width: 576px) {
-
+@media screen and (max-width: 576px) {
     .pag-1-wrapper-sec-2-wrapper h4 {
-           max-width: 341px;
-           font-size: 24px;
+        max-width: 341px;
+        font-size: 24px;
     }
-    footer img{
+
+    footer img {
         width: 100%;
     }
 
@@ -696,8 +761,8 @@ section.main {
         padding: 3px;
         font-size: 14px;
     }
+
     .dashboard-report-img {
-        /* padding-top: 9px; */
         margin-bottom: 0;
         padding-top: 0;
     }
@@ -706,11 +771,22 @@ section.main {
         max-height: 109px;
         overflow: hidden;
     }
-    section.page-heading  h3 {
+
+    section.page-heading h3 {
         margin-bottom: 0;
         font-size: 18px;
     }
+}
 
-  }
+.dashboard-hospital-logo-bg {
+    position: relative;
+    z-index: 0; /* Push the background behind */
+}
 
-/**/
+.sign-up-form {
+    position: relative;
+    z-index: 10; /* Bring the form above the background */
+    background-color: rgba(255, 255, 255, 0.9); /* Optional: Add a semi-transparent background */
+    padding: 20px;
+    border-radius: 8px;
+}
