@@ -450,7 +450,7 @@ const Dashboard = () => {
                                             report.boundingBoxes[0];
                                         } else {
                                           console.warn(
-                                            `No valid bounding box for report:`,
+                                           " No valid bounding box for report:",
                                             report
                                           );
                                           return;
@@ -594,11 +594,11 @@ const Dashboard = () => {
                           return;
                         }
 
-                        // Get the bounding box for the *current* incident
+                        // Get the bounding box for the current incident
                         // Use optional chaining for safety
                         const boundingBox = event.allIncidents[currentIndex]?.boundingBoxes?.[0];
 
-                        // Set canvas dimensions to match the *displayed* image size *before* drawing
+                        // Set canvas dimensions to match the displayed image size before drawing
                         canvas.width = img.clientWidth;
                         canvas.height = img.clientHeight;
 
@@ -623,13 +623,13 @@ const Dashboard = () => {
                         }
 
 
-                        // Calculate scaling factors based on *displayed* vs *natural* size
+                        // Calculate scaling factors based on displayed vs natural size
                         const scaleX = img.clientWidth / img.naturalWidth;
                         const scaleY = img.clientHeight / img.naturalHeight;
 
 
                         // --- CORRECTED CALCULATION ---
-                        // Scale bounding box coordinates *directly* without adding offsets.
+                        // Scale bounding box coordinates directly without adding offsets.
                         // These coordinates are relative to the top-left of the canvas/image.
                         const boxX = x1 * scaleX;
                         const boxY = y1 * scaleY;
@@ -689,7 +689,7 @@ const Dashboard = () => {
                     <button
                       className="carousel-next" // Style this button
                       onClick={() => {
-                         console.log("Next Button Clicked. New URL:", event.allIncidents[nextIndex].image_url);
+                         console.log("Next Button Clicked. New URL:", nextIndex, "    ",event.allIncidents[nextIndex].image_url);
                         setZoomedImageUrl(event.allIncidents[nextIndex].image_url);
                       }}
                       // Disable if only one image? (Optional)

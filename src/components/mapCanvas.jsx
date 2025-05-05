@@ -9,7 +9,7 @@ const containerStyle = {
 
 function MapCanvas({ coordinates }) {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDvcjPnTtV0vF8A43Ofwgp4oLtUeJXs8Mo", // Replace with your API key
+    googleMapsApiKey: "AIzaSyD1r7v2X0xk4bq3g5c6j8z9l1Z5Y2Qe4wE" , // Replace with your API key
   });
 
   return isLoaded && coordinates ? (
