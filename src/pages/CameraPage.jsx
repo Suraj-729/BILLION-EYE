@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "../public/assets/css/CameraPage.css"; // Ensure you have a CSS file for styling
 import api from "../api";
 import ExifReader from "exifreader";
-import Loader from "./loader"; // Import the Loader component
+
 
 const CameraPage = () => {
-  const [loading, setLoading] = useState(true);
+ 
   const videoRef = useRef(null); // Reference for the video element
   const canvasRef = useRef(null); // Reference for the canvas element
   const [capturedImage, setCapturedImage] = useState(null); // State to store the captured image
@@ -14,7 +14,7 @@ const CameraPage = () => {
   const [locationError, setLocationError] = useState(null); // State to store location errors
   const [cameraError, setCameraError] = useState(null); // State to store camera errors
   const [devices, setDevices] = useState([]); // State to store available camera devices
-  const [cameraType, setCameraType] = useState("user");
+  // const [cameraType, setCameraType] = useState("user");
   const [imageId, setImageId] = useState(null); //store uplaoded imageid
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
@@ -55,14 +55,14 @@ const CameraPage = () => {
         };
 
         console.log("Requesting camera access...");
-        setLoading(true);
+        // setLoading(true);
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
          
           console.log("Camera access granted.");
         }
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.error("Error accessing camera:", error);
         setCameraError(
@@ -86,7 +86,7 @@ const CameraPage = () => {
         console.log("Camera stream stopped.");
       }
     };
-  }, [cameraType]);
+  }, []);
 
   // Function to capture the image from the camera
   const captureImage = () => {
@@ -261,10 +261,10 @@ const CameraPage = () => {
     }
   };
 
-  const toggleCamera = () => {
-    setCameraType((prevType) => (prevType === "user" ? "environment" : "user"));
-  };
-  if (loading) return <Loader />;
+  // const toggleCamera = () => {
+  //   setCameraType((prevType) => (prevType === "user" ? "environment" : "user"));
+  // };
+  // if (loading) return <Loader />;
   return (
     <section className="main camera-page">
       <div className="camera-space">
@@ -282,12 +282,12 @@ const CameraPage = () => {
           
             Capture
           </button>
-          <button onClick={toggleCamera} className="switch-camera-button">
+          {/* <button onClick={toggleCamera} className="switch-camera-button">
             <img
               src="/billioneye/images/switch-camera.png"
               alt="Switch Camera"
             />
-          </button>
+          </button> */}
         </div>
 
         {/* Hidden Canvas for Capturing Image */}

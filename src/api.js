@@ -13,8 +13,8 @@ import axios from "axios";
 const isLocalhost = window.location.hostname === "localhost";
 const api = axios.create({
   baseURL: isLocalhost
-    ? "http://localhost:5000" // Local development backend
-    : "https://pbox.nic.in/backend", // Production backend
+    ? "http://localhost:5000/" // Local development backend
+    : "https://pbox.nic.in/", // Production backend
   timeout: 10000000,
 });
 
