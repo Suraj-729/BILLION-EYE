@@ -6,7 +6,7 @@ import ExifReader from "exifreader";
 import Loader from "./loader"; // Import the Loader component
 
 const CameraPage = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const videoRef = useRef(null); // Reference for the video element
   const canvasRef = useRef(null); // Reference for the canvas element
   const [capturedImage, setCapturedImage] = useState(null); // State to store the captured image
