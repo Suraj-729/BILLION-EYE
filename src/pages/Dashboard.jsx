@@ -290,7 +290,7 @@ const Dashboard = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>Assigned Agency: {assignedAgency}</h3>
+              <h3>{assignedAgency}</h3>
             </div>
           </div>
         </div>
@@ -325,12 +325,12 @@ const Dashboard = () => {
                     />
                   </div>
                   <h4>Recent Reports</h4>
-                  <button
+                  {/* <button
                     onClick={() => handleNavigation("/reports")}
                     className="table-card-btn"
                   >
                     View All <i className="fa-solid fa-play"></i>
-                  </button>
+                  </button> */}
                 </div>
                 <div className="table-con table-responsive">
                   <ul className="nav nav-tabs" style={{ marginLeft: "-290px" }}>
@@ -704,10 +704,10 @@ const Dashboard = () => {
           </div> {/* End Zoomed Image Container */}
         </div> /* End Zoom Overlay */
       )} {/* End Zoomed Image Section */}
-      <footer className="footer" style={{ marginTop: "720px" }}>
+      <footer className="footer" style={{ marginTop: "320px" }}>
         <div className="footer-container">
           <div className="row" >
-            <div className="col-md-12 text-center">
+            <div className="col-md-12 text-center" style={{marginTop:"185px"}}>
               <p>
                 © 2025 All Rights Reserved.{" "}
                 <span className="nic-credit">Developed by NIC</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../public/assets/css/AgencyRegister.css";
 import { Link } from "react-router-dom";
 import api from "../api";
@@ -9,7 +9,35 @@ const AgencyRegister = () => {
     mobileNumber: "",
     password: "",
     confirmPassword: "",
+    lat: null, // Automatically fetched latitude
+    lng: null, // Automatically fetched longitude
   });
+
+  const [locationError, setLocationError] = useState(null);
+
+  // Fetch user's location using Geolocation API
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setFormData((prevData) => ({
+            ...prevData,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          }));
+          console.log("Location fetched:", position.coords);
+        },
+        (error) => {
+          console.error("Error fetching location:", error.message);
+          setLocationError(
+            "Unable to fetch location. Please allow location access."
+          );
+        }
+      );
+    } else {
+      setLocationError("Geolocation is not supported by your browser.");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,12 +67,14 @@ const AgencyRegister = () => {
 
     try {
       const requestData = {
-        agencyName: formData.agencyName,
-        phoneNumber: formData.mobileNumber,
+        AgencyName: formData.agencyName,
+        mobileNumber: formData.mobileNumber,
         password: formData.password,
+        lat: formData.lat,
+        lng: formData.lng,
       };
 
-      const response = await api.post("/agencies/agencyId", requestData);
+      const response = await api.post("backend/agency", requestData);
 
       console.log("API Response:", response);
 
@@ -99,7 +129,10 @@ const AgencyRegister = () => {
         <section className="pag-2-wrapper-sec-1">
           <div className="pag-2-wrapper-sec-1-bgimg dashboard-hospital-logo-bg">
             <figure>
-              <img src="/billioneye/images/pag-2-logo-bg.png" alt="Background Left" />
+              <img
+                src="/billioneye/images/pag-2-logo-bg.png"
+                alt="Background Left"
+              />
             </figure>
             <figure>
               <img
@@ -113,9 +146,12 @@ const AgencyRegister = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <figure className="logo-con" style={{marginTop: "18px"}}>
+                <figure className="logo-con" style={{ marginTop: "18px" }}>
                   <a href="index.html">
-                    <img src="/billioneye/images/logo-blue.png" alt="Logo"  />
+                    <img
+                      src="/billioneye/images/logo-blue.png"
+                      alt="Logo"
+                    />
                   </a>
                 </figure>
               </div>
@@ -124,7 +160,10 @@ const AgencyRegister = () => {
         </section>
 
         {/* Sign-Up Form Section */}
-        <section className="sign-up-form dashboard-hospital-sign-up" style={{ marginTop: "-2px" }}>
+        <section
+          className="sign-up-form dashboard-hospital-sign-up"
+          style={{ marginTop: "-2px" }}
+        >
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -177,6 +216,11 @@ const AgencyRegister = () => {
                       required
                     />
                   </div>
+                  {locationError && (
+                    <div className="alert alert-warning" role="alert">
+                      {locationError}
+                    </div>
+                  )}
                   <button type="submit" className="btn btn-primary">
                     Register
                   </button>
