@@ -80,6 +80,8 @@ const EventReport = () => {
     const fetchData = async () => {
       try {
         const response = await api.get(`backend/event-report/${event_id}`); // Adjust endpoint as needed
+        console.log("API Response:", response.data);
+        
         setReportData(response.data);
       } catch (error) {
         console.error("Error fetching report data:", error);
@@ -212,12 +214,12 @@ const EventReport = () => {
 
       <section
         className="page-heading"
-        style={{ marginTop: "-25px", padding: "2px" }}
+        style={{ marginTop: "-2px", padding: "2px" }}
       >
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>BMC</h3>
+              <h3>KIIMS</h3>
             </div>
           </div>
         </div>
@@ -229,10 +231,10 @@ const EventReport = () => {
             <div
               className="col-md-6 "
               id="report-coloumn"
-              style={{ marginTop: "-15px" }}
+              style={{ marginTop: "-100px" }}
             >
               <div className="table-card-2">
-                <div className="table-card-heading">
+                <div className="table-card-heading" style={{marginTop: "100px"}}>
                   <div className="table-card-heading-icon">
                     <img src="/billioneye/images/dashboard-icon.png" alt="Report " />
                   </div>
@@ -332,7 +334,7 @@ const EventReport = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <div className="dashboard-report-img">
+              <div className="dashboard-report-img" style={{marginTop:"-100px"}}>
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
                     <img src="/billioneye/images/image-icon.png" alt="Incident" />
@@ -352,7 +354,7 @@ const EventReport = () => {
                 </figure>
               </div>
             </div>
-            <div className="col-md-6" style={{ marginTop: "-300px" }}>
+            <div className="col-md-6" >
               <div
                 className="dashboard-report-assign"
                 style={{
