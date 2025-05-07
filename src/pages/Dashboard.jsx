@@ -58,7 +58,7 @@ const Dashboard = () => {
 
   const approveEvent = (event_id) => {
     updateEventStatus(event_id, "Accepted");
-    navigate(`backend/eventreport/${event_id}`, { state: { event_id } });
+    navigate(`/eventReport/${event_id}`, { state: { event_id } });
   };
   const rejectEvent = (event_id) => updateEventStatus(event_id, "Rejected");
   // const holdEvent = (event_id) => updateEventStatus(event_id, "On Hold");
