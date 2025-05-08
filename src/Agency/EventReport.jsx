@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom"; // Ensure all imports are at the top
+import { useParams, Link ,useNavigate } from "react-router-dom"; // Ensure all imports are at the top
 import "../public/assets/css/EventReport.css";
 import api from "../api";
 
@@ -18,9 +18,19 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
 const EventReport = () => {
-  const { event_id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState();
   const open = Boolean(anchorEl);
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [users, setUsers] = useState([]);
+  const { event_id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [reportData, setReportData] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
+  const [isAssigned, setIsAssigned] = useState(false); // State to track assignment status
+  const [mapCoordinates, setMapCoordinates] = useState(null);
+  const [agencyGroundStaff, setAgencyGroundStaff] = useState([]);
+
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,47 +40,23 @@ const EventReport = () => {
     setAnchorEl(null);
   };
 
-  const [loading, setLoading] = useState(true);
-  const [mapCoordinates, setMapCoordinates] = useState(null);
-  const [reportData, setReportData] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(""); // State for selected user
-  const [userDetails, setUserDetails] = useState(null); // State for user details
 
-  const [users] = useState([
-    {
-      id: "1",
-      name: "John Doe",
-      phone: "123-456-7890",
-      responsibility: "Traffic Officer",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      phone: "987-654-3210",
-      responsibility: "Road Safety Analyst",
-    },
-    {
-      id: "3",
-      name: "Alice Johnson",
-      phone: "555-666-7777",
-      responsibility: "Emergency Responder",
-    },
-    {
-      id: "4",
-      name: "Bob Williams",
-      phone: "111-222-3333",
-      responsibility: "Field Inspector",
-    },
-  ]); // Manually added users
+  // useEffect(() => {
+  //   // Fetch ground staff from the backend
+  //   const fetchGroundStaff = async () => {
+  //     try {
+  //       const response = await api.get("backend/agency/groundstaff");
+  //       setUsers(response.data); // Update users state with fetched data
+  //     } catch (error) {
+  //       console.error("Error fetching ground staff:", error);
+  //     }
+  //   };
 
-  const handleUserChange = (event) => {
-    const userId = event.target.value;
-    setSelectedUser(userId);
+  //   fetchGroundStaff();
+  // }, []);
 
-    // Find the selected user details (assuming user objects have id, name, phone, responsibility)
-    const user = users.find((u) => u.id === userId);
-    setUserDetails(user || null);
-  };
+
+
   useEffect(() => {
     if (!event_id) {
       console.error("Event ID is missing");
@@ -79,10 +65,10 @@ const EventReport = () => {
 
     const fetchData = async () => {
       try {
-        const response = await api.get(`backend/event-report/${event_id}`); // Adjust endpoint as needed
+        const response = await api.get(`backend/event-report/${event_id}`);
         console.log("API Response:", response.data);
-        
         setReportData(response.data);
+        setIsAssigned(response.data.status === "Assigned"); // Set initial assignment status
       } catch (error) {
         console.error("Error fetching report data:", error);
       } finally {
@@ -91,7 +77,64 @@ const EventReport = () => {
     };
 
     fetchData();
-  }, [event_id]); // Run effect when eventId changes
+  }, [event_id]);
+
+  // Fetch ground staff by agency ID
+  useEffect(() => {
+    if (!reportData?.AgencyId) {
+      console.error("Agency ID is missing");
+      return;
+    }
+
+    const fetchAgencyGroundStaff = async () => {
+      try {
+        const response = await api.get(`backend/${reportData.AgencyId}/groundstaff`);
+        if (response.data.success) {
+          setAgencyGroundStaff(response.data.data);
+        } else {
+          console.error("Failed to fetch ground staff");
+        }
+      } catch (error) {
+        console.error("Error fetching ground staff by agency:", error);
+      }
+    };
+
+    fetchAgencyGroundStaff();
+  }, [reportData?.AgencyId]);
+
+  const handleUserChange = (event) => {
+    const userId = event.target.value;
+    setSelectedUser(userId);
+
+    const user = users.find((u) => u.id === userId);
+    setUserDetails(user || null);
+  };
+
+  const handleAddGroundStaff = () => {
+    if (reportData?.AgencyId) {
+      navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}`);
+    } else {
+      console.error("Agency ID is not available");
+    }
+  };
+
+  const updateEventStatus = async (newStatus) => {
+    try {
+      const response = await api.put(`backend/events/status/${event_id}`, {
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        console.log(`Event ${event_id} status updated to ${newStatus}`);
+        setIsAssigned(newStatus === "Assigned"); // Update assignment status
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleAssign = () => {
+    updateEventStatus("Assigned");
+  };
 
   if (loading) {
     return <p>Loading report data...</p>;
@@ -148,7 +191,10 @@ const EventReport = () => {
                         aria-expanded={open ? "true" : undefined}
                       >
                         <Avatar sx={{ width: 52, height: 52 }}>
-                          <img src="/billioneye/images/adminlogo.ico" alt="image-logo" />
+                          <img
+                            src="/billioneye/images/adminlogo.ico"
+                            alt="image-logo"
+                          />
                         </Avatar>
                       </IconButton>
                     </Tooltip>
@@ -219,7 +265,7 @@ const EventReport = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>KIIMS</h3>
+           <h3>{reportData.AgencyName }</h3> 
             </div>
           </div>
         </div>
@@ -234,9 +280,15 @@ const EventReport = () => {
               style={{ marginTop: "-100px" }}
             >
               <div className="table-card-2">
-                <div className="table-card-heading" style={{marginTop: "100px"}}>
+                <div
+                  className="table-card-heading"
+                  style={{ marginTop: "100px" }}
+                >
                   <div className="table-card-heading-icon">
-                    <img src="/billioneye/images/dashboard-icon.png" alt="Report " />
+                    <img
+                      src="/billioneye/images/dashboard-icon.png"
+                      alt="Report "
+                    />
                   </div>
                   <h4 className="text-uppercase">Report</h4>
                 </div>
@@ -334,10 +386,16 @@ const EventReport = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <div className="dashboard-report-img" style={{marginTop:"-100px"}}>
+              <div
+                className="dashboard-report-img"
+                style={{ marginTop: "-100px" }}
+              >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
-                    <img src="/billioneye/images/image-icon.png" alt="Incident" />
+                    <img
+                      src="/billioneye/images/image-icon.png"
+                      alt="Incident"
+                    />
                   </div>
                   <h4 className="text-uppercase">IMAGE</h4>
                 </div>
@@ -354,40 +412,13 @@ const EventReport = () => {
                 </figure>
               </div>
             </div>
-            <div className="col-md-6" >
-              <div
-                className="dashboard-report-assign"
-                style={{
-                  marginTop: "-15px",
-                }}
-              >
+            <div className="col-md-6">
+              <div className="dashboard-report-assign">
                 <div className="table-card-heading">
-                  <div className="table-card-heading-icon">
-                    <img src="/billioneye/images/user.png" alt="" title="" />
-                  </div>
-                  <h4
-                    className="text-uppercase"
-                    style={{ marginLeft: "-10px" }}
-                  >
-                    ASSIGN TO
-                  </h4>
+                  <h4 className="text-uppercase">Assign To</h4>
                 </div>
                 <form>
-                  <select
-                    aria-label="Select User"
-                    id="userSelect"
-                    className="form-control"
-                    value={selectedUser}
-                    onChange={handleUserChange}
-                  >
-                    {users.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {" "}
-                        {/* Changed user.is → user.id */}
-                        {user.name}
-                      </option>
-                    ))}
-                  </select>
+                  {/* Removed the first dropdown */}
                 </form>
                 {userDetails && (
                   <div
@@ -411,13 +442,75 @@ const EventReport = () => {
                       </li>
                     </ul>
                     <div style={{ textAlign: "center", marginTop: "10px" }}>
-                      <button className="btn btn-success">Assign</button>
-                      <Link to='/dashboard/agency-125'>
-                        <button className="btn btn-success">
-                          Not Assigned
-                        </button>
-                      </Link>
+                      <button
+                        className="btn btn-success"
+                        onClick={handleAssign}
+                        disabled={isAssigned} // Disable if already assigned
+                      >
+                        Assign
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        disabled={isAssigned} // Disable if already assigned
+                      >
+                        Unassigned
+                      </button>
                     </div>
+                  </div>
+                )}
+                 <button
+                        className="btn btn-success"
+                        onClick={handleAddGroundStaff}
+                        disabled={isAssigned}
+                         // Disable if already assigned
+                      >
+                        Onboard GroundStaff
+                      </button>
+
+                {/* Retained the second dropdown */}
+                <div className="form-group">
+                  <label htmlFor="agencyGroundStaffSelect">Select Ground Staff:</label>
+                  <select
+                    id="agencyGroundStaffSelect"
+                    className="form-control"
+                    onChange={(e) => {
+                      const selectedStaff = agencyGroundStaff.find(
+                        (staff) => staff._id === e.target.value
+                      );
+                      setUserDetails(selectedStaff || null);
+                    }}
+                  >
+                    <option value="">Select Ground Staff</option>
+                    {agencyGroundStaff.map((staff) => (
+                      <option key={staff._id} value={staff._id}>
+                        {staff.name} - {staff.number}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Display selected ground staff details */}
+                {userDetails && (
+                  <div
+                    className="assign-details"
+                    style={{
+                      marginTop: "10px",
+                      background: "#f9f9f9",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      <li>
+                        <b>Name:</b> {userDetails.name}
+                      </li>
+                      <li>
+                        <b>Phone:</b> {userDetails.number}
+                      </li>
+                      <li>
+                        <b>Address:</b> {userDetails.address}
+                      </li>
+                    </ul>
                   </div>
                 )}
 

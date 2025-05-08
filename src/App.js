@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import BillionEye from "./pages/BillionEye";
 import RegisterPage from "./pages/userRegistration";
@@ -33,7 +28,7 @@ const ProtectedRoute = ({ element: Element }) => {
   return isAuthenticated ? (
     <Element />
   ) : (
-    <Navigate to="/billioneye/login" replace />
+    <Navigate to="/agencyLogin" replace />
   );
 };
 
@@ -54,20 +49,20 @@ function App() {
         <Route path="/agencyRegister" element={<AgencyRegister />} />
         <Route path="/groundstaffTax" element={<GroundStaffTax />} />
         <Route path="/ongoingTax" element={<OngoingTax />} />
-        <Route path="/dashboard/:agencyId" element={<Dashboard />} />
+        <Route
+          path="/dashboard/:agencyId"
+          element={<ProtectedRoute element={Dashboard} />}
+        />
         <Route path="/assignGroundstaff" element={<AssignGroundStaff />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Protected Routes */}
-       
+
         <Route
           path="/ServiceLogin"
           element={<ProtectedRoute element={ServiceLogin} />}
         />
-        <Route
-          path="/demo"
-          element={<ProtectedRoute element={Demo} />}
-        />
+        <Route path="/demo" element={<ProtectedRoute element={Demo} />} />
       </Routes>
     </BrowserRouter>
   );

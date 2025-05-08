@@ -65,12 +65,16 @@ const Dashboard = () => {
   const handleAssign = (event_id) => updateEventStatus(event_id, "Assigned");
   const handleComplete = (event_id) => updateEventStatus(event_id, "Resolved");
 
+  const tabs = [
+    { id: "RecentReports", label: "Recent Reports" },
+    { id: "AssignedEvents", label: "Assigned Events" },
+    { id: "ResolvedEvents", label: "Resolved Events" },
+  ];
+
   const filteredDashboardData = () => {
     switch (activeTab) {
       case "RecentReports":
         return dashboardData.filter((event) => event.status === "open");
-      case "ActiveEvents":
-        return dashboardData.filter((event) => event.status === "Accepted");
       case "AssignedEvents":
         return dashboardData.filter((event) => event.status === "Assigned");
       case "ResolvedEvents":
@@ -135,13 +139,6 @@ const Dashboard = () => {
         return null;
     }
   };
-
-  const tabs = [
-    { id: "RecentReports", label: "Recent Reports" },
-    { id: "ActiveEvents", label: "Active Events" },
-    { id: "AssignedEvents", label: "Assigned Events" },
-    { id: "ResolvedEvents", label: "Resolved Events" },
-  ];
 
   // Add this function inside the Dashboard component
   const handleNavigation = (event) => {
@@ -210,6 +207,40 @@ const Dashboard = () => {
     }
   }, [zoomedImageUrl, dashboardData]);
 
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You are not logged in.");
+        navigate("/login");
+        return;
+      }
+
+      console.log("Sending Logout Request...");
+      const response = await api.post(
+        "backend/agency/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Logout Response:", response.data);
+        localStorage.removeItem("token"); // Clear token from localStorage
+        alert("Logout Successful!");
+        navigate("/agencyLogin"); // Redirect to login page
+      } else {
+        alert("Logout Failed: " + (response.data?.message || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Error Logging Out:", error);
+      alert(error.response?.data?.message || "Logout failed!");
+    }
+  };
+
   return (
     <>
       <header>
@@ -217,8 +248,16 @@ const Dashboard = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="d-flex align-items-center justify-content-between">
-                <div className="logo">
-                  <img src="/billioneye/images/logo-small.png" alt="Logo" title="Logo" />
+                <div
+                  className="logo"
+                  onClick={() => navigate(`/dashboard/${agencyId}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <img
+                    src="/billioneye/images/logo-small.png"
+                    alt="Logo"
+                    title=""
+                  />
                 </div>
                 <div
                   style={{
@@ -235,20 +274,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        {isOpen && (
-          <div
-            style={{
-              position: "fixed",
-              top: "0",
-              left: "0",
-              width: "100%",
-              height: "100vh",
-              background: "rgba(0, 0, 0, 0.3)",
-              zIndex: "999",
-            }}
-            onClick={() => setIsOpen(false)}
-          ></div>
-        )}
         <div
           style={{
             position: "fixed",
@@ -256,36 +281,117 @@ const Dashboard = () => {
             left: isOpen ? "0" : "-250px",
             width: "250px",
             height: "100vh",
-            background: "#fff",
-            boxShadow: "2px 0px 10px rgba(0, 0, 0, 0.1)",
+            background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+            boxShadow: "2px 0px 10px rgba(0, 0, 0, 0.3)",
             transition: "left 0.3s ease-in-out",
             padding: "20px",
             zIndex: "1000",
+            color: "#fff",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
-          <span
+          <div>
+            <span
+              style={{
+                fontSize: "24px",
+                cursor: "pointer",
+                display: "block",
+                marginBottom: "20px",
+                color: "#fff",
+              }}
+              onClick={() => setIsOpen(false)}
+            >
+              ✕
+            </span>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: "0",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <li
+                style={{
+                  padding: "12px 76px",
+                  background: "#fff",
+                  color: "#2575fc",
+                  borderRadius: "5px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  border: "none",
+                  transition: "background 0.3s ease, color 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#2575fc";
+                  e.target.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "#fff";
+                  e.target.style.color = "#2575fc";
+                }}
+                onClick={() => navigate(`/dashboard/${agencyId}`)}
+              >
+                Home
+              </li>
+
+              <Link
+                to={"/assignGroundstaff"}
+                style={{ textDecoration: "none" }}
+              >
+                <li
+                  style={{
+                    padding: "12px 20px",
+                    background: "#fff",
+                    color: "#2575fc",
+                    borderRadius: "5px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    border: "none",
+                    transition: "background 0.3s ease, color 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "#2575fc";
+                    e.target.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "#fff";
+                    e.target.style.color = "#2575fc";
+                  }}
+                >
+                  Onboard GroundStaff
+                </li>
+              </Link>
+            </ul>
+          </div>
+          <button
             style={{
-              fontSize: "20px",
+              padding: "10px 15px",
+              background: "#fff",
+              color: "#2575fc",
+              borderRadius: "5px",
+              textAlign: "center",
               cursor: "pointer",
-              display: "block",
-              marginBottom: "20px",
-              marginRight: "-190px",
+              border: "none",
+              transition: "background 0.3s ease, color 0.3s ease",
             }}
-            onClick={() => setIsOpen(false)}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#2575fc";
+              e.target.style.color = "#fff";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#fff";
+              e.target.style.color = "#2575fc";
+            }}
+            onClick={handleLogout} // Call the logout function
           >
-            ✕
-          </span>
-          <ul>
-            <Link to={"/dashboard"}>
-              <li>HOME</li>
-            </Link>
-            <Link to={"/assignGroundstaff"}>
-              <li>Onboarding ground staff</li>
-            </Link>
-          </ul>
+            Logout
+          </button>
         </div>
       </header>
-
       <section className="page-heading">
         <div className="container">
           <div className="row">
@@ -295,26 +401,24 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
-
-    
-
-      <section className="dashboard-map" >
+      <section className="dashboard-map">
         <div>
-        {mapCoordinates ? (
-          <MapCanvas coordinates={mapCoordinates} style={{ height: "300px" }}/>
-        ) : (
-          <p style={{ padding: "130px", textAlign: "center" }}>
-            Click 📍 on an event to view its location.
-          </p>
-        )}
+          {mapCoordinates ? (
+            <MapCanvas
+              coordinates={mapCoordinates}
+              style={{ height: "300px" }}
+            />
+          ) : (
+            <p style={{ padding: "130px", textAlign: "center" }}>
+              Click 📍 on an event to view its location.
+            </p>
+          )}
         </div>
-      
       </section>
-
-      <section className="dashboard-table-con"  style={{ marginTop: "-150px" }}>
+      <section className="dashboard-table-con" style={{ marginTop: "-150px" }}>
         <div className="container">
           <div className="row">
-            <div className="col-md-12" >
+            <div className="col-md-12">
               <div className="table-card" style={{ marginTop: "130px" }}>
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
@@ -333,7 +437,7 @@ const Dashboard = () => {
                   </button> */}
                 </div>
                 <div className="table-con table-responsive">
-                  <ul className="nav nav-tabs" style={{ marginLeft: "-290px" }}>
+                  <ul className="nav nav-tabs" style={{ marginLeft: "-650px" }}>
                     {tabs.map((tab) => (
                       <li key={tab.id} className="nav-item">
                         <button
@@ -450,7 +554,7 @@ const Dashboard = () => {
                                             report.boundingBoxes[0];
                                         } else {
                                           console.warn(
-                                           " No valid bounding box for report:",
+                                            " No valid bounding box for report:",
                                             report
                                           );
                                           return;
@@ -523,7 +627,6 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
-
       {/* === Zoomed Image Overlay Section === */}
       {zoomedImageUrl && (
         <div className="zoom-overlay" onClick={() => setZoomedImageUrl(null)}>
@@ -535,12 +638,11 @@ const Dashboard = () => {
             {/* Close Button */}
             <button
               className="close-button"
-              style={{marginTop: "15px", marginRight: "17px"}}
+              style={{ marginTop: "15px", marginRight: "17px" }}
               onClick={() => setZoomedImageUrl(null)}
             >
               ✕ {/* Use a proper 'close' icon/character */}
             </button>
-
             {/* Image and Canvas Container */}
             <div style={{ position: "relative", display: "inline-block" }}>
               {(() => {
@@ -553,7 +655,10 @@ const Dashboard = () => {
 
                 // If event data isn't found, don't render image/canvas
                 if (!event) {
-                  console.error("Could not find event data for zoomed image:", zoomedImageUrl);
+                  console.error(
+                    "Could not find event data for zoomed image:",
+                    zoomedImageUrl
+                  );
                   return <p>Error loading image data.</p>; // Or some other fallback
                 }
 
@@ -563,9 +668,12 @@ const Dashboard = () => {
                 );
 
                 if (currentIndex === -1) {
-                  console.error("Could not find incident index for zoomed image:", zoomedImageUrl);
+                  console.error(
+                    "Could not find incident index for zoomed image:",
+                    zoomedImageUrl
+                  );
                   return <p>Error loading incident data.</p>; // Or some other fallback
-                 }
+                }
 
                 // Calculate indices for previous/next images in the carousel
                 const prevIndex =
@@ -582,7 +690,11 @@ const Dashboard = () => {
                       src={zoomedImageUrl}
                       alt="Zoomed Event"
                       className="zoomed-image" // Style this class for appropriate sizing/display
-                      style={{ display: "block", maxWidth: "80vw", maxHeight:"80vh" }} // Adjust styling as needed
+                      style={{
+                        display: "block",
+                        maxWidth: "80vw",
+                        maxHeight: "80vh",
+                      }} // Adjust styling as needed
                       // --- onLoad Handler to Draw Bounding Box ---
                       onLoad={(e) => {
                         const img = e.target;
@@ -596,7 +708,8 @@ const Dashboard = () => {
 
                         // Get the bounding box for the current incident
                         // Use optional chaining for safety
-                        const boundingBox = event.allIncidents[currentIndex]?.boundingBoxes?.[0];
+                        const boundingBox =
+                          event.allIncidents[currentIndex]?.boundingBoxes?.[0];
 
                         // Set canvas dimensions to match the displayed image size before drawing
                         canvas.width = img.clientWidth;
@@ -604,11 +717,14 @@ const Dashboard = () => {
 
                         // Check if bounding box data is valid
                         if (!boundingBox || boundingBox.length !== 4) {
-                          console.warn("Invalid or missing bounding box for zoomed image:", zoomedImageUrl);
+                          console.warn(
+                            "Invalid or missing bounding box for zoomed image:",
+                            zoomedImageUrl
+                          );
                           // Clear canvas if previous box was drawn, otherwise leave blank
                           ctx.clearRect(0, 0, canvas.width, canvas.height);
-                           // Optional: Draw only the image if you want it on the canvas even without a box
-                           // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                          // Optional: Draw only the image if you want it on the canvas even without a box
+                          // ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                           return; // Don't try to draw an invalid box
                         }
 
@@ -617,16 +733,17 @@ const Dashboard = () => {
 
                         // Ensure coordinates are numbers (add more robust checks if needed)
                         if ([x1, y1, x2, y2].some(isNaN)) {
-                            console.warn("Invalid coordinate values in bounding box:", boundingBox);
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            return;
+                          console.warn(
+                            "Invalid coordinate values in bounding box:",
+                            boundingBox
+                          );
+                          ctx.clearRect(0, 0, canvas.width, canvas.height);
+                          return;
                         }
-
 
                         // Calculate scaling factors based on displayed vs natural size
                         const scaleX = img.clientWidth / img.naturalWidth;
                         const scaleY = img.clientHeight / img.naturalHeight;
-
 
                         // --- CORRECTED CALCULATION ---
                         // Scale bounding box coordinates directly without adding offsets.
@@ -636,7 +753,6 @@ const Dashboard = () => {
                         const boxWidth = (x2 - x1) * scaleX;
                         const boxHeight = (y2 - y1) * scaleY;
                         // --- END CORRECTION ---
-
 
                         // Use requestAnimationFrame for smoother rendering
                         requestAnimationFrame(() => {
@@ -676,8 +792,13 @@ const Dashboard = () => {
                     <button
                       className="carousel-prev" // Style this button
                       onClick={() => {
-                        console.log("Prev Button Clicked. New URL:", event.allIncidents[prevIndex].image_url);
-                        setZoomedImageUrl(event.allIncidents[prevIndex].image_url);
+                        console.log(
+                          "Prev Button Clicked. New URL:",
+                          event.allIncidents[prevIndex].image_url
+                        );
+                        setZoomedImageUrl(
+                          event.allIncidents[prevIndex].image_url
+                        );
                       }}
                       // Disable if only one image? (Optional)
                       // disabled={event.allIncidents.length <= 1}
@@ -689,8 +810,15 @@ const Dashboard = () => {
                     <button
                       className="carousel-next" // Style this button
                       onClick={() => {
-                         console.log("Next Button Clicked. New URL:", nextIndex, "    ",event.allIncidents[nextIndex].image_url);
-                        setZoomedImageUrl(event.allIncidents[nextIndex].image_url);
+                        console.log(
+                          "Next Button Clicked. New URL:",
+                          nextIndex,
+                          "    ",
+                          event.allIncidents[nextIndex].image_url
+                        );
+                        setZoomedImageUrl(
+                          event.allIncidents[nextIndex].image_url
+                        );
                       }}
                       // Disable if only one image? (Optional)
                       // disabled={event.allIncidents.length <= 1}
@@ -699,15 +827,22 @@ const Dashboard = () => {
                     </button>
                   </>
                 );
-              })()} {/* End Immediately Invoked Function Expression */}
-            </div> {/* End Image and Canvas Container */}
-          </div> {/* End Zoomed Image Container */}
+              })()}{" "}
+              {/* End Immediately Invoked Function Expression */}
+            </div>{" "}
+            {/* End Image and Canvas Container */}
+          </div>{" "}
+          {/* End Zoomed Image Container */}
         </div> /* End Zoom Overlay */
-      )} {/* End Zoomed Image Section */}
+      )}{" "}
+      {/* End Zoomed Image Section */}
       <footer className="footer" style={{ marginTop: "320px" }}>
         <div className="footer-container">
-          <div className="row" >
-            <div className="col-md-12 text-center" style={{marginTop:"185px"}}>
+          <div className="row">
+            <div
+              className="col-md-12 text-center"
+              style={{ marginTop: "185px" }}
+            >
               <p>
                 © 2025 All Rights Reserved.{" "}
                 <span className="nic-credit">Developed by NIC</span>

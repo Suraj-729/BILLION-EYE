@@ -1,7 +1,53 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import {  useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import api from "../api";
+
 const AssignGroundStaff = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    number: "",
+    address: "",
+  });
+  const navigate = useNavigate();
+  const location = useLocation(); // Fixed useLocation
+  const [message, setMessage] = useState("");
+
+  const queryParams = new URLSearchParams(location.search);
+  const eventId = queryParams.get("eventId");
+  const agencyId = queryParams.get("agencyId"); // Retrieve agencyId from query params
+
+  const [isOpen, setIsOpen] = useState(false); // Added useState
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Include agencyId in the formData
+      const dataToSubmit = { ...formData, agencyId };
+
+      const response = await api.post(
+        "backend/agency/addgroundstaff",
+        dataToSubmit
+      );
+      if (response.data.success) {
+        setMessage("Ground staff added successfully!");
+        setFormData({ name: "", number: "", address: "" }); // Reset form
+
+        // Redirect back to EventReport with eventId
+        if (eventId) {
+          navigate(`/event-report/${eventId}`);
+        }
+      } else {
+        setMessage("Failed to add ground staff.");
+      }
+    } catch (error) {
+      setMessage("An error occurred. Please try again.");
+      console.error(error);
+    }
+  };
+
   return (
     <section className="main dashboard-main onboarding_ground_staff_page">
       <section
@@ -13,10 +59,16 @@ const AssignGroundStaff = () => {
             <div className="row" style={{ marginTop: "-11px" }}>
               <div className="col-md-12">
                 <div className="top-1">
-                  <div className="logo">
-                    <a href="dashboard-admin-bmc.html">
-                      <img src="/billioneye/images/logo-small.png" alt="Logo" title="" />
-                    </a>
+                  <div
+                    className="logo"
+                    onClick={() => navigate(`/dashboard/${agencyId}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src="/billioneye/images/logo-small.png"
+                      alt="Logo"
+                      title=""
+                    />
                   </div>
                   {/* Hamburger Menu Button */}
                   <div
@@ -74,10 +126,13 @@ const AssignGroundStaff = () => {
                       ✕
                     </span>
 
-                    <ul>
-                      <Link to="/dashboard">
-                        <li>HOME</li>
-                      </Link>
+                    <ul >
+                     
+                        <li
+                           style={{ cursor: "pointer" }}
+                         onClick={() => navigate(`/dashboard/${agencyId}`)}
+                        >HOME</li>
+                      
                     </ul>
                   </div>
                   {/* <div className="menu-con">
@@ -103,10 +158,7 @@ const AssignGroundStaff = () => {
           </div>
         </header>
 
-        <section
-          className="page-heading"
-          style={{ marginTop: "-25px", padding: "2px" }}
-        >
+        <section className="page-heading" style={{ padding: "2px" }}>
           <div className="container">
             <div className="row">
               <div className="col-md-12">
@@ -129,10 +181,10 @@ const AssignGroundStaff = () => {
                         title=""
                       />
                     </div>
-                    <h4 style={{ marginRight: "1011px" }}>On-boarding</h4>
+                    <h4>On-boarding</h4>
                   </div>
                   <div className="onboarding_ground_staff_formcon">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="row">
                         <div className="col-md-6">
                           <div className="mb-3">
@@ -147,7 +199,11 @@ const AssignGroundStaff = () => {
                               type="text"
                               className="form-control"
                               id="name"
+                              name="name"
+                              value={formData.name}
+                              onChange={handleChange}
                               placeholder="Name of ground staff"
+                              required
                             />
                           </div>
                         </div>
@@ -164,7 +220,11 @@ const AssignGroundStaff = () => {
                               type="text"
                               className="form-control"
                               id="number"
+                              name="number"
+                              value={formData.number}
+                              onChange={handleChange}
                               placeholder="Number of ground staff"
+                              required
                             />
                           </div>
                         </div>
@@ -180,13 +240,17 @@ const AssignGroundStaff = () => {
                         <textarea
                           className="form-control"
                           id="address"
+                          name="address"
+                          value={formData.address}
+                          onChange={handleChange}
                           placeholder="Address of ground staff"
+                          required
                         ></textarea>
                       </div>
-                      <div className="mb-3" style={{ marginLeft: "11px" }}>
+                      {/* <div className="mb-3" style={{ marginLeft: "11px" }}>
                         <h5>Type of problem responsible for</h5>
-                      </div>
-                      <div className="d-flex gap-3">
+                      </div> */}
+                      {/* <div className="d-flex gap-3">
                         <div className="form-check">
                           <div className="mb-3">
                             <input
@@ -232,15 +296,16 @@ const AssignGroundStaff = () => {
                             </label>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <button
                         type="submit"
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
                       >
-                        <a href="ground-staff-login.html">Submit</a>
+                        Submit
                       </button>
                     </form>
+                    {message && <p>{message}</p>}
                   </div>
                 </div>
               </div>
