@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../src/public/assets/css/BillionEyePublic.css";
 
 
 // export default BillionEye;
 const BillionEyePublic = () => {
+  const navigate = useNavigate();
   
   return (
     <section
@@ -31,14 +32,17 @@ const BillionEyePublic = () => {
             </div>
           </div>
         </section>
-
+        
         {/* Emergency Support Section */}
-        <section className="emergency-section text-center">
-          <Link to={'/Camera'}>
-          <button className="btn btn-danger">
+        <section className="emergency-section text-center" 
+        style={{position:"relative", zIndex:1}}>
+       
+          <button className="btn btn-danger"
+           onClick={() => navigate('/Camera')}
+          >
             <i className="bi bi-camera-fill"></i> Incident & Report
           </button>
-        </Link>
+       
         </section>
           
 

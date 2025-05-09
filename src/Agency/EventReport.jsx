@@ -30,7 +30,7 @@ const EventReport = () => {
   const [isAssigned, setIsAssigned] = useState(false); // State to track assignment status
   const [mapCoordinates, setMapCoordinates] = useState(null);
   const [agencyGroundStaff, setAgencyGroundStaff] = useState([]);
-
+  const  { agencyId } = useParams(); // Retrieve agencyId from query params
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -132,8 +132,38 @@ const EventReport = () => {
     }
   };
 
-  const handleAssign = () => {
-    updateEventStatus("Assigned");
+  // const handleAssign = () => {
+  //   updateEventStatus("Assigned");
+  // };
+
+  const handleAssign = async () => {
+    if (!selectedUser) {
+      console.error("No ground staff selected");
+      return;
+    }
+  
+    try {
+      const selectedStaff = agencyGroundStaff.find(
+        (staff) => staff._id === selectedUser
+      );
+  
+      if (!selectedStaff) {
+        console.error("Selected ground staff not found");
+        return;
+      }
+  
+      const response = await api.put(`backend/events/status/${event_id}`, {
+        status: "Assigned",
+        groundStaffName: selectedStaff.name, // Updated to match API payload
+      });
+  
+      if (response.status === 200) {
+        console.log(`Event ${event_id} assigned to ${selectedStaff.name}`);
+        setIsAssigned(true); // Update assignment status
+      }
+    } catch (error) {
+      console.error("Error assigning ground staff:", error);
+    }
   };
 
   if (loading) {
@@ -167,10 +197,11 @@ const EventReport = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="top-1">
-                <div className="logo">
-                  <Link to={"/dashboard"}>
+                <div className="logo"  style={{ cursor: "pointer" }}
+                         onClick={() => navigate(`/dashboard/${agencyId}`)}>
+                 
                     <img src="/billioneye/images/logo-small.png" alt="Logo" />
-                  </Link>
+                 
                 </div>
 
                 <React.Fragment>
@@ -417,47 +448,7 @@ const EventReport = () => {
                 <div className="table-card-heading">
                   <h4 className="text-uppercase">Assign To</h4>
                 </div>
-                <form>
-                  {/* Removed the first dropdown */}
-                </form>
-                {userDetails && (
-                  <div
-                    className="assign-details"
-                    style={{
-                      marginTop: "10px",
-                      background: "#f9f9f9",
-                      padding: "10px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <ul style={{ listStyle: "none", padding: 0 }}>
-                      <li>
-                        <b>Name:</b> {userDetails.name}
-                      </li>
-                      <li>
-                        <b>Phone:</b> {userDetails.phone}
-                      </li>
-                      <li>
-                        <b>Responsibility:</b> {userDetails.responsibility}
-                      </li>
-                    </ul>
-                    <div style={{ textAlign: "center", marginTop: "10px" }}>
-                      <button
-                        className="btn btn-success"
-                        onClick={handleAssign}
-                        disabled={isAssigned} // Disable if already assigned
-                      >
-                        Assign
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        disabled={isAssigned} // Disable if already assigned
-                      >
-                        Unassigned
-                      </button>
-                    </div>
-                  </div>
-                )}
+               
                  <button
                         className="btn btn-success"
                         onClick={handleAddGroundStaff}
@@ -473,11 +464,14 @@ const EventReport = () => {
                   <select
                     id="agencyGroundStaffSelect"
                     className="form-control"
+                    value={selectedUser} // Bind the selected value to the state
                     onChange={(e) => {
+                      const userId = e.target.value;
+                      setSelectedUser(userId); // Update selectedUser state
                       const selectedStaff = agencyGroundStaff.find(
-                        (staff) => staff._id === e.target.value
+                        (staff) => staff._id === userId
                       );
-                      setUserDetails(selectedStaff || null);
+                      setUserDetails(selectedStaff || null); // Update userDetails state
                     }}
                   >
                     <option value="">Select Ground Staff</option>
@@ -511,6 +505,21 @@ const EventReport = () => {
                         <b>Address:</b> {userDetails.address}
                       </li>
                     </ul>
+                    <div style={{ textAlign: "center", marginTop: "10px" }}>
+                      <button
+                        className="btn btn-success"
+                        onClick={handleAssign}
+                        disabled={isAssigned} // Disable if already assigned
+                      >
+                        Assign
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        disabled={isAssigned} // Disable if already assigned
+                      >
+                        Unassigned
+                      </button>
+                    </div>
                   </div>
                 )}
 
