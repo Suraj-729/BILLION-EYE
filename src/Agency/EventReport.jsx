@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link ,useNavigate } from "react-router-dom"; // Ensure all imports are at the top
+import { useParams, Link, useNavigate } from "react-router-dom"; // Ensure all imports are at the top
 import "../public/assets/css/EventReport.css";
 import api from "../api";
 
@@ -30,7 +30,7 @@ const EventReport = () => {
   const [isAssigned, setIsAssigned] = useState(false); // State to track assignment status
   const [mapCoordinates, setMapCoordinates] = useState(null);
   const [agencyGroundStaff, setAgencyGroundStaff] = useState([]);
-  const  { agencyId } = useParams(); // Retrieve agencyId from query params
+  const { agencyId } = useParams(); // Retrieve agencyId from query params
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,7 +39,6 @@ const EventReport = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
 
   // useEffect(() => {
   //   // Fetch ground staff from the backend
@@ -54,8 +53,6 @@ const EventReport = () => {
 
   //   fetchGroundStaff();
   // }, []);
-
-
 
   useEffect(() => {
     if (!event_id) {
@@ -81,14 +78,15 @@ const EventReport = () => {
 
   // Fetch ground staff by agency ID
   useEffect(() => {
-    if (!reportData?.AgencyId) {
-      console.error("Agency ID is missing");
-      return;
+    if (!reportData || !reportData.AgencyId) {
+      return; // Exit early if reportData or AgencyId is not available
     }
 
     const fetchAgencyGroundStaff = async () => {
       try {
-        const response = await api.get(`backend/${reportData.AgencyId}/groundstaff`);
+        const response = await api.get(
+          `backend/${reportData.AgencyId}/groundstaff`
+        );
         if (response.data.success) {
           setAgencyGroundStaff(response.data.data);
         } else {
@@ -100,7 +98,31 @@ const EventReport = () => {
     };
 
     fetchAgencyGroundStaff();
-  }, [reportData?.AgencyId]);
+  }, [reportData]);
+
+   //=================back button=====================================
+//    useEffect(() => {
+//   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
+//   if (agencyId && !storedStack.includes(agencyId)) {
+//     const updatedStack = [...storedStack, agencyId];
+//     localStorage.setItem("navigationStack", JSON.stringify(updatedStack));
+//   }
+// }, [agencyId]);
+
+// const handleBack = () => {
+//   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
+//   if (storedStack.length > 1) {
+//     storedStack.pop(); // Remove current agencyId
+//     const previousAgencyId = storedStack[storedStack.length - 1]; // Get previous
+//     localStorage.setItem("navigationStack", JSON.stringify(storedStack)); // Save updated stack
+//     navigate(`/dashboard/${previousAgencyId}`); // Navigate
+//   } else {
+//     // Optional: handle case when no previous page exists
+//     navigate(`/dashboard?AgencyId=${agencyId}`);
+//   }
+// };
+
+
 
   const handleUserChange = (event) => {
     const userId = event.target.value;
@@ -132,34 +154,31 @@ const EventReport = () => {
     }
   };
 
-  // const handleAssign = () => {
-  //   updateEventStatus("Assigned");
-  // };
-
   const handleAssign = async () => {
     if (!selectedUser) {
       console.error("No ground staff selected");
       return;
     }
-  
+
     try {
       const selectedStaff = agencyGroundStaff.find(
         (staff) => staff._id === selectedUser
       );
-  
+
       if (!selectedStaff) {
         console.error("Selected ground staff not found");
         return;
       }
-  
+
       const response = await api.put(`backend/events/status/${event_id}`, {
         status: "Assigned",
         groundStaffName: selectedStaff.name, // Updated to match API payload
       });
-  
+
       if (response.status === 200) {
         console.log(`Event ${event_id} assigned to ${selectedStaff.name}`);
         setIsAssigned(true); // Update assignment status
+        navigate(`/dashboard/${reportData.AgencyId}`);
       }
     } catch (error) {
       console.error("Error assigning ground staff:", error);
@@ -197,11 +216,12 @@ const EventReport = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="top-1">
-                <div className="logo"  style={{ cursor: "pointer" }}
-                         onClick={() => navigate(`/dashboard/${agencyId}`)}>
-                 
-                    <img src="/billioneye/images/logo-small.png" alt="Logo" />
-                 
+                <div
+                  className="logo"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/dashboard/agencyId=${agencyId}`)}
+                >
+                  <img src="/billioneye/images/logo-small.png" alt="Logo" />
                 </div>
 
                 <React.Fragment>
@@ -296,7 +316,7 @@ const EventReport = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-           <h3>{reportData.AgencyName }</h3> 
+              <h3>{reportData.assignedAgency}</h3>
             </div>
           </div>
         </div>
@@ -443,24 +463,34 @@ const EventReport = () => {
                 </figure>
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6" style={{ marginTop: "-200px" }}>
               <div className="dashboard-report-assign">
                 <div className="table-card-heading">
                   <h4 className="text-uppercase">Assign To</h4>
                 </div>
-               
-                 <button
-                        className="btn btn-success"
-                        onClick={handleAddGroundStaff}
-                        disabled={isAssigned}
-                         // Disable if already assigned
-                      >
-                        Onboard GroundStaff
-                      </button>
+
+                <button
+                  className="btn btn-success"
+                  onClick={handleAddGroundStaff}
+                  disabled={isAssigned}
+                  // Disable if already assigned
+                >
+                  Onboard GroundStaff
+                </button>
+
+                <button
+                  className="btn btn-success"
+                  onClick={() => navigate(`/dashboard/${reportData.AgencyId}`)}
+                  disabled={isAssigned} // Optional: disable only if needed
+                >
+                  Back
+                </button>
 
                 {/* Retained the second dropdown */}
                 <div className="form-group">
-                  <label htmlFor="agencyGroundStaffSelect">Select Ground Staff:</label>
+                  <label htmlFor="agencyGroundStaffSelect">
+                    Select Ground Staff:
+                  </label>
                   <select
                     id="agencyGroundStaffSelect"
                     className="form-control"

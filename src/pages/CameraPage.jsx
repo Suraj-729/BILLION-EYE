@@ -277,7 +277,7 @@ const CameraPage = () => {
         ></video>
 
         {/* Camera Buttons */}
-        <div className="camera-btn">
+        <div className="camera-btn" style={{marginLeft:"29px"}}>
           <button onClick={captureImage} className="capture-button">
           
             Capture

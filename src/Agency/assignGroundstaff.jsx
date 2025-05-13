@@ -304,6 +304,14 @@ const AssignGroundStaff = () => {
                       >
                         Submit
                       </button>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ marginLeft: "5px" }}
+                        onClick={() => navigate(`/dashboard/${agencyId}`)}
+                      >
+                        Back
+                      </button>
                     </form>
                     {message && <p>{message}</p>}
                   </div>

@@ -42,8 +42,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<BillionEyePublic />} />
         <Route path="/Camera" element={<CameraPage />} />
-        <Route path="/onBoardingStaff" element={<OnBoardingStaff />} />
-        <Route path="/eventReport/:event_id" element={<EventReport />} />
+        <Route path="/onBoardingStaff" element={<ProtectedRoute element={OnBoardingStaff} />} />
+        <Route path="/eventReport/:event_id"  element={<ProtectedRoute element={EventReport} />} />
         <Route path="/gomaps" element={<GoMapsTest />} />
         <Route path="/agencyLogin" element={<AgencyLogin />} />
         <Route path="/agencyRegister" element={<AgencyRegister />} />
@@ -53,7 +53,7 @@ function App() {
           path="/dashboard/:agencyId"
           element={<ProtectedRoute element={Dashboard} />}
         />
-        <Route path="/assignGroundstaff" element={<AssignGroundStaff />} />
+        <Route path="/assignGroundstaff" element={<ProtectedRoute element={AssignGroundStaff} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Protected Routes */}

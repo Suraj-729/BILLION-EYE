@@ -13,6 +13,9 @@ const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [zoomedImageUrl, setZoomedImageUrl] = useState(null);
   const [activeTab, setActiveTab] = useState("RecentReports"); // Default to Recent Reports
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // For popup visibility
+  const [currentPage, setCurrentPage] = useState(1); // For pagination
+  const eventsPerPage = 10; // Number of events per page
   const imgRef = useRef(null);
 
   useEffect(() => {
@@ -100,6 +103,7 @@ const Dashboard = () => {
             <button
               className="btn btn-danger"
               onClick={() => rejectEvent(event.event_id)}
+              style={{marginLeft:"10px"}}
             >
               Reject
             </button>
@@ -129,6 +133,7 @@ const Dashboard = () => {
             >
               Reject
             </button>
+            <h4>{event.ground_staff}</h4>
           </>
         );
       case "Resolved":
@@ -241,6 +246,22 @@ const Dashboard = () => {
     }
   };
 
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(dashboardData.length / eventsPerPage)) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * eventsPerPage;
+  const endIndex = Math.min(startIndex + eventsPerPage, dashboardData.length);
+  const currentEvents = dashboardData.slice(startIndex, endIndex);
+
   return (
     <>
       <header>
@@ -250,12 +271,13 @@ const Dashboard = () => {
               <div className="d-flex align-items-center justify-content-between">
                 <div
                   className="logo"
-                  onClick={() => navigate(`/dashboard/${agencyId}`)}
-                  style={{ cursor: "pointer" }}
+                 
                 >
                   <img
                     src="/billioneye/images/logo-small.png"
                     alt="Logo"
+                     onClick={() => navigate(`/dashboard/${agencyId}`)}
+                  style={{ cursor: "pointer" }}
                     title=""
                   />
                 </div>
@@ -314,7 +336,8 @@ const Dashboard = () => {
                 gap: "10px",
               }}
             >
-              <li
+              <Link to={`/dashboard/${agencyId}`}>
+               <li
                 style={{
                   padding: "12px 76px",
                   background: "#fff",
@@ -333,13 +356,15 @@ const Dashboard = () => {
                   e.target.style.background = "#fff";
                   e.target.style.color = "#2575fc";
                 }}
-                onClick={() => navigate(`/dashboard/${agencyId}`)}
+                
               >
                 Home
               </li>
+              </Link>
+              
 
               <Link
-                to={"/assignGroundstaff"}
+                to={`/assignGroundstaff/?agencyId=${agencyId}`}
                 style={{ textDecoration: "none" }}
               >
                 <li
@@ -353,6 +378,7 @@ const Dashboard = () => {
                     border: "none",
                     transition: "background 0.3s ease, color 0.3s ease",
                   }}
+                  
                   onMouseEnter={(e) => {
                     e.target.style.background = "#2575fc";
                     e.target.style.color = "#fff";
@@ -429,12 +455,12 @@ const Dashboard = () => {
                     />
                   </div>
                   <h4>Recent Reports</h4>
-                  {/* <button
-                    onClick={() => handleNavigation("/reports")}
+                  <button
+                    onClick={() => setIsPopupOpen(true)}
                     className="table-card-btn"
                   >
                     View All <i className="fa-solid fa-play"></i>
-                  </button> */}
+                  </button>
                 </div>
                 <div className="table-con table-responsive">
                   <ul className="nav nav-tabs" style={{ marginLeft: "-650px" }}>
@@ -453,6 +479,9 @@ const Dashboard = () => {
                   </ul>
 
                   <div className="tab-content">
+                    <div
+                      style={{ maxHeight: "400px", overflowY: "auto" }}
+                    >
                     <table className="event-table">
                       <tr>
                         <th>Sl.No</th>
@@ -517,6 +546,7 @@ const Dashboard = () => {
                                         cursor: "zoom-in",
                                         maxWidth: "100px",
                                         borderRadius: "6px",
+                                        maxHeight: "62px",
                                         display: "block",
                                         zIndex: 0,
                                       }}
@@ -620,6 +650,7 @@ const Dashboard = () => {
                         )}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -851,6 +882,144 @@ const Dashboard = () => {
           </div>
         </div>
       </footer>
+      {/* === Events Popup Section === */}
+      {isPopupOpen && (
+        <div
+          className="popup-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="popup-content"
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              width: "80%",
+              maxHeight: "80%",
+              overflow: "hidden",
+            }}
+          >
+            <h3>All Events</h3>
+            <table
+              className="table table-striped"
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginBottom: "20px",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentEvents.map((event, index) => (
+                  <tr key={event.event_id || index}>
+                    <td>{index + 1 + startIndex}</td>
+                    <td>{event.description}</td>
+                    <td>
+                      {event.assignment_time
+                        ? new Date(event.assignment_time).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td>
+                      {event.assignment_time
+                        ? new Date(event.assignment_time).toLocaleTimeString()
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Pagination Buttons */}
+            <div
+              className="pagination"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: currentPage === 1 ? "#ccc" : "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                }}
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of{" "}
+                {Math.ceil(dashboardData.length / eventsPerPage)}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={
+                  currentPage ===
+                  Math.ceil(dashboardData.length / eventsPerPage)
+                }
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor:
+                    currentPage ===
+                    Math.ceil(dashboardData.length / eventsPerPage)
+                      ? "#ccc"
+                      : "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor:
+                    currentPage ===
+                    Math.ceil(dashboardData.length / eventsPerPage)
+                      ? "not-allowed"
+                      : "pointer",
+                }}
+              >
+                Next
+              </button>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setIsPopupOpen(false)}
+              style={{
+                marginTop: "20px",
+                padding: "10px 20px",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {/* End Events Popup Section */}
     </>
   );
 };
