@@ -16,8 +16,8 @@ const libraries = ['marker'];
 
 function MapCanvas({ coordinates }) {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyD1r7v2X0xk4bq3g5c6j8z9l1Z5Y2Qe4wE", // Replace with your API key
-    libraries,
+    //googleMapsApiKey: "AIzaSyD1r7v2X0xk4bq3g5c6j8z9l1Z5Y2Qe4wE",
+    googleMapsApiKey: "AIzaSyDvcjPnTtV0vF8A43Ofwgp4oLtUeJXs8Mo" // Replace with your API key  libraries,
   });
 
   const mapRef = useRef(null);
