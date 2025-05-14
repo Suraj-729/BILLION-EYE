@@ -1,3 +1,7 @@
+
+// MapCanvas.js
+
+
 // MapCanvas.js
 import React, { useEffect, useRef } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
@@ -7,10 +11,13 @@ const containerStyle = {
   height: "300px",
 };
 
+// ✅ FIX: move libraries outside the component
+const libraries = ['marker'];
+
 function MapCanvas({ coordinates }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyD1r7v2X0xk4bq3g5c6j8z9l1Z5Y2Qe4wE", // Replace with your API key
-    libraries: ['marker'], // Important: Load 'marker' library for AdvancedMarkerElement
+    libraries,
   });
 
   const mapRef = useRef(null);
@@ -18,12 +25,10 @@ function MapCanvas({ coordinates }) {
 
   useEffect(() => {
     if (isLoaded && coordinates && mapRef.current) {
-      // Remove old marker if it exists
       if (markerRef.current) {
         markerRef.current.map = null;
       }
 
-      // Create new AdvancedMarkerElement
       markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
         position: coordinates,
         map: mapRef.current,
@@ -43,5 +48,3 @@ function MapCanvas({ coordinates }) {
 }
 
 export default MapCanvas;
-
-
