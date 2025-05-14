@@ -480,6 +480,7 @@ const EventReport = () => {
 
                 <button
                   className="btn btn-success"
+                  style={{marginLeft:"300px"}}
                   onClick={() => navigate(`/dashboard/${reportData.AgencyId}`)}
                   disabled={isAssigned} // Optional: disable only if needed
                 >
