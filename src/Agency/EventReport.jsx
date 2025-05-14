@@ -133,8 +133,8 @@ const EventReport = () => {
   };
 
   const handleAddGroundStaff = () => {
-    if (reportData?.AgencyId && reportData?.EventId) {
-     navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}&eventId=${reportData.EventId}`);
+    if (reportData?.AgencyId) {
+     navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}`);
     } else {
       console.error("Agency ID is not available");
     }
