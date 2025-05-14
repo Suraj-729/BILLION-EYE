@@ -66,7 +66,7 @@ const Dashboard = () => {
   const rejectEvent = (event_id) => updateEventStatus(event_id, "Rejected");
   // const holdEvent = (event_id) => updateEventStatus(event_id, "On Hold");
   const handleAssign = (event_id) => updateEventStatus(event_id, "Assigned");
-  const handleComplete = (event_id) => updateEventStatus(event_id, "Resolved");
+  const handleComplete = (event_id) => updateEventStatus(event_id, "closed");
 
   const tabs = [
     { id: "RecentReports", label: "Recent Reports" },
@@ -82,7 +82,7 @@ const Dashboard = () => {
         return dashboardData.filter((event) => event.status === "Assigned");
       case "ResolvedEvents":
         return dashboardData.filter(
-          (event) => event.status === "Resolved" || event.status === "Rejected"
+          (event) => event.status === "closed" || event.status === "Rejected"
         );
       default:
         return dashboardData;
@@ -136,7 +136,7 @@ const Dashboard = () => {
             <h4>{event.ground_staff}</h4>
           </>
         );
-      case "Resolved":
+      case "closed":
         return <p>Task Completed</p>;
       case "Rejected":
         return <p>Rejected</p>;
