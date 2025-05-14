@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/billioneye/static/css/main.f773c9c6.css",
-    "main.js": "/billioneye/static/js/main.4c47f2df.js",
+    "main.js": "/billioneye/static/js/main.b642c739.js",
     "index.html": "/billioneye/index.html",
     "main.f773c9c6.css.map": "/billioneye/static/css/main.f773c9c6.css.map",
-    "main.4c47f2df.js.map": "/billioneye/static/js/main.4c47f2df.js.map"
+    "main.b642c739.js.map": "/billioneye/static/js/main.b642c739.js.map"
   },
   "entrypoints": [
     "static/css/main.f773c9c6.css",
-    "static/js/main.4c47f2df.js"
+    "static/js/main.b642c739.js"
   ]
 }

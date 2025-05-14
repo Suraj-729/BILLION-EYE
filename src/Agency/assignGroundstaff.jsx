@@ -308,7 +308,7 @@ const AssignGroundStaff = () => {
                         type="submit"
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
-                        onClick={() => navigate(`/dashboard/${agencyId}`)}
+                        onClick={() => navigate(`/eventReport/${eventId}`)}
                       >
                         Back
                       </button>
