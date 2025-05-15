@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import { useNavigate, useLocation } from "react-router-dom"; // Added useLocation
 import api from "../api";
 
 const AssignGroundStaff = () => {
@@ -37,7 +37,7 @@ const AssignGroundStaff = () => {
 
         // Redirect back to EventReport with eventId
         if (eventId) {
-          navigate(`/event-report/${eventId}`);
+          navigate(`/eventReport/${eventId}`);
         }
       } else {
         setMessage("Failed to add ground staff.");
@@ -106,35 +106,66 @@ const AssignGroundStaff = () => {
                       left: isOpen ? "0" : "-250px",
                       width: "250px",
                       height: "100vh",
-                      background: "#fff",
-                      boxShadow: "2px 0px 10px rgba(0, 0, 0, 0.1)",
+                      background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+                      boxShadow: "2px 0px 10px rgba(0, 0, 0, 0.3)",
                       transition: "left 0.3s ease-in-out",
                       padding: "20px",
-                      zIndex: "1000", // Ensures it appears above everything
+                      zIndex: "1000",
+                      color: "#fff",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: "20px",
-                        cursor: "pointer",
-                        display: "block",
-                        marginBottom: "20px",
-                        marginRight: "-190px",
-                      }}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      ✕
-                    </span>
-
-                    <ul >
-                     
+                    <div>
+                      <span
+                        style={{
+                          fontSize: "24px",
+                          cursor: "pointer",
+                          display: "block",
+                          marginBottom: "20px",
+                          color: "#fff",
+                        }}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        ✕
+                      </span>
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          padding: "0",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                        }}
+                      >
                         <li
-                           style={{ cursor: "pointer" }}
-                         onClick={() => navigate(`/dashboard/${agencyId}`)}
-                        >HOME</li>
-                      
-                    </ul>
+                          onClick={() => navigate(`/dashboard/${agencyId}`)}
+                          style={{
+                            padding: "12px 76px",
+                            background: "#fff",
+                            color: "#2575fc",
+                            borderRadius: "5px",
+                            textAlign: "center",
+                            cursor: "pointer",
+                            border: "none",
+                            transition: "background 0.3s ease, color 0.3s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.background = "#2575fc";
+                            e.target.style.color = "#fff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = "#fff";
+                            e.target.style.color = "#2575fc";
+                          }}
+                        >
+                          Home
+                        </li>
+                      </ul>
+                    </div>
                   </div>
+
                   {/* <div className="menu-con">
                                         <nav id="navigation1" className="navigation">
                                             <div className="nav-header">
@@ -299,6 +330,7 @@ const AssignGroundStaff = () => {
                       </div> */}
                       <button
                         type="submit"
+                        onClick={() => navigate(`/dashboard/${agencyId}`)}
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
                       >
@@ -308,7 +340,17 @@ const AssignGroundStaff = () => {
                         type="submit"
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
-                        onClick={() => navigate(`/eventReport/${eventId}`)}
+                        onClick={() => {
+                          if (eventId) {
+                            navigate(`/eventReport/${eventId}`);
+                          } else if (agencyId) {
+                            navigate(`/dashboard/${agencyId}`);
+                          } else {
+                            console.error(
+                              "No valid eventId or agencyId to navigate back."
+                            );
+                          }
+                        }}
                       >
                         Back
                       </button>

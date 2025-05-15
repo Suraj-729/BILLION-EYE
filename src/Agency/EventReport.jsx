@@ -132,13 +132,21 @@ const EventReport = () => {
     setUserDetails(user || null);
   };
 
+  // const handleAddGroundStaff = () => {
+  //   if (reportData?.AgencyId) {
+  //    navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}`);
+  //   } else {
+  //     console.error("Agency ID is not available");
+  //   }
+  // };
+
   const handleAddGroundStaff = () => {
-    if (reportData?.AgencyId) {
-     navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}`);
-    } else {
-      console.error("Agency ID is not available");
-    }
-  };
+  if (reportData?.AgencyId && reportData?.event_id) {
+    navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}&eventId=${reportData.event_id}`);
+  } else {
+    console.error("Agency ID or Event ID is not available");
+  }
+};
 
   const updateEventStatus = async (newStatus) => {
     try {
