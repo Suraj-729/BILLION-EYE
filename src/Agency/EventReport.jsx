@@ -472,7 +472,7 @@ const EventReport = () => {
               </div>
             </div>
             <div className="col-md-6" style={{ marginTop: "-200px" }}>
-              <div className="dashboard-report-assign">
+              <div className="dashboard-report-assign" style={{marginTop:"100px"}}>
                 <div className="table-card-heading">
                   <h4 className="text-uppercase">Assign To</h4>
                 </div>

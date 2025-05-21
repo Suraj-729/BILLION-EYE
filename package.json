@@ -17,12 +17,14 @@
     "crypto-js": "^4.2.0",
     "exif-js": "^2.3.0",
     "exifreader": "^4.26.2",
+    "leaflet": "^1.9.4",
     "minio": "^8.0.4",
     "node": "^18.20.6",
     "owl.carousel": "^2.3.4",
     "piexifjs": "^1.0.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.1.3",
     "react-scripts": "^5.0.1",
     "socket.io-client": "^4.8.1",
@@ -53,6 +55,8 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-unicorn": "^56.0.1",
     "sass": "^1.83.4"
   }
