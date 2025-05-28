@@ -1139,7 +1139,7 @@ const Dashboard = () => {
   };
 
   const approveEvent = (event_id) => {
-    updateEventStatus(event_id, "Accepted");
+    // updateEventStatus(event_id, "Accepted");
     navigate(`/eventReport/${event_id}`, { state: { event_id } });
   };
   const rejectEvent = (event_id) => updateEventStatus(event_id, "Rejected");
@@ -1994,9 +1994,11 @@ const Dashboard = () => {
               className="col-md-12 text-center"
               style={{ marginTop: "55px" }}
             >
+             
               <p style={{marginTop:"-30px"}}>
+               <img src="/billioneye/images/nic-logo.png" style={{height:"19px" , width:"60px"}}/>
                 © 2025 All Rights Reserved.{" "}
-                <span className="nic-credit">Developed by NIC</span>
+                {/* <span className="nic-credit">Developed by NIC</span> */}
               </p>
             </div>
           </div>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Inter font and general layout */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .image-display {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .image-card {
+            flex: 1 1 300px; /* Allows cards to grow but ensures min width */
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 250px; /* Ensure consistent height */
+            justify-content: center;
+        }
+        .image-card img {
+            max-width: 100%;
+            max-height: 200px; /* Limit image height within card */
+            object-fit: contain;
+            border-radius: 0.5rem;
+            background-color: #e0e0e0; /* Placeholder background */
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Image Compressor</h1>
+
+        <div class="w-full flex flex-col items-center gap-4">
+            <label for="imageUpload" class="block text-sm font-medium text-gray-700">Select an image to compress:</label>
+            <input type="file" id="imageUpload" accept="image/*" class="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100 cursor-pointer">
+        </div>
+
+        <button id="compressButton"
+                class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md
+                       hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75
+                       transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+            Compress Image
+        </button>
+
+        <div id="loadingIndicator" class="hidden mt-4">
+            <div class="loading-spinner"></div>
+            <p class="text-gray-600 mt-2">Compressing image...</p>
+        </div>
+
+        <div id="messageBox" class="hidden p-3 mt-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+            <span class="font-medium">Error:</span> <span id="messageText"></span>
+        </div>
+
+        <div class="image-display">
+            <div class="image-card">
+                <h2 class="text-xl font-semibold text-gray-800">Original Image</h2>
+                <img id="originalImage" src="https://placehold.co/200x150/e0e0e0/ffffff?text=No+Image" alt="Original Image">
+                <p class="text-sm text-gray-600">Size: <span id="originalSize">N/A</span></p>
+            </div>
+
+            <div class="image-card">
+                <h2 class="text-xl font-semibold text-gray-800">Compressed Thumbnail</h2>
+                <img id="compressedImage" src="https://placehold.co/200x150/e0e0e0/ffffff?text=No+Image" alt="Compressed Image">
+                <p class="text-sm text-gray-600">Size: <span id="compressedSize">N/A</span></p>
+                <p class="text-xs text-gray-500">(Target: ~2-3 KB)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageUpload = document.getElementById('imageUpload');
+            const compressButton = document.getElementById('compressButton');
+            const originalImage = document.getElementById('originalImage');
+            const compressedImage = document.getElementById('compressedImage');
+            const originalSizeSpan = document.getElementById('originalSize');
+            const compressedSizeSpan = document.getElementById('compressedSize');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+
+            let selectedFile = null;
+
+            // Function to show a message in the message box
+            function showMessage(text, isError = true) {
+                messageText.textContent = text;
+                messageBox.className = `p-3 mt-4 text-sm rounded-lg ${isError ? 'text-red-700 bg-red-100' : 'text-green-700 bg-green-100'}`;
+                messageBox.classList.remove('hidden');
+            }
+
+            // Function to hide the message box
+            function hideMessage() {
+                messageBox.classList.add('hidden');
+            }
+
+            // Event listener for file selection
+            imageUpload.addEventListener('change', (event) => {
+                selectedFile = event.target.files[0];
+                if (selectedFile) {
+                    hideMessage();
+                    compressButton.disabled = false;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        originalImage.src = e.target.result;
+                        originalSizeSpan.textContent = `${(selectedFile.size / 1024).toFixed(2)} KB`;
+                        compressedImage.src = "https://placehold.co/200x150/e0e0e0/ffffff?text=No+Image"; // Reset compressed image
+                        compressedSizeSpan.textContent = "N/A"; // Reset compressed size
+                    };
+                    reader.readAsDataURL(selectedFile);
+                } else {
+                    compressButton.disabled = true;
+                    originalImage.src = "https://placehold.co/200x150/e0e0e0/ffffff?text=No+Image";
+                    originalSizeSpan.textContent = "N/A";
+                    compressedImage.src = "https://placehold.co/200x150/e0e0e0/ffffff?text=No+Image";
+                    compressedSizeSpan.textContent = "N/A";
+                }
+            });
+
+            // Event listener for compress button click
+            compressButton.addEventListener('click', async () => {
+                if (!selectedFile) {
+                    showMessage("Please select an image first.");
+                    return;
+                }
+
+                hideMessage();
+                loadingIndicator.classList.remove('hidden');
+                compressButton.disabled = true;
+
+                try {
+                    const compressedDataUrl = await compressImage(selectedFile);
+                    compressedImage.src = compressedDataUrl;
+                    const compressedSize = (compressedDataUrl.length * 0.75 / 1024).toFixed(2); // Estimate Base64 size
+                    compressedSizeSpan.textContent = `${compressedSize} KB`;
+                    showMessage("Image compressed successfully!", false);
+                } catch (error) {
+                    console.error("Compression error:", error);
+                    showMessage(`Failed to compress image: ${error.message}`);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                    compressButton.disabled = false;
+                }
+            });
+
+            /**
+             * Compresses an image file using HTML Canvas.
+             * @param {File} file - The image file to compress.
+             * @returns {Promise<string>} A promise that resolves with the Base64 data URL of the compressed image.
+             */
+            function compressImage(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+
+                            // Define target dimensions for the thumbnail
+                            // Aim for small dimensions to achieve small file size
+                            const maxWidth = 200;
+                            const maxHeight = 200;
+
+                            let width = img.width;
+                            let height = img.height;
+
+                            // Calculate new dimensions to fit within maxWidth/maxHeight
+                            if (width > height) {
+                                if (width > maxWidth) {
+                                    height *= maxWidth / width;
+                                    width = maxWidth;
+                                }
+                            } else {
+                                if (height > maxHeight) {
+                                    width *= maxHeight / height;
+                                    height = maxHeight;
+                                }
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+
+                            // Draw the image onto the canvas with new dimensions
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Get the Base64 data URL from the canvas
+                            // Use 'image/jpeg' for better compression and adjust quality (0.0 to 1.0)
+                            // A lower quality (e.g., 0.6) will result in a smaller file size.
+                            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6); // 60% quality
+
+                            resolve(compressedDataUrl);
+                        };
+                        img.onerror = (error) => {
+                            reject(new Error("Could not load image for compression."));
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = (error) => {
+                        reject(new Error("Failed to read file."));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Initialize button state
+            compressButton.disabled = true;
+        });
+    </script>
+</body>
+</html>
