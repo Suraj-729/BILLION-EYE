@@ -32,6 +32,7 @@ const EventReport = () => {
   const [agencyGroundStaff, setAgencyGroundStaff] = useState([]);
   const { agencyId } = useParams(); // Retrieve agencyId from query params
 
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -201,15 +202,22 @@ const EventReport = () => {
     return <p>No data found for event {event_id}</p>;
   }
 
+   const assignmentTime = reportData?.assignment_time?.$date;
   // Only format date & time if reportData is available
-  const formattedDate = reportData?.assignment_time
-    ? new Date(reportData.assignment_time).toLocaleDateString()
-    : "N/A";
+  // const formattedDate = reportData?.assignmentTime
+  //   ? new Date(reportData.assignment_time).toLocaleDateString()
+  //   : "N/A";
 
-  const formattedTime = reportData?.assignment_time
-    ? new Date(reportData.assignment_time).toLocaleTimeString()
-    : "N/A";
+  // const formattedTime = reportData?.assignment_time
+  //   ? new Date(reportData.assignment_time).toLocaleTimeString()
+  //   : "N/A";
+const formattedDate = assignmentTime
+  ? new Date(assignmentTime).toLocaleDateString()
+  : "N/A";
 
+const formattedTime = assignmentTime
+  ? new Date(assignmentTime).toLocaleTimeString()
+  : "N/A";
   if (!reportData) {
     return <p>Loading report data...</p>;
   }
@@ -397,7 +405,7 @@ const EventReport = () => {
                 <div
                   className="map-container"
                   style={{
-                    height: "400px",
+                    height: "300px",
                     width: "100%",
                     position: "relative", // Needed to position button inside
                   }}
@@ -472,7 +480,7 @@ const EventReport = () => {
               </div>
             </div>
             <div className="col-md-6" style={{ marginTop: "-200px" }}>
-              <div className="dashboard-report-assign" style={{marginTop:"100px"}}>
+              <div className="dashboard-report-assign" style={{marginTop:"300px"}}>
                 <div className="table-card-heading">
                   <h4 className="text-uppercase">Assign To</h4>
                 </div>
