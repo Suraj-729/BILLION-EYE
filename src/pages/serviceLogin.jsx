@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState} from "react";
+import { useNavigate , Link } from "react-router-dom";
 import "../public/assets/css/SServiceLogin.css";
 const ServiceLogin = () => {
   const [formData, setFormData] = useState({
@@ -53,9 +53,9 @@ const ServiceLogin = () => {
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con">
-                  <a href="index.html">
+                  <Link>
                     <img src="./billioneye/images/logo-blue.png" alt="Logo" />
-                  </a>
+                  </Link>
                 </figure>
               </div>
             </div>

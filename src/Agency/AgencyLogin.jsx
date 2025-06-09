@@ -11,6 +11,8 @@ const AgencyLogin = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,43 +22,69 @@ const AgencyLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login form submitted!");
+    setErrorMessage("");
+    setSuccessMessage("");
 
-    if (!formData.mobileNumber || !formData.password) {
-      alert("Please enter Mobile Number and Password.");
+    // Check if blocked
+    const blockedUntil = localStorage.getItem("agencyLoginBlockedUntil");
+    if (blockedUntil && new Date() < new Date(blockedUntil)) {
+      setErrorMessage("Too many failed attempts. Login is blocked for 24 hours.");
+      return;
+    }
+
+    if (!formData.mobileNumber) {
+      setErrorMessage("Mobile number is required.");
+      return;
+    }
+    if (!formData.password) {
+      setErrorMessage("Password is required.");
       return;
     }
 
     setLoading(true);
 
     try {
-      console.log("Sending Login Request with:", formData);
       const response = await api.post("backend/agency/login", {
         mobileNumber: formData.mobileNumber.trim(),
         password: formData.password,
       });
 
-      console.log("Login Response:", response);
       if (response.status === 200) {
+        // Reset attempts on success
+        localStorage.removeItem("agencyLoginAttempts");
+        localStorage.removeItem("agencyLoginBlockedUntil");
         const { token, agency } = response.data;
         const agencyId = agency?.AgencyId;
-        console.log("Extracted Agency ID:", agencyId);
 
-        // Store token in localStorage
         localStorage.setItem("token", token);
-        alert("Login Successful!");
+        setSuccessMessage("Login Successful!");
 
-        if (agencyId) {
-          navigate(`/dashboard/${agencyId}`); // Redirect to dashboard with AgencyId
-        } else {
-          alert("Agency ID is missing. Please contact support.");
-        }
+        setTimeout(() => {
+          if (agencyId) {
+            navigate(`/dashboard/${agencyId}`);
+          } else {
+            setErrorMessage("Agency ID is missing. Please contact support.");
+          }
+        }, 1000);
       } else {
-        alert("Login Failed: " + (response.data?.message || "Unknown error"));
+        throw new Error(response.data?.message || "Login Failed: Unknown error");
       }
     } catch (error) {
-      console.error("Error Logging In:", error);
-      alert(error.response?.data?.message || "Invalid credentials!");
+      // Track failed attempts
+      let attempts = parseInt(localStorage.getItem("agencyLoginAttempts") || "0", 10) + 1;
+      localStorage.setItem("agencyLoginAttempts", attempts);
+
+      if (attempts === 3) {
+        setErrorMessage("Warning: Last 2 chances left before account is blocked for 24 hours.");
+      } else if (attempts === 4) {
+        setErrorMessage("Warning: Last chance left before account is blocked for 24 hours.");
+      } else if (attempts >= 5) {
+        const blockUntil = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+        localStorage.setItem("agencyLoginBlockedUntil", blockUntil);
+        setErrorMessage("Too many failed attempts. Login is blocked for 24 hours.");
+      } else {
+        setErrorMessage(error.response?.data?.message || "Invalid credentials!");
+      }
     } finally {
       setLoading(false);
     }
@@ -104,9 +132,9 @@ const AgencyLogin = () => {
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con">
-                  <a href="index.html">
+                  <Link>
                     <img src="/billioneye/images/logo-blue.png" alt="Logo" />
-                  </a>
+                  </Link>
                 </figure>
               </div>
             </div>
@@ -118,6 +146,17 @@ const AgencyLogin = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
+                {/* Show error or success messages */}
+                {errorMessage && (
+                  <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                  </div>
+                )}
+                {successMessage && (
+                  <div className="alert alert-success" role="alert">
+                    {successMessage}
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} style={{ marginTop: "-150px" }}>
                   <div className="mb-3">
                     <input

@@ -97,9 +97,9 @@ const LoginPage = () => {
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con">
-                  <a href="index.html">
+                  <Link>
                     <img src="./billioneye/images/logo.png" alt="Logo" />
-                  </a>
+                  </Link>
                 </figure>
               </div>
             </div>

@@ -180,12 +180,13 @@ const EventReport = () => {
 
       const response = await api.put(`backend/events/status/${event_id}`, {
         status: "Assigned",
-        groundStaffName: selectedStaff.name, // Updated to match API payload
+        groundStaffName: selectedStaff.name,
+        assignment_time: new Date().toISOString(), // Add timestamp here
       });
 
       if (response.status === 200) {
         console.log(`Event ${event_id} assigned to ${selectedStaff.name}`);
-        setIsAssigned(true); // Update assignment status
+        setIsAssigned(true);
         navigate(`/dashboard/${reportData.AgencyId}`);
       }
     } catch (error) {

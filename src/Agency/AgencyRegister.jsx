@@ -147,9 +147,9 @@ const AgencyRegister = () => {
             <div className="row">
               <div className="col-md-12">
                 <figure className="logo-con" style={{ marginTop: "18px" }}>
-                  <a href="index.html">
+                  <Link>
                     <img src="/billioneye/images/logo-blue.png" alt="Logo" />
-                  </a>
+                  </Link>
                 </figure>
               </div>
             </div>
