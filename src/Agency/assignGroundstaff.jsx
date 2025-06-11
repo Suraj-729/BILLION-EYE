@@ -23,6 +23,14 @@ const AssignGroundStaff = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !formData.name.trim() ||
+      !formData.number.trim() ||
+      !formData.address.trim()
+    ) {
+      setMessage("Please fill all fields before submitting.");
+      return;
+    }
     try {
       // Include agencyId in the formData
       const dataToSubmit = { ...formData, agencyId };
@@ -35,9 +43,11 @@ const AssignGroundStaff = () => {
         setMessage("Ground staff added successfully!");
         setFormData({ name: "", number: "", address: "" }); // Reset form
 
-        // Redirect back to EventReport with eventId
+        // Redirect back to EventReport with eventId or dashboard if not present
         if (eventId) {
           navigate(`/eventReport/${eventId}`);
+        } else if (agencyId) {
+          navigate(`/dashboard/${agencyId}`);
         }
       } else {
         setMessage("Failed to add ground staff.");
@@ -47,6 +57,9 @@ const AssignGroundStaff = () => {
       console.error(error);
     }
   };
+
+  const [namePlaceholder, setNamePlaceholder] = useState("Name of ground staff");
+  const [numberPlaceholder, setNumberPlaceholder] = useState("Enter 10-digit mobile number starting with 6");
 
   return (
     <section className="main dashboard-main onboarding_ground_staff_page">
@@ -232,12 +245,33 @@ const AssignGroundStaff = () => {
                               id="name"
                               name="name"
                               value={formData.name}
-                              onChange={handleChange}
-                              placeholder="Name of ground staff"
+                              onChange={(e) => {
+                                const input = e.target.value;
+                                // Allow only letters and spaces
+                                if (/^[a-zA-Z\s]*$/.test(input)) {
+                                  handleChange(e);
+                                  setNamePlaceholder("Name of ground staff");
+                                }
+                              }}
+                              onBlur={(e) => {
+                                const input = e.target.value.trim();
+                                // Validate that each word starts with a capital letter
+                                const isValid = input
+                                  .split(" ")
+                                  .filter(Boolean)
+                                  .every((word) => /^[A-Z][a-z]*$/.test(word));
+
+                                if (!isValid && input.length > 0) {
+                                  setNamePlaceholder("Each word should start with a capital letter (e.g., John Doe)");
+                                  setFormData({ ...formData, name: "" });
+                                }
+                              }}
+                              placeholder={namePlaceholder}
                               required
                             />
                           </div>
                         </div>
+
                         <div className="col-md-6">
                           <div className="mb-3">
                             <label
@@ -245,7 +279,7 @@ const AssignGroundStaff = () => {
                               className="form-label"
                               style={{ marginLeft: "5px" }}
                             >
-                              Number
+                              Mobile Number
                             </label>
                             <input
                               type="text"
@@ -253,8 +287,23 @@ const AssignGroundStaff = () => {
                               id="number"
                               name="number"
                               value={formData.number}
-                              onChange={handleChange}
-                              placeholder="Number of ground staff"
+                              onChange={(e) => {
+                                const input = e.target.value;
+                                // Allow only digits and limit to 10 characters
+                                if (/^\d{0,10}$/.test(input)) {
+                                  handleChange(e);
+                                  setNumberPlaceholder("Enter 10-digit mobile number starting with 6");
+                                }
+                              }}
+                              placeholder={numberPlaceholder}
+                              onBlur={(e) => {
+                                const input = e.target.value;
+                                if (!/^[6-9]\d{9}$/.test(input) && input.length > 0) {
+                                  setNumberPlaceholder("Mobile number must be 10 digits and start with 6, 7, 8, or 9");
+                                  setFormData({ ...formData, number: "" });
+                                }
+                              }}
+                              maxLength={10}
                               required
                             />
                           </div>
@@ -330,7 +379,6 @@ const AssignGroundStaff = () => {
                       </div> */}
                       <button
                         type="submit"
-                        onClick={() => navigate(`/dashboard/${agencyId}`)}
                         className="btn btn-primary"
                         style={{ marginLeft: "5px" }}
                       >

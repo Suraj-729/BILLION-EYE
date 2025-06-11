@@ -100,29 +100,27 @@ const EventReport = () => {
     fetchAgencyGroundStaff();
   }, [reportData]);
 
-   //=================back button=====================================
-//    useEffect(() => {
-//   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
-//   if (agencyId && !storedStack.includes(agencyId)) {
-//     const updatedStack = [...storedStack, agencyId];
-//     localStorage.setItem("navigationStack", JSON.stringify(updatedStack));
-//   }
-// }, [agencyId]);
+  //=================back button=====================================
+  //    useEffect(() => {
+  //   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
+  //   if (agencyId && !storedStack.includes(agencyId)) {
+  //     const updatedStack = [...storedStack, agencyId];
+  //     localStorage.setItem("navigationStack", JSON.stringify(updatedStack));
+  //   }
+  // }, [agencyId]);
 
-// const handleBack = () => {
-//   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
-//   if (storedStack.length > 1) {
-//     storedStack.pop(); // Remove current agencyId
-//     const previousAgencyId = storedStack[storedStack.length - 1]; // Get previous
-//     localStorage.setItem("navigationStack", JSON.stringify(storedStack)); // Save updated stack
-//     navigate(`/dashboard/${previousAgencyId}`); // Navigate
-//   } else {
-//     // Optional: handle case when no previous page exists
-//     navigate(`/dashboard?AgencyId=${agencyId}`);
-//   }
-// };
-
-
+  // const handleBack = () => {
+  //   const storedStack = JSON.parse(localStorage.getItem("navigationStack")) || [];
+  //   if (storedStack.length > 1) {
+  //     storedStack.pop(); // Remove current agencyId
+  //     const previousAgencyId = storedStack[storedStack.length - 1]; // Get previous
+  //     localStorage.setItem("navigationStack", JSON.stringify(storedStack)); // Save updated stack
+  //     navigate(`/dashboard/${previousAgencyId}`); // Navigate
+  //   } else {
+  //     // Optional: handle case when no previous page exists
+  //     navigate(`/dashboard?AgencyId=${agencyId}`);
+  //   }
+  // };
 
   const handleUserChange = (event) => {
     const userId = event.target.value;
@@ -131,6 +129,25 @@ const EventReport = () => {
     const user = users.find((u) => u.id === userId);
     setUserDetails(user || null);
   };
+
+  const handleUnassign = async () => {
+  try {
+    const response = await api.put(`backend/events/status/${event_id}`, {
+      status: "Unassigned",
+      groundStaffName: null, // Optionally clear ground staff
+      assignment_time: null, // Optionally clear assignment time
+    });
+    if (response.status === 200) {
+      setIsAssigned(false);
+      setUserDetails(null);
+      setSelectedUser("");
+      // Optionally, fetch updated report data here
+      // or navigate as needed
+    }
+  } catch (error) {
+    console.error("Error unassigning ground staff:", error);
+  }
+};
 
   // const handleAddGroundStaff = () => {
   //   if (reportData?.AgencyId) {
@@ -141,12 +158,14 @@ const EventReport = () => {
   // };
 
   const handleAddGroundStaff = () => {
-  if (reportData?.AgencyId && reportData?.event_id) {
-    navigate(`/assignGroundstaff?agencyId=${reportData.AgencyId}&eventId=${reportData.event_id}`);
-  } else {
-    console.error("Agency ID or Event ID is not available");
-  }
-};
+    if (reportData?.AgencyId && reportData?.event_id) {
+      navigate(
+        `/assignGroundstaff?agencyId=${reportData.AgencyId}&eventId=${reportData.event_id}`
+      );
+    } else {
+      console.error("Agency ID or Event ID is not available");
+    }
+  };
 
   const updateEventStatus = async (newStatus) => {
     try {
@@ -398,7 +417,7 @@ const EventReport = () => {
                 <div
                   className="map-container"
                   style={{
-                    height: "400px",
+                    height: "300px",
                     width: "100%",
                     position: "relative", // Needed to position button inside
                   }}
@@ -448,7 +467,7 @@ const EventReport = () => {
             <div className="col-md-6">
               <div
                 className="dashboard-report-img"
-                style={{ marginTop: "-100px" }}
+                style={{ marginTop: "200px" }}
               >
                 <div className="table-card-heading">
                   <div className="table-card-heading-icon">
@@ -473,7 +492,10 @@ const EventReport = () => {
               </div>
             </div>
             <div className="col-md-6" style={{ marginTop: "-200px" }}>
-              <div className="dashboard-report-assign" style={{marginTop:"100px"}}>
+              <div
+                className="dashboard-report-assign"
+                style={{ marginTop: "100px" }}
+              >
                 <div className="table-card-heading">
                   <h4 className="text-uppercase">Assign To</h4>
                 </div>
@@ -489,7 +511,7 @@ const EventReport = () => {
 
                 <button
                   className="btn btn-success"
-                  style={{marginLeft:"300px"}}
+                  style={{ marginLeft: "300px" }}
                   onClick={() => navigate(`/dashboard/${reportData.AgencyId}`)}
                   disabled={isAssigned} // Optional: disable only if needed
                 >
@@ -524,7 +546,7 @@ const EventReport = () => {
                 </div>
 
                 {/* Display selected ground staff details */}
-                {userDetails && (
+                {/* {userDetails && (
                   <div
                     className="assign-details"
                     style={{
@@ -556,6 +578,45 @@ const EventReport = () => {
                       <button
                         className="btn btn-danger"
                         disabled={isAssigned} // Disable if already assigned
+                      >
+                        Unassigned
+                      </button>
+                    </div>
+                  </div>
+                )} */}
+                {userDetails && (
+                  <div
+                    className="assign-details"
+                    style={{
+                      marginTop: "10px",
+                      background: "#f9f9f9",
+                      padding: "10px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      <li>
+                        <b>Name:</b> {userDetails.name}
+                      </li>
+                      <li>
+                        <b>Phone:</b> {userDetails.number}
+                      </li>
+                      <li>
+                        <b>Address:</b> {userDetails.address}
+                      </li>
+                    </ul>
+                    <div style={{ textAlign: "center", marginTop: "10px" }}>
+                      <button
+                        className="btn btn-success"
+                        onClick={handleAssign}
+                        disabled={isAssigned}
+                      >
+                        Assign
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={handleUnassign} // <-- Add this handler
+                        // disabled={!isAssigned} // Only enable if currently assigned
                       >
                         Unassigned
                       </button>
