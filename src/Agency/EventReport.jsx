@@ -21,7 +21,7 @@ const EventReport = () => {
   const [anchorEl, setAnchorEl] = React.useState();
   const open = Boolean(anchorEl);
   const navigate = useNavigate(); // Initialize useNavigate
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
   const { event_id } = useParams();
   const [loading, setLoading] = useState(true);
   const [reportData, setReportData] = useState(null);
@@ -125,13 +125,13 @@ const EventReport = () => {
 
 
 
-  const handleUserChange = (event) => {
-    const userId = event.target.value;
-    setSelectedUser(userId);
+  // const handleUserChange = (event) => {
+  //   const userId = event.target.value;
+  //   setSelectedUser(userId);
 
-    const user = users.find((u) => u.id === userId);
-    setUserDetails(user || null);
-  };
+  //   const user = users.find((u) => u.id === userId);
+  //   setUserDetails(user || null);
+  // };
 
   // const handleAddGroundStaff = () => {
   //   if (reportData?.AgencyId) {
@@ -162,6 +162,8 @@ const EventReport = () => {
       console.error("Error updating status:", error);
     }
   };
+ 
+
 
   const handleAssign = async () => {
     if (!selectedUser) {
@@ -193,6 +195,32 @@ const EventReport = () => {
       console.error("Error assigning ground staff:", error);
     }
   };
+
+  // 🔸 Auto-assign (transfer) the event to another agency
+const handleAutoAssign = async () => {
+  try {
+    console.log("Sending auto-assign request for:", event_id);
+    const res = await api.patch(`backend/events/${event_id}/auto-assign`);
+    if (res.data.success) {
+      if (res.data.reassigned) {
+        alert(
+          `Event transferred to ${res.data.newAgencyName} (${res.data.newAgencyId}).`
+        );
+        // 🚀 jump to that agency’s dashboard
+        navigate(`/dashboard/${res.data.newAgencyId}`);
+      } else {
+        alert("Current agency already has ground staff. No transfer needed.");
+      }
+    } else {
+      // backend returned success:false
+      alert(`Transfer failed: ${res.data.reason || "unknown error"}`);
+    }
+  } catch (err) {
+    console.error("Auto-assign error:", err);
+    alert("Server error while trying to transfer the event.");
+  }
+};
+
 
   if (loading) {
     return <p>Loading report data...</p>;
@@ -493,6 +521,16 @@ const formattedTime = assignmentTime
                 >
                   Onboard GroundStaff
                 </button>
+                 
+
+                <button
+  className="btn btn-warning"
+  style={{ marginLeft: "10px" }}
+  onClick={handleAutoAssign}
+  disabled={isAssigned}   // optional: disable once it’s already assigned
+>
+  Transfer to Other Agency
+</button>
 
                 <button
                   className="btn btn-success"

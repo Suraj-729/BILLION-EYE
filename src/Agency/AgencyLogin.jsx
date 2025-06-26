@@ -65,8 +65,6 @@ const AgencyLogin = () => {
     }
   };
 
-  
-
   return (
     <section className="main dashboard-hospital">
       <nav className="navbar navbar-expand-lg navbar-dark">
@@ -83,7 +81,6 @@ const AgencyLogin = () => {
                 Register
               </button>
             </Link>
-           
           </div>
         </div>
       </nav>
@@ -127,16 +124,32 @@ const AgencyLogin = () => {
                 <form onSubmit={handleSubmit} style={{ marginTop: "-150px" }}>
                   <div className="mb-3">
                     <input
-                      type="tel"
+                      type="text"
                       className="form-control"
                       placeholder="MOBILE NUMBER"
                       name="mobileNumber"
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        const onlyDigits = e.target.value.replace(/\D/g, ""); // Remove non-digits
+                        if (onlyDigits.length <= 10) {
+                          handleChange({
+                            target: {
+                              name: "mobileNumber",
+                              value: onlyDigits,
+                            },
+                          });
+                        }
+                      }}
                       value={formData.mobileNumber}
-                      style={{ color: "black" }}
+                      autoComplete="off"
+                      maxLength={10}
+                      minLength={10}
                       required
+                      pattern="\d{10}"
+                      title="Please enter a valid 10-digit mobile number"
+                      style={{ color: "black" }}
                     />
                   </div>
+
                   <div className="mb-3">
                     <input
                       type="password"

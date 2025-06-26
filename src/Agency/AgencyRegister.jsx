@@ -148,10 +148,7 @@ const AgencyRegister = () => {
               <div className="col-md-12">
                 <figure className="logo-con" style={{ marginTop: "18px" }}>
                   <a href="index.html">
-                    <img
-                      src="/billioneye/images/logo-blue.png"
-                      alt="Logo"
-                    />
+                    <img src="/billioneye/images/logo-blue.png" alt="Logo" />
                   </a>
                 </figure>
               </div>
@@ -181,17 +178,33 @@ const AgencyRegister = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <input
-                      style={{ color: "black" }}
-                      type="tel"
-                      className="form-control"
-                      placeholder="MOBILE NUMBER"
-                      name="mobileNumber"
-                      onChange={handleChange}
-                      value={formData.mobileNumber} // Ensure this is tied to state
-                      required
-                    />
-                  </div>
+  <input
+    style={{ color: "black" }}
+    type="text"
+    className="form-control"
+    placeholder="MOBILE NUMBER"
+    name="mobileNumber"
+    autoComplete="off"
+    value={formData.mobileNumber}
+    onChange={(e) => {
+      const onlyDigits = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      if (onlyDigits.length <= 10) {
+        handleChange({
+          target: {
+            name: 'mobileNumber',
+            value: onlyDigits,
+          },
+        });
+      }
+    }}
+    maxLength={10}
+    minLength={10}
+    pattern="\d{10}"
+    required
+    title="Please enter a valid 10-digit mobile number"
+  />
+</div>
+
                   <div className="mb-3">
                     <input
                       style={{ color: "black" }}
@@ -270,4 +283,3 @@ const AgencyRegister = () => {
 };
 
 export default AgencyRegister;
-
